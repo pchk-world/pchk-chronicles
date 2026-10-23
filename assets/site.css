@@ -672,3 +672,28 @@ body.mini .ep-player{bottom:16px}
 body.mini main.wrap{padding-right:calc(var(--player-w) + 40px)}
 .ep-player-t a{color:var(--link)}
 .ep-player-t a:hover{color:var(--link-h)}
+
+/* результат броска с кадра */
+.roll-res{display:inline-block; font:600 11.5px var(--mono); color:var(--roll); border:1px solid color-mix(in srgb, var(--roll) 45%, transparent); border-radius:999px; padding:0 7px; margin-left:4px; white-space:nowrap}
+.roll-res.crit{color:#000; background:var(--link); border-color:var(--link)}
+.roll-res.fail{color:#fff; background:#a3324a; border-color:#a3324a}
+
+/* таблицы бросков и листов героев */
+.tbl-wrap{overflow-x:auto; margin:0 0 8px}
+.sheet-tbl, .roll-tbl{border-collapse:collapse; width:100%; font-size:14px}
+.sheet-tbl th{font:600 11px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--muted); text-align:left; padding:6px 8px; border-bottom:1px solid var(--border); white-space:nowrap}
+.sheet-tbl td, .roll-tbl td{padding:6px 8px; border-bottom:1px solid color-mix(in srgb, var(--border) 55%, transparent); vertical-align:top}
+.sheet-tbl td.n{font:600 13px var(--mono); text-align:center; white-space:nowrap}
+.sheet-tbl td.gear{color:var(--muted); font-size:13px; min-width:160px}
+.sheet-tbl td.who{display:flex; gap:8px; align-items:center; white-space:nowrap}
+.sheet-tbl td.who .av{width:28px; height:28px; border-radius:50%; object-fit:cover; object-position:top}
+.sheet-tbl tbody tr:hover, .roll-tbl tbody tr:hover{background:var(--accent)}
+.roll-tbl td:first-child{white-space:nowrap; width:1%}
+.roll-tbl .tm{font:500 12px var(--mono)}
+h3.sub-h{font:600 11px var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--link); margin:20px 0 10px}
+h3.sub-h small{color:var(--muted); letter-spacing:0; text-transform:none; font-weight:500}
+.bars{display:flex; align-items:flex-end; gap:4px; height:180px; padding:8px 0 0}
+.bar-c{flex:1 1 0; min-width:14px; height:100%; display:grid; grid-template-rows:1fr auto auto; text-align:center}
+.bar-c span{align-self:end; display:block; background:var(--roll); border-radius:3px 3px 0 0; min-height:1px}
+.bar-c b{font:600 11px var(--mono); color:var(--muted); padding-top:4px}
+.bar-c i{font:500 10px var(--mono); color:var(--faint); font-style:normal; min-height:12px}

@@ -31,7 +31,7 @@
 
   const T = D.duration;
   const anchor = (it, i) => 't-' + (it.sec != null ? fmt(it.sec).replace(/:/g, '-') : 'x') + (it.type === 'scene' ? '' : '-' + it.type + i);
-  const rollLine = r => `🎲 <b>${link(r.who_url, r.who)}</b>${r.to ? ' → ' + link(r.to_url, r.to) : ''}${r.act ? ': ' + esc(r.act) : ''}${r.check ? ` <span class="note">· ${esc(r.check)}</span>` : ''}`;
+  const rollLine = r => `🎲 <b>${link(r.who_url, r.who)}</b>${r.to ? ' → ' + link(r.to_url, r.to) : ''}${r.act ? ': ' + esc(r.act) : ''}${r.check ? ` <span class="note">· ${esc(r.check)}</span>` : ''}${r.res ? ` <span class="roll-res${r.nat === 20 ? ' crit' : r.nat === 1 ? ' fail' : ''}">${esc(r.res)}${r.nat === 20 ? ' · крит' : r.nat === 1 ? ' · единица' : ''}</span>` : ''}`;
   const rollsOf = url => url ? rolls.filter(r => r.who_url === url).length : 0;
   const pct = s => (Math.min(T, Math.max(0, s)) / T * 100).toFixed(3) + '%';
   const ticks = []; const stepT = T > 6000 ? 1800 : 900;
@@ -79,7 +79,7 @@
         <div class="bar"></div><div class="fill" id="fill"></div>
         ${items.filter(i => i.sec != null && i.type === 'scene').map(i => `<span class="mk${i.key ? ' key' : ' minor'}" style="left:${pct(i.sec)}"></span>`).join('')}
         ${coinEv.filter(e => e.sec != null).map(e => `<span class="mk coin${e.kind === 'spend' ? ' spend' : ''}" style="left:${pct(e.sec)}" title="${esc(e.t)} ${esc(e.who || '')}: ${esc(e.reason || '')}"></span>`).join('')}
-        ${rolls.map(r => `<span class="mk roll" style="left:${pct(r.sec)}" title="${esc(r.t)} ${esc(r.who)}${r.act ? ': ' + esc(r.act) : ''}"></span>`).join('')}
+        ${rolls.map(r => `<span class="mk roll" style="left:${pct(r.sec)}" title="${esc(r.t)} ${esc(r.who)}${r.act ? ': ' + esc(r.act) : ''}${r.res ? ' · ' + esc(r.res) : ''}"></span>`).join('')}
         ${ticks.map(s => `<span class="tick" style="left:${pct(s)}">${fmt(s).replace(/:00$/, '')}</span>`).join('')}
         <div class="head" id="head"></div>
         <input type="range" id="range" min="0" max="${Math.round(T)}" step="1" value="0" aria-label="Промотать выпуск">
