@@ -27,7 +27,6 @@
         <p class="note">Проект сделан зрителями и не связан с авторами шоу.</p>
         <div class="intro-btns">
           <button class="ytb intro-go" type="button">Добро пожаловать в игру</button>
-          <a class="btn" href="https://podzem.cc/" target="_blank" rel="noopener">Открыть podzem.cc ↗</a>
         </div>
       </div>`;
     document.body.appendChild(dlg);

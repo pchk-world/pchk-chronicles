@@ -1,4 +1,4 @@
-/* Верхнее меню: подсветка текущего пункта (в том числе вкладок главной по хэшу), временный показ
+/* Верхнее меню: подсветка текущего пункта по адресу, временный показ
    подразделов при наведении, мобильная панель с аккордеоном, «/» — фокус в поиск. Разметка — viz/nav.py. */
 (() => {
   const hd = document.querySelector('.site-nav'); if (!hd) return;
@@ -8,12 +8,7 @@
   const idle = hd.dataset.idle === undefined ? -1 : +hd.dataset.idle;
   let active = -1, preview = null, timer = 0;
 
-  const matches = m => {
-    const i = m.indexOf('#');
-    if (i < 0) return location.pathname.startsWith(m);
-    const h = decodeURIComponent(location.hash.slice(1));
-    return location.pathname === m.slice(0, i) && (h === m.slice(i + 1) || h.startsWith(m.slice(i + 1) + '/'));
-  };
+  const matches = m => m === '/' ? location.pathname === '/' : location.pathname.startsWith(m);
   const mark = (el, on, cur) => { el.classList.toggle('on', on); on ? el.setAttribute('aria-current', cur) : el.removeAttribute('aria-current'); };
 
   function show(i){
@@ -83,6 +78,5 @@
   });
 
   window.navSync = sync;
-  window.addEventListener('hashchange', sync);
   sync();
 })();

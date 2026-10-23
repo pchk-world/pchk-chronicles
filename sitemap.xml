@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://pchk.world/</loc></url>
+<url><loc>https://pchk.world/branches/</loc></url>
+<url><loc>https://pchk.world/ep/</loc></url>
+<url><loc>https://pchk.world/p/</loc></url>
+<url><loc>https://pchk.world/heroes/</loc></url>
+<url><loc>https://pchk.world/c/</loc></url>
+<url><loc>https://pchk.world/graph/</loc></url>
+<url><loc>https://pchk.world/lore/</loc></url>
 <url><loc>https://pchk.world/map/</loc></url>
 <url><loc>https://pchk.world/place/</loc></url>
 <url><loc>https://pchk.world/a/</loc></url>

@@ -13,6 +13,8 @@
   const plural = (n, a, b, c) => n % 10 === 1 && n % 100 !== 11 ? a : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? b : c;
   const isDead = f => /погиб|умер|убит|сожж|казн|мёртв|мертв|рассыпал/i.test(f || '');
   document.documentElement.style.setProperty('--c', D.branch_color);
+  /* при мягком переходе на другую страницу (плеер открыт) снимаем свои обработчики с window и document */
+  const ac = new AbortController(), sig = { signal: ac.signal };
 
   const coinEv = (D.coins && D.coins.events || []).filter(e => e.kind !== 'loot');
   const coinLabel = e => ({ earn: 'получает монету', spend: 'тратит монету', give: 'передаёт монету' }[e.kind] || 'монета');
@@ -39,13 +41,13 @@
   if (D.pod_html) toc.push(['pod', 'Из подкастов']);
 
   $('#app').innerHTML = `
-  <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/#eps">Выпуски</a> › #${esc(D.label)}</div>
+  <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/ep/">Выпуски</a> › #${esc(D.label)}</div>
   <header class="ep-hero">
     <a href="${yt()}" target="_blank" rel="noopener"><img class="thumb" src="https://i.ytimg.com/vi/${esc(D.video_id)}/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${esc(D.video_id)}/hqdefault.jpg'" alt="Обложка выпуска"></a>
     <div>
       <span class="eyebrow">Выпуск #${esc(D.label)} · ${esc(D.date.split('-').reverse().join('.'))} · ${D.minutes} мин</span>
       <h1>${esc(D.title)}</h1>
-      <div class="meta"><a class="badge" style="--c:${D.branch_color}" href="/#map"><i></i>${esc(D.branch)}</a>${D.place ? `<span>${esc(D.place)}</span>` : ''}</div>
+      <div class="meta"><a class="badge" style="--c:${D.branch_color}" href="/branches/"><i></i>${esc(D.branch)}</a>${D.place ? `<span>${esc(D.place)}</span>` : ''}</div>
       <p class="lead">${D.short_html}</p>
       <div class="ep-nav">
         <button type="button" class="ytb" id="watch-here-top" data-label="▶ Смотреть на странице" hidden>▶ Смотреть на странице</button>
@@ -75,7 +77,7 @@
       <div class="read"><span class="now" id="now">0:00:00</span><span class="what" id="what"></span><span class="read-btns"><button type="button" class="ytb" id="watch-here" data-label="▶ Смотреть здесь" hidden>▶ Смотреть здесь</button><a class="dur" id="watch" href="${yt(0)}" target="_blank" rel="noopener">▶ на YouTube с этого места</a></span></div>
       <div class="track" id="track">
         <div class="bar"></div><div class="fill" id="fill"></div>
-        ${items.filter(i => i.sec != null && i.type === 'scene').map(i => `<span class="mk${i.key ? ' key' : ''}" style="left:${pct(i.sec)}"></span>`).join('')}
+        ${items.filter(i => i.sec != null && i.type === 'scene').map(i => `<span class="mk${i.key ? ' key' : ' minor'}" style="left:${pct(i.sec)}"></span>`).join('')}
         ${coinEv.filter(e => e.sec != null).map(e => `<span class="mk coin${e.kind === 'spend' ? ' spend' : ''}" style="left:${pct(e.sec)}" title="${esc(e.t)} ${esc(e.who || '')}: ${esc(e.reason || '')}"></span>`).join('')}
         ${rolls.map(r => `<span class="mk roll" style="left:${pct(r.sec)}" title="${esc(r.t)} ${esc(r.who)}${r.act ? ': ' + esc(r.act) : ''}"></span>`).join('')}
         ${ticks.map(s => `<span class="tick" style="left:${pct(s)}">${fmt(s).replace(/:00$/, '')}</span>`).join('')}
@@ -83,14 +85,15 @@
         <input type="range" id="range" min="0" max="${Math.round(T)}" step="1" value="0" aria-label="Промотать выпуск">
       </div>
       <div class="legendline"><span><i style="width:6px;height:14px;background:var(--c);border-radius:2px"></i>ключевое событие</span><span><i style="width:4px;height:10px;background:var(--muted);border-radius:2px"></i>сцена</span><span><i style="width:9px;height:9px;background:var(--link);border-radius:50%"></i>монета получена</span><span><i style="width:9px;height:9px;border:2px solid var(--link);border-radius:50%"></i>монета потрачена</span>${rolls.length ? '<span><i style="width:7px;height:7px;background:var(--roll);transform:rotate(45deg)"></i>бросок на экране</span>' : ''}<span>Тяните шкалу или прокручивайте список</span></div>
-      <div class="tl-filter" role="group" aria-label="Что показывать в списке">
-        <button type="button" data-f="coin" aria-pressed="true">Монеты</button>${rolls.length ? '<button type="button" data-f="roll" aria-pressed="true">Броски</button>' : ''}
+      <div class="tl-filter" role="group" aria-label="Что показывать на таймлайне">
+        <span class="lbl">Показывать:</span><button type="button" data-f="minor" aria-pressed="true" title="Сцены между ключевыми событиями">Все сцены</button><button type="button" data-f="coin" aria-pressed="true">Монеты</button>${rolls.length ? '<button type="button" data-f="roll" aria-pressed="true">Броски кубика</button>' : ''}
+        <button type="button" class="tl-only" data-only="1" title="Скрыть мелкие детали: обычные сцены, монеты и броски">Только главное</button>
       </div>
     </div>
     <ol class="scenes" id="scenes">${items.map((it, i) => it.type === 'roll'
       ? `<li class="scene roll" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body">${rollLine(it.r)}</div></li>`
       : it.type === 'scene'
-      ? `<li class="scene${it.key ? ' key' : ''}" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec ?? ''}"><span class="t">${it.sec != null ? `<a href="${yt(it.sec)}" target="_blank" rel="noopener" title="Смотреть с этого момента">${esc(it.t)}</a>` : esc(it.t || '')}</span><span class="rail"></span><div class="body">${it.html}${it.sec != null ? `<button class="share" data-copy="${epUrl(D.key)}#t=${fmt(it.sec)}" title="Скопировать ссылку на этот момент">🔗</button>` : ''}</div></li>`
+      ? `<li class="scene${it.key ? ' key' : ' minor'}" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec ?? ''}"><span class="t">${it.sec != null ? `<a href="${yt(it.sec)}" target="_blank" rel="noopener" title="Смотреть с этого момента">${esc(it.t)}</a>` : esc(it.t || '')}</span><span class="rail"></span><div class="body">${it.html}${it.sec != null ? `<button class="share" data-copy="${epUrl(D.key)}#t=${fmt(it.sec)}" title="Скопировать ссылку на этот момент">🔗</button>` : ''}</div></li>`
       : `<li class="scene coin" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body"><b>${link(it.e.who_url, it.e.who || 'Игрок')}</b> ${coinLabel(it.e)}${it.e.to ? ' → ' + esc(it.e.to) : ''}: ${it.e.reason_html || esc(it.e.reason || '')}${it.e.result ? ` <span class="note">(${esc(it.e.result)})</span>` : ''}</div></li>`).join('')}</ol>
   </section>
 
@@ -130,7 +133,7 @@
     const b = e.target.closest('button.fn'); if (!b) return;
     const t = b.nextElementSibling; if (!t || !t.classList.contains('fnb')) return;
     t.hidden = !t.hidden; b.setAttribute('aria-expanded', String(!t.hidden));
-  });
+  }, sig);
   /* фильтр записей подкастов по типу */
   document.querySelectorAll('.ptfilter').forEach(f => f.addEventListener('click', e => {
     const b = e.target.closest('.ptf'); if (!b) return;
@@ -163,7 +166,7 @@
   const all = [...document.querySelectorAll('#scenes .scene')];
   let rows = all;
   const range = $('#range'), head = $('#head'), fill = $('#fill'), now = $('#now'), what = $('#what'), watch = $('#watch');
-  let cur = -1, scrubbing = false, player = null, watching = false, follow = 0;
+  let cur = -1, scrubbing = false, watching = false, follow = 0;
   function setHead(sec, idx) {
     head.style.left = pct(sec); fill.style.width = pct(sec); range.value = Math.round(sec);
     now.textContent = fmt(sec); watch.href = yt(sec);
@@ -177,7 +180,7 @@
   function idxAt(sec) { let k = 0; rows.forEach((r, i) => { const s = r.dataset.sec; if (s !== '' && +s <= sec) k = i; }); return k; }
   range.addEventListener('input', () => {
     const sec = +range.value, i = idxAt(sec);
-    if (watching) { player.seekTo(sec, true); setHead(sec, i); follow = 0; rows[i].scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+    if (watching) { P().seek(sec); setHead(sec, i); follow = 0; rows[i].scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
     scrubbing = true; setHead(sec, i); rows[i].scrollIntoView({ block: 'start' });
     clearTimeout(range._t); range._t = setTimeout(() => { scrubbing = false; }, 250);
   });
@@ -187,86 +190,85 @@
     let i = 0; for (let k = 0; k < rows.length; k++) { if (rows[k].getBoundingClientRect().top <= line) i = k; else break; }
     const s = rows[i].dataset.sec; setHead(s !== '' ? +s : 0, i);
   }
-  let raf = 0; window.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(onScroll); }, { passive: true });
+  let raf = 0; window.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(onScroll); }, { passive: true, signal: ac.signal });
   if (rows.length) setHead(rows[0].dataset.sec !== '' ? +rows[0].dataset.sec : 0, 0);
 
-  /* фильтр списка: монеты и броски можно скрыть (выбор запоминается) */
-  const FKEY = 'pchk-tl-hide';
-  let hidden = new Set(); try { hidden = new Set(JSON.parse(localStorage.getItem(FKEY) || '[]')); } catch (e) {}
+  /* фильтр таймлайна: мелкие сцены, монеты и броски можно скрыть — и в списке, и на шкале (выбор запоминается);
+     по умолчанию броски кубика скрыты как самая мелкая деталь */
+  const FKEY = 'pchk-tl-hide2', KINDS = ['minor', 'coin', 'roll'];
+  let hidden = new Set(['roll']); try { const v = localStorage.getItem(FKEY); if (v) hidden = new Set(JSON.parse(v)); } catch (e) {}
   function applyFilter() {
-    document.querySelectorAll('.tl-filter button').forEach(b => b.setAttribute('aria-pressed', String(!hidden.has(b.dataset.f))));
+    document.querySelectorAll('.tl-filter button[data-f]').forEach(b => b.setAttribute('aria-pressed', String(!hidden.has(b.dataset.f))));
+    const only = document.querySelector('.tl-filter .tl-only'); if (only) only.setAttribute('aria-pressed', String(KINDS.every(f => hidden.has(f))));
+    KINDS.forEach(f => $('#scrub').classList.toggle('no-' + f, hidden.has(f)));
     all.forEach(r => r.classList.toggle('hide', [...hidden].some(f => r.classList.contains(f))));
     rows = all.filter(r => !r.classList.contains('hide'));
     cur = -1; watching ? tick(true) : onScroll();
   }
   document.querySelectorAll('.tl-filter button').forEach(b => b.addEventListener('click', () => {
-    hidden.has(b.dataset.f) ? hidden.delete(b.dataset.f) : hidden.add(b.dataset.f);
+    if (b.dataset.only) hidden = KINDS.every(f => hidden.has(f)) ? new Set() : new Set(KINDS);
+    else hidden.has(b.dataset.f) ? hidden.delete(b.dataset.f) : hidden.add(b.dataset.f);
     try { localStorage.setItem(FKEY, JSON.stringify([...hidden])); } catch (e) {}
     applyFilter();
   }));
-  if (hidden.size) applyFilter();
+  applyFilter();
 
-  /* просмотр выпуска на странице (широкие экраны): плеер YouTube справа, шкала прилипает к низу и идёт за видео */
+  /* просмотр выпуска на странице (широкие экраны): плеер YouTube справа (общий для сайта, viz/player.js),
+     шкала прилипает к низу и идёт за видео. Плеер переживает переходы по сайту; вернувшись сюда, шкала снова идёт за ним */
   const wide = matchMedia('(min-width: 1100px)');
   const wbtn = $('#watch-here'), hbtn = $('#watch-here-top');
+  const P = () => window.pchkPlayer;
   const showBtns = () => [wbtn, hbtn].forEach(b => b && (b.hidden = !wide.matches));
-  showBtns(); wide.addEventListener('change', () => { showBtns(); if (!wide.matches && watching) stopWatch(); });
-  function loadApi() {
-    if (window.YT && YT.Player) return Promise.resolve();
-    return new Promise(res => {
-      const prev = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => { prev && prev(); res(); };
-      const sc = document.createElement('script'); sc.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(sc);
-    });
-  }
+  showBtns(); wide.addEventListener('change', showBtns, sig);
   function tick(force) {
-    if (!player || !player.getCurrentTime) return;
-    const sec = player.getCurrentTime() || 0, i = idxAt(sec);
+    if (!watching) return;
+    const sec = P().time(), i = idxAt(sec);
     if ((setHead(sec, i) || force) && Date.now() > follow && rows[i]) rows[i].scrollIntoView({ block: 'center', behavior: 'smooth' });
   }
   let timer = 0, dockObs = null;
+  function attach() {
+    if (watching) return;
+    watching = true; document.body.classList.add('watching');
+    timer = setInterval(tick, 250);
+    dockObs = new ResizeObserver(() => document.body.style.setProperty('--dock-h', $('#scrub').offsetHeight + 'px'));
+    dockObs.observe($('#scrub'));
+    [wbtn, hbtn].forEach(b => b && (b.textContent = '■ Закрыть плеер'));
+  }
+  function detach() {
+    if (!watching) return;
+    clearInterval(timer); timer = 0; if (dockObs) { dockObs.disconnect(); dockObs = null; }
+    watching = false; document.body.classList.remove('watching');
+    [wbtn, hbtn].forEach(b => b && (b.textContent = b.dataset.label));
+  }
   async function startWatch(at) {
-    if (!wide.matches) return false;
+    if (!wide.matches || !P()) return false;
     const start = at ?? +range.value ?? 0;
-    if (!watching) {
-      watching = true; document.body.classList.add('watching');
-      const box = document.createElement('div'); box.className = 'ep-player'; box.id = 'ep-player';
-      box.innerHTML = '<div class="ep-player-bar"><span>Выпуск #' + esc(D.label) + '</span><button type="button" class="ep-player-x" aria-label="Закрыть плеер">×</button></div><div class="ep-player-frame"><div id="yt-frame"></div></div>';
-      document.body.appendChild(box);
-      box.querySelector('.ep-player-x').addEventListener('click', stopWatch);
-      await loadApi();
-      await new Promise(res => {
-        player = new YT.Player('yt-frame', { videoId: D.video_id, playerVars: { start: Math.floor(start), autoplay: 1, rel: 0, playsinline: 1 },
-          events: { onReady: () => { player.playVideo(); res(); } } });
-      });
-      timer = setInterval(tick, 250);
-      dockObs = new ResizeObserver(() => document.body.style.setProperty('--dock-h', $('#scrub').offsetHeight + 'px'));
-      dockObs.observe($('#scrub'));
-      [wbtn, hbtn].forEach(b => b && (b.textContent = '■ Закрыть плеер'));
-    } else if (player && player.seekTo) { player.seekTo(start, true); player.playVideo(); }
-    follow = 0; tick(true);
+    if (!await P().start({ videoId: D.video_id, label: D.label, url: epUrl(D.key), sec: start })) return false;
+    attach(); follow = 0; tick(true);
     return true;
   }
-  function stopWatch() {
-    clearInterval(timer); timer = 0; if (dockObs) { dockObs.disconnect(); dockObs = null; }
-    try { player && player.destroy(); } catch (e) {}
-    player = null; watching = false; document.body.classList.remove('watching');
-    const box = $('#ep-player'); if (box) box.remove();
-    [wbtn, hbtn].forEach(b => b && (b.textContent = b.dataset.label));
-    onScroll();
-  }
+  function stopWatch() { P() && P().stop(); }
+  document.addEventListener('pchk:player-stop', () => { detach(); onScroll(); }, sig);
+  document.addEventListener('pchk:leave', () => { detach(); ac.abort(); }, { once: true });
+  if (P() && P().active() && P().videoId === D.video_id) { attach(); follow = 0; setTimeout(() => tick(true), 50); }
   [wbtn, hbtn].forEach(b => b && b.addEventListener('click', () => watching ? stopWatch() : startWatch(b === hbtn ? (+range.value || 0) : undefined).then(() => { if (b === hbtn) $('#timeline').scrollIntoView({ block: 'start' }); })));
   /* пользователь сам листает список — не дёргаем прокрутку 6 секунд */
   ['wheel', 'touchmove', 'keydown'].forEach(ev => window.addEventListener(ev, e => {
     if (watching && !(e.type === 'keydown' && !/^(Arrow|Page|Home|End| )/.test(e.key))) follow = Date.now() + 6000;
-  }, { passive: true }));
-  /* в режиме просмотра тайм-коды перематывают встроенный плеер, а не открывают YouTube */
+  }, { passive: true, signal: ac.signal }));
+  /* в режиме просмотра любые тайм-коды этого выпуска (сцены, монеты, ключевые события) перематывают встроенный плеер, а не открывают YouTube */
+  const secOfLink = a => {
+    if (a.id === 'watch') return +range.value;
+    const li = a.closest('#scenes .scene'); if (li && li.dataset.sec !== '') return +li.dataset.sec;
+    const m = a.href.match(/^https:\/\/(?:youtu\.be\/|www\.youtube\.com\/watch\?v=)([\w-]{11})[?&]t=(\d+)/);
+    return m && m[1] === D.video_id ? +m[2] : null;
+  };
   document.addEventListener('click', e => {
     if (!watching) return;
-    const a = e.target.closest('#scenes .t a, #watch'); if (!a) return;
-    const li = a.closest('.scene'); const sec = li ? +li.dataset.sec : +range.value;
-    e.preventDefault(); player.seekTo(sec, true); player.playVideo(); follow = 0; tick(true);
-  });
+    const a = e.target.closest('a[href]'); if (!a) return;
+    const sec = secOfLink(a); if (sec == null) return;
+    e.preventDefault(); P().seek(sec); follow = 0; tick(true);
+  }, sig);
 
   /* ссылки «скопировать» */
   document.querySelectorAll('[data-copy]').forEach(bt => bt.addEventListener('click', ev => {
@@ -281,11 +283,11 @@
     const m = decodeURIComponent(location.hash).match(/^#t=(?:(\d+):)?(\d+)(?::(\d+))?$/);
     if (!m) return;
     const sec = m[3] != null ? (+m[1] || 0) * 3600 + +m[2] * 60 + +m[3] : m[1] != null ? +m[1] * 60 + +m[2] : +m[2];
-    if (watching) { player.seekTo(sec, true); follow = 0; tick(true); return; }
+    if (watching) { P().seek(sec); follow = 0; tick(true); return; }
     const i = idxAt(sec); scrubbing = true; setHead(rows[i].dataset.sec !== '' ? +rows[i].dataset.sec : sec, i);
     rows[i].scrollIntoView({ block: 'start' }); rows[i].classList.add('on');
     setTimeout(() => { scrubbing = false; }, 400);
   }
-  window.addEventListener('hashchange', jump);
+  window.addEventListener('hashchange', jump, sig);
   if (location.hash) setTimeout(jump, 50);
 })();
