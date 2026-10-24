@@ -259,7 +259,7 @@
   /* в режиме просмотра любые тайм-коды этого выпуска (сцены, монеты, ключевые события) перематывают встроенный плеер, а не открывают YouTube */
   const secOfLink = a => {
     if (a.id === 'watch') return +range.value;
-    const li = a.closest('#scenes .scene'); if (li && li.dataset.sec !== '') return +li.dataset.sec;
+    const li = a.closest('#scenes .scene > .t')?.parentElement; if (li && li.dataset.sec !== '') return +li.dataset.sec;   // только тайм-код самой сцены: сноски подкастов внутри сцены открывают подкаст
     const m = a.href.match(/^https:\/\/(?:youtu\.be\/|www\.youtube\.com\/watch\?v=)([\w-]{11})[?&]t=(\d+)/);
     return m && m[1] === D.video_id ? +m[2] : null;
   };
