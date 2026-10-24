@@ -8,15 +8,15 @@ const cv = document.getElementById("stage"), ctx = cv.getContext("2d");
 const capEl = document.getElementById("caption"), plotEl = document.getElementById("plot");
 cv.width = W; cv.height = H;
 
-// запасные спрайты, если для персонажа нет своего
-const SPRITE_OF = { peasant1: "farmer1", peasant2: "farmer2", peasant3: "farmer3", zombie1: "zombie", zombie2: "zombie", zombie3: "zombie", angel1: "angel" };
+// запасные спрайты, если для персонажа нет своего (дополняются из manifest.alias)
+let SPRITE_OF = { peasant1: "farmer1", peasant2: "farmer2", peasant3: "farmer3", zombie1: "zombie", zombie2: "zombie", zombie3: "zombie", angel1: "angel" };
 // какой спрайт рисовать: вариант по «облику» (look) или статусу — если такая картинка есть, иначе базовая
 function spriteKey(a) {
   const base = SPRITE_OF[a.id] && !MAN.sprites[a.id] ? SPRITE_OF[a.id] : a.id;
   for (const v of [a.look, a.status]) if (v && MAN.sprites[a.id + "_" + v]) return a.id + "_" + v;
-  return MAN.sprites[base] ? base : "shlepa";
+  return MAN.sprites[base] ? base : MAN.fallback || "shlepa";
 }
-const HEROES = ["sofia", "yulian", "vitya", "bagira", "titus"];
+let HEROES = ["sofia", "yulian", "vitya", "bagira", "titus"], PROPS = ["cart"];   // герои и предметы выпуска — из manifest.json
 const img = {};                                 // кэш картинок
 function load(name, src) {
   if (!img[name]) { const i = new Image(); i.src = src; img[name] = i; }
@@ -25,7 +25,7 @@ function load(name, src) {
 
 let TL, MAN, INFO = {}, scenes = [], events = [];
 Promise.all([fetch(base + "timeline.json").then(r => r.json()), fetch(base + "manifest.json").then(r => r.json())]).then(([tl, man]) => {
-  TL = tl; MAN = man; scenes = tl.scenes.slice().sort((a, b) => a.t - b.t);
+  TL = tl; MAN = man; HEROES = man.heroes || HEROES; PROPS = man.props || PROPS; SPRITE_OF = { ...SPRITE_OF, ...(man.alias || {}) }; scenes = tl.scenes.slice().sort((a, b) => a.t - b.t);
   events = tl.events.slice().sort((a, b) => a.t - b.t);
   Object.keys(man.sprites).forEach(k => load("s:" + k, base + "sprites/" + k + ".webp"));
   Object.keys(man.bgs).forEach(k => load("b:" + k, base + "bg/" + k + ".webp"));
@@ -121,7 +121,7 @@ function simulate(t) {
 }
 
 // ---------- отрисовка ----------
-const baseY = id => id === "cart" ? GROUND + 34 : GROUND + (hashy(id) % 5) * 13 - 14;
+const baseY = id => PROPS.includes(id) ? GROUND + 34 : GROUND + (hashy(id) % 5) * 13 - 14;
 function drawBg(name, alpha = 1) {
   const im = img["b:" + name]; if (!im || !im.complete || !im.naturalWidth) { ctx.fillStyle = "#222"; ctx.fillRect(0, 0, W, H); return; }
   const r = Math.max(W / im.naturalWidth, H / im.naturalHeight), w = im.naturalWidth * r, h = im.naturalHeight * r;
@@ -151,7 +151,8 @@ function drawSprite(key, x, y, o) {
 }
 function shadow(x, y, w, a = .35) { ctx.save(); ctx.fillStyle = `rgba(0,0,0,${a})`; ctx.beginPath(); ctx.ellipse(x, y - 2, w * .42, w * .09, 0, 0, 7); ctx.fill(); ctx.restore(); }
 
-const BADGE = { paralyzed: "парализован", sleep: "спит", nakedsleep: "спит голый", naked: "голый", stun: "оглушён", shrunk: "уменьшен" };
+const BADGE = { paralyzed: "парализован", sleep: "спит", nakedsleep: "спит голый", naked: "голый", stun: "оглушён", shrunk: "уменьшен",
+  chained: "в кандалах", caged: "в клетке", burning: "горит", poisoned: "отравлен" };
 function drawActors(S, t) {
   const list = Object.values(S.A).filter(a => a.vis || a.mv);
   const info = {};
@@ -257,6 +258,22 @@ function drawFx(S, t, info) {
     } else if (f.kind === "portal") {
       const cx = px(f.x), cy = GROUND - 140; ctx.translate(cx, cy);
       for (let i = 0; i < 5; i++) { ctx.strokeStyle = `rgba(${170 + i * 15},${90 + i * 20},255,${(.8 - i * .12) * fade})`; ctx.lineWidth = 6 - i; ctx.beginPath(); ctx.ellipse(0, 0, (60 - i * 9) * Math.min(k * 4, 1), (150 - i * 22) * Math.min(k * 4, 1), t * (i % 2 ? 1 : -1) * .8, 0, 7); ctx.stroke(); }
+    } else if (f.kind === "water") {                 // струя воды: дуга капель от заклинателя к точке
+      const p = info[f.id], x0 = p ? p.x : px(f.x) - 200, y0 = p ? p.top + p.h * .4 : GROUND - 150, x1 = px(f.x), y1 = GROUND - 90;
+      for (let i = 0; i < 40; i++) { const u = ((i / 40) + t * 1.6) % 1, xx = x0 + (x1 - x0) * u, yy = y0 + (y1 - y0) * u - Math.sin(u * Math.PI) * 70;
+        ctx.fillStyle = `rgba(120,190,255,${.75 * fade})`; ctx.beginPath(); ctx.arc(xx + Math.sin(i * 3.1) * 6, yy + Math.cos(i * 2.3) * 6, 5 + i % 4, 0, 7); ctx.fill(); }
+    } else if (f.kind === "ice") {
+      const cx = px(f.x); ctx.fillStyle = `rgba(190,230,255,${.55 * fade})`; ctx.strokeStyle = `rgba(240,250,255,${.9 * fade})`; ctx.lineWidth = 2;
+      for (let i = 0; i < 9; i++) { const h = hashy("i" + i), hh = (90 + h % 160) * Math.min(k * 3, 1), xx = cx - 90 + i * 22;
+        ctx.beginPath(); ctx.moveTo(xx - 12, GROUND); ctx.lineTo(xx, GROUND - hh); ctx.lineTo(xx + 12, GROUND); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+    } else if (f.kind === "fire") {
+      const cx = px(f.x); for (let i = 0; i < 40; i++) { const h = hashy("f" + i), u = ((t * (.8 + (h % 7) / 10)) + (h % 100) / 100) % 1;
+        const xx = cx - 110 + (h >> 3) % 220 + Math.sin(u * 8 + i) * 12, yy = GROUND - u * 260, r = (1 - u) * (14 + h % 12);
+        ctx.fillStyle = `rgba(255,${120 + (1 - u) * 120 | 0},30,${(1 - u) * .85 * fade})`; ctx.beginPath(); ctx.arc(xx, yy, r, 0, 7); ctx.fill(); }
+    } else if (f.kind === "swarm") {                 // саранча или рой крыс: тёмные точки носятся вокруг
+      const cx = px(f.x); ctx.fillStyle = `rgba(30,24,14,${.85 * fade})`;
+      for (let i = 0; i < 80; i++) { const h = hashy("w" + i), a2 = t * (2 + h % 5) + h, rad = 30 + (h >> 4) % 140;
+        ctx.beginPath(); ctx.ellipse(cx + Math.cos(a2) * rad, GROUND - 150 + Math.sin(a2 * 1.3) * rad * .6, 5, 3, a2, 0, 7); ctx.fill(); }
     } else if (f.kind === "sparkle") {
       const cx = px(f.x); for (let i = 0; i < 20; i++) { const h = hashy("s" + i), a2 = t * 2 + h; ctx.fillStyle = `rgba(255,245,200,${fade * (.4 + .6 * Math.abs(Math.sin(a2)))})`; ctx.beginPath(); ctx.arc(cx - 90 + h % 180, GROUND - 40 - (h >> 4) % 240, 2 + h % 3, 0, 7); ctx.fill(); }
     }
