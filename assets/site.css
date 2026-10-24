@@ -705,3 +705,27 @@ h3.sub-h small{color:var(--muted); letter-spacing:0; text-transform:none; font-w
 .abil-box h4{font:600 12px var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--link); margin:14px 0 6px}
 .abil{margin:0; padding-left:18px}
 .abil li{margin:3px 0; line-height:1.45}
+/* галерея изображений персонажа */
+.gal{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px}
+.gal figure{position:relative; margin:0; border-radius:8px; overflow:hidden; background:var(--page2); border:1px solid var(--border); cursor:zoom-in;
+  transition:transform .15s, box-shadow .15s, border-color .15s}
+.gal figure:hover{transform:translateY(-2px); border-color:var(--link); box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.gal img{display:block; width:100%; aspect-ratio:3/4; object-fit:cover; object-position:50% 15%}
+.gal figcaption{padding:6px 8px 7px; font:11.5px/1.35 var(--mono); color:var(--faint)}
+.gal figcaption a{color:var(--link)}
+.gal-auto{position:absolute; top:6px; right:6px; font:600 10px var(--mono); letter-spacing:.06em; text-transform:uppercase; padding:2px 6px; border-radius:999px;
+  background:rgba(20,14,30,.8); color:#f3d58a; border:1px solid rgba(232,182,76,.5)}
+.lightbox{position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; background:rgba(8,6,12,.92); padding:16px}
+.lightbox.on{display:flex}
+.lightbox figure{margin:0; max-width:min(1100px, 92vw); text-align:center}
+.lightbox img{max-width:100%; max-height:80vh; border-radius:6px; box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.lightbox figcaption{margin-top:10px; font:13px var(--mono); color:#ddd}
+.lightbox figcaption a{color:var(--link)}
+.lightbox button{position:absolute; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:30px; width:46px; height:46px;
+  border-radius:50%; cursor:pointer; line-height:1}
+.lightbox button:hover{background:rgba(255,255,255,.18)}
+.lb-x{top:16px; right:16px}
+.lb-p{left:16px; top:50%; transform:translateY(-50%)}
+.lb-nx{right:16px; top:50%; transform:translateY(-50%)}
+.lb-n{position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font:12px var(--mono); color:#aaa}
+@media (max-width:600px){ .gal{grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:8px} .lb-p, .lb-nx{top:auto; bottom:12px; transform:none} }
