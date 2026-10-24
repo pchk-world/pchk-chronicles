@@ -281,7 +281,7 @@
   /* переход к моменту: /ep/NN/#t=0:12:30 или #t=750 */
   function jump() {
     const m = decodeURIComponent(location.hash).match(/^#t=(?:(\d+):)?(\d+)(?::(\d+))?$/);
-    if (!m) return;
+    if (!m) { const el = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el) el.scrollIntoView({ block: 'start' }); return; }   // #people и др.: страница рисуется скриптом, браузер сам не докрутит
     const sec = m[3] != null ? (+m[1] || 0) * 3600 + +m[2] * 60 + +m[3] : m[1] != null ? +m[1] * 60 + +m[2] : +m[2];
     if (watching) { P().seek(sec); follow = 0; tick(true); return; }
     const i = idxAt(sec); scrubbing = true; setHead(rows[i].dataset.sec !== '' ? +rows[i].dataset.sec : sec, i);

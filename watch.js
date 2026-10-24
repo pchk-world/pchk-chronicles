@@ -324,8 +324,9 @@ function updateCards(S, t) {
       const d = document.createElement("div"); d.className = "pcard" + (HEROES.includes(id) ? " hero" : "");
       const im = document.createElement("img"); im.src = base_url(base); im.alt = ""; im.loading = "lazy";
       const tx = document.createElement("div"); tx.className = "pt";
-      const nm = document.createElement("b"); nm.textContent = inf.name; tx.appendChild(nm);
-      if (inf.actor || inf.role) { const sp = document.createElement("span"); sp.textContent = inf.actor || inf.role; tx.appendChild(sp); }
+      const nm = document.createElement("b"), sub = inf.actor || inf.role;   // имя и игрок — ссылки на их страницы, если такие есть
+      nm.appendChild(linkOrText(inf.name, inf.url)); tx.appendChild(nm);
+      if (sub) { const sp = document.createElement("span"); sp.appendChild(linkOrText(sub, inf.actor && inf.actor_url)); tx.appendChild(sp); }
       const st = document.createElement("i"); st.className = "pst"; tx.appendChild(st);
       d.append(im, tx); cardsEl.appendChild(d); cardEls[id] = { d, st };
     }
@@ -340,6 +341,10 @@ function updateCards(S, t) {
   }
 }
 const base_url = k => base + "sprites/" + k + ".webp";
+function linkOrText(text, url) {
+  if (!url) return document.createTextNode(text);
+  const a = document.createElement("a"); a.href = url; a.textContent = text; return a;
+}
 
 // ---------- кадр ----------
 let fadeAt = -99, lastSceneId = null;
