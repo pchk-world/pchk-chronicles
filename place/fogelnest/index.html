@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>7</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/dzhonatan-tverdyy/">Джонатан Твёрдый</a><span class="note">начальник лагеря; погиб</span></div><div class="rel" style="--c:var(--link)"><i></i>Урс<span class="note">медведолюд, бывший заключённый</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/kukanyaka/">Кукан Яка</a><span class="note">гном, бывший заключённый</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/volodimir/">Володимир</a><span class="note">полурослик, бывший заключённый</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/zara/">Зара</a><span class="note">медсестра лагеря, затем врач в <a class="ref" href="/place/shish-kebab/">Шиш Кебабе</a></span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/pshen/">Пшен</a><span class="note">надзиратель, потом на острове Соблазна</span></div><div class="rel" style="--c:var(--link)"><i></i>Кеша<span class="note">панцирник, друг детства Урса</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>2</small></h2><ul class="eplinks"><li style="--c:#C8423B"><span><a href="/ep/05/" title="Шахты Фогельнест">#5</a><br><span class="dir">2021</span></span><span><a href="/ep/05/">Шахты Фогельнест</a> <span class="note">· Сфинктерион</span><br><span class="note"><a class="ref" href="/c/sfinkterion/">Сфинктерион</a> и <a class="ref" href="/c/pelias/">Пэлиас</a> взрывают склад, а панцирник Кеша помогает перебить охрану; лагерь разрушен, герои бегут.</span></span></li><li style="--c:#C8423B"><span><a href="/ep/11/" title="Оазис Шиш Кебаб">#11</a><br><span class="dir">2022</span></span><span><a href="/ep/11/">Оазис Шиш Кебаб</a> <span class="note">· Сфинктерион</span><br><span class="note"><a class="ref" href="/c/zara/">Медсестра Зара</a> из Фогельнеста, ставшая врачом <a class="ref" href="/place/shish-kebab/">Шиш Кебаба</a>, погибает в стычке с <a class="ref" href="/c/pelias/">Пэлиасом</a> и <a class="ref" href="/c/stanislava/">Севстанией</a>.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>2</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/cecdb2be3d8a.webp" target="_blank" rel="noopener"><img src="/img/maps/cecdb2be3d8a-t.webp" alt="Фогельнест" loading="lazy"><span class="t"><b>Фогельнест</b><small>Каторжный лагерь в Кунисских горах.</small></span></a><a class="mapcard" href="/img/maps/a8c49d61cf83.webp" target="_blank" rel="noopener"><img src="/img/maps/a8c49d61cf83-t.webp" alt="Лагерь Фогельнест" loading="lazy"><span class="t"><b>Лагерь Фогельнест</b><small>План лагеря из выпуска «Шахты Фогельнест».</small></span></a></div></section>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>4 изображения</small></h2><div class="gal"><figure data-full="/img/places/95c4381ab837.webp"><img src="/img/places/95c4381ab837.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/maps/cecdb2be3d8a.webp"><img src="/img/maps/cecdb2be3d8a.webp" alt="" loading="lazy"><figcaption>карта: Фогельнест</figcaption></figure><figure data-full="/img/maps/a8c49d61cf83.webp"><img src="/img/maps/a8c49d61cf83.webp" alt="" loading="lazy"><figcaption>карта: Лагерь Фогельнест</figcaption></figure><figure data-full="/img/gallery/pzh-lager-karta-5.webp"><img src="/img/gallery/pzh-lager-karta-5.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>Артефакты, связанные с местом</h2><div class="mates"><a class="mate" href="/a/vyshka-5g/"><span>Вышка 5G</span><small>кристалл</small></a></div></section>
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

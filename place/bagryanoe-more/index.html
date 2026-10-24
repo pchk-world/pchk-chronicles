@@ -68,7 +68,37 @@
 
 <section class="ep-sec"><h2>Что здесь происходило <small>4</small></h2><ul class="eplinks"><li style="--c:#C8423B"><span><a href="/ep/11/" title="Оазис Шиш Кебаб">#11</a><br><span class="dir">2022</span></span><span><a href="/ep/11/">Оазис Шиш Кебаб</a> <span class="note">· Сфинктерион</span><br><span class="note">Герои пересекают море, чтобы добраться до оазиса <a class="ref" href="/place/shish-kebab/">Шиш Кебаб</a> за Щитом Чёрного Властелина.</span></span></li><li style="--c:#C8423B"><span><a href="/ep/41/" title="Гонка за желанием">#41</a><br><span class="dir">2025</span></span><span><a href="/ep/41/">Гонка за желанием</a> <span class="note">· Сфинктерион</span><br><span class="note">Гоночная трасса джинна <a class="ref" href="/c/dzhinn-dzhiga/">Джиги</a> ведёт через хрустальный мост с мыса Бакштак к оазису <a class="ref" href="/place/shish-kebab/">Шиш Кебаб</a>.</span></span></li><li style="--c:#DD7A2F"><span><a href="/ep/44/" title="Королевская охота">#44</a><br><span class="dir">2025</span></span><span><a href="/ep/44/">Королевская охота</a> <span class="note">· Отряд крысы Ларисы</span><br><span class="note">Король объясняет, что второй свиток Апокалипсиса хранится у Великой <a class="ref" href="/place/velikaya-falariya/">Фаларии</a> за Багряным морем.</span></span></li><li style="--c:#DD7A2F"><span><a href="/ep/50/" title="Крыса корабельная">#50</a><br><span class="dir">2026</span></span><span><a href="/ep/50/">Крыса корабельная</a> <span class="note">· Отряд крысы Ларисы</span><br><span class="note">Отряд <a class="ref" href="/c/krysa-larisa/">Ларисы</a> плывёт из Гнилой Гавани через Багряное море и Поющий риф в порт <a class="ref" href="/place/velikaya-falariya/">Нерек</a>.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>1</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/cd1233296d71.webp" target="_blank" rel="noopener"><img src="/img/maps/cd1233296d71-t.webp" alt="Багряное море" loading="lazy"><span class="t"><b>Багряное море</b><small>Море между Поникопфом и Каракуни.</small></span></a></div></section>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/maps/cd1233296d71.webp"><img src="/img/maps/cd1233296d71.webp" alt="" loading="lazy"><figcaption>карта: Багряное море</figcaption></figure><figure data-full="/img/gallery/pzh-bagryanoe-more.webp"><img src="/img/gallery/pzh-bagryanoe-more.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

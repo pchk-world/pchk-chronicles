@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>7</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/aleks-batter-st/">Алекс Баттер-старший</a><span class="note">владелец, распорядитель</span></div><div class="rel" style="--c:var(--link)"><i></i>Алекс <a class="ref" href="/c/batter-mladshiy/">Баттер-младший</a><span class="note">убит героями</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/savl/">Савл</a><span class="note">брат <a class="ref" href="/c/erik-penisov/">Эрика</a>; утонул в выгребной яме</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/medium-pahom/">Пахом</a><span class="note">медиум</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/gnomka-talala/">Талала</a><span class="note">гномка</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/shafran-desperado/">Шафран</a><span class="note">дварф</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/bulbu-bulbashi/">Бульбух</a><span class="note">дварфийка-воин</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>2</small></h2><ul class="eplinks"><li style="--c:#7C5CD6"><span><a href="/ep/10/" title="Храм Юмора">#10</a><br><span class="dir">2022</span></span><span><a href="/ep/10/">Храм Юмора</a> <span class="note">· Пахом и Талала</span><br><span class="note">Отряд <a class="ref" href="/c/medium-pahom/">Пахома</a> проникает в храм, <a class="ref" href="/c/savl/">Савл</a> выдаёт их и тонет в яме; алтарь минируют, храм рушится вместе с демоном.</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/17/" title="Демонизация">#17</a><br><span class="dir">2023</span></span><span><a href="/ep/17/">Демонизация</a> <span class="note">· Пахом и Талала</span><br><span class="note">Кровь тысяч погибших при обрушении храма пролилась на алтарь и открыла портал из преисподней; в <a class="ref" href="/place/gelenburg/">Геленбург</a> хлынули демоны.</span></span></li></ul></section>
 
-<section class="ep-sec"><h2>Иллюстрации</h2><div class="gallery" style="gap:12px"><a href="/img/places/2eb835ed000c.webp" target="_blank" rel="noopener"><img class="pic" style="max-width:240px" src="/img/places/2eb835ed000c.webp" alt="" loading="lazy"></a><a href="/img/places/e7e1ce23071b.webp" target="_blank" rel="noopener"><img class="pic" style="max-width:240px" src="/img/places/e7e1ce23071b.webp" alt="" loading="lazy"></a></div></section>
+<section class="ep-sec" id="gallery"><h2>Галерея <small>4 изображения</small></h2><div class="gal"><figure data-full="/img/places/cffa9c7940be.webp"><img src="/img/places/cffa9c7940be.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/places/2eb835ed000c.webp"><img src="/img/places/2eb835ed000c.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/places/e7e1ce23071b.webp"><img src="/img/places/e7e1ce23071b.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/gallery/pzh-hram-yumora.webp"><img src="/img/gallery/pzh-hram-yumora.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

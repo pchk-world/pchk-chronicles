@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>8</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/vitalis/">Виталис</a><span class="note">гном, контрабандист</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/vitalis/">Милонис</a><span class="note">гном, контрабандист</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/pablo-tehnik/">Пабло Техник</a><span class="note">гном, посредник</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/pif-paf/">Пиф-Паф</a><span class="note">гном, наёмный убийца</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/chek/">Чек-Ин</a><span class="note">администраторка бани</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/go-sha/">Го-Ша</a><span class="note">охранник бани</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/dzhuna/">Джуна</a><span class="note">старушка, продавшая душу бесу Мише</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/aragorn/">Арагорн</a><span class="note">президент голубей</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>4</small></h2><ul class="eplinks"><li style="--c:#2F84C8"><span><a href="/ep/14/" title="Янус доставка">#14</a><br><span class="dir">2022</span></span><span><a href="/ep/14/">Янус доставка</a> <span class="note">· Эрик, София и Лёша</span><br><span class="note">У ворот — огромная очередь неграждан, беженцев с запада <a class="ref" href="/place/poniya/">Понии</a> от войны <a class="ref" href="/c/lord-vlaston/">Властона</a>. Гномы-близнецы готовят распыление тонны эльфийской соли над столицей; голубятня накрыта, голуби атакуют <a class="ref" href="/c/erik-penisov/">Эрика</a>.</span></span></li><li style="--c:#B03A7A"><span><a href="/ep/28a/" title="Часть 1 Чёрное небо вампиров">#28a</a><br><span class="dir">2024</span></span><span><a href="/ep/28a/">Часть 1 Чёрное небо вампиров</a> <span class="note">· Вампиры Дан Балана</span><br><span class="note">Клан <a class="ref" href="/c/dan-balan/">Дан Балана</a> узнаёт о плане «Чёрное небо» и проникает в лагерь мигрантов у города.</span></span></li><li style="--c:#B03A7A"><span><a href="/ep/28b/" title="Часть 2 Чёрное небо вампиров">#28b</a><br><span class="dir">2024</span></span><span><a href="/ep/28b/">Часть 2 Чёрное небо вампиров</a> <span class="note">· Вампиры Дан Балана</span><br><span class="note">В бане «Гномский Пар» воскрешён <a class="ref" href="/c/vampir-bek/">Вампирбек</a>; на аэродроме взорван дирижабль «Красный дракон».</span></span></li><li style="--c:#C8423B"><span><a href="/ep/35/" title="Второй Шанс">#35</a><br><span class="dir">2025</span></span><span><a href="/ep/35/">Второй Шанс</a> <span class="note">· Сфинктерион</span><br><span class="note">Отряд <a class="ref" href="/c/sfinkterion/">Сфинктериона</a> выясняет, что голуби заклевали <a class="ref" href="/c/erik-penisov/">Эрика</a> и отправили его в <a class="ref" href="/place/nizhniy-tvorozhok/">Нижний Творожок</a>.</span></span></li></ul></section>
 
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/places/bdedcaf7a940.webp"><img src="/img/places/bdedcaf7a940.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/gallery/pzh-zmiy-hrustalniy.webp"><img src="/img/gallery/pzh-zmiy-hrustalniy.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

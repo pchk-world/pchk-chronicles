@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>2</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/rygor/">Рыгор</a><span class="note">тролль, убит</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/deyn/">Дейн</a><span class="note">горный дварф, ветеран армии в отряде <a class="ref" href="/c/ragozin/">Рогозия</a></span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>2</small></h2><ul class="eplinks"><li style="--c:#7D8A84"><span><a href="/ep/03/" title="Пещера кобольдов">#3</a><br><span class="dir">2021</span></span><span><a href="/ep/03/">Пещера кобольдов</a> <span class="note">· Ваншоты</span><br><span class="note">Селяне нанимают охотников; тролля, державшего кладку кобольдов, скармливают бомбу и выжигают изнутри.</span></span></li><li style="--c:#2F84C8"><span><a href="/ep/14/" title="Янус доставка">#14</a><br><span class="dir">2022</span></span><span><a href="/ep/14/">Янус доставка</a> <span class="note">· Эрик, София и Лёша</span><br><span class="note">Банда <a class="ref" href="/c/erik-penisov/">Эрика</a> с эльфийской солью проходит через пещеру, мост над кипящим маслом. Кобольды укрывают здесь гнома <a class="ref" href="/c/pablo-tehnik/">Пабло</a> — из благодарности <a class="ref" href="/c/ragozin/">Рогозию</a>, приняв Пабло за его родственника.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>1</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/9a84dc7e0945.webp" target="_blank" rel="noopener"><img src="/img/maps/9a84dc7e0945-t.webp" alt="Пещера кобольдов" loading="lazy"><span class="t"><b>Пещера кобольдов</b><small>Схема пещеры.</small></span></a></div></section>
-<section class="ep-sec"><h2>Иллюстрации</h2><div class="gallery" style="gap:12px"><a href="/img/places/1b16156a4b15.webp" target="_blank" rel="noopener"><img class="pic" style="max-width:240px" src="/img/places/1b16156a4b15.webp" alt="" loading="lazy"></a></div></section>
+<section class="ep-sec" id="gallery"><h2>Галерея <small>4 изображения</small></h2><div class="gal"><figure data-full="/img/places/3cc0b24ef5c0.webp"><img src="/img/places/3cc0b24ef5c0.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/places/1b16156a4b15.webp"><img src="/img/places/1b16156a4b15.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/maps/9a84dc7e0945.webp"><img src="/img/maps/9a84dc7e0945.webp" alt="" loading="lazy"><figcaption>карта: Пещера кобольдов</figcaption></figure><figure data-full="/img/gallery/pzh-cobold-cave.webp"><img src="/img/gallery/pzh-cobold-cave.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

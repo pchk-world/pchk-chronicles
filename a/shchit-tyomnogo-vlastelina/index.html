@@ -65,6 +65,37 @@
     </div>
   </div>
 </header>
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/artifacts/9808e4b24de6.webp"><img src="/img/artifacts/9808e4b24de6.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="/img/gallery/pzh-pchk_35-1-0011.webp"><img src="/img/gallery/pzh-pchk_35-1-0011.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/11/" title="Оазис Шиш Кебаб">#11</a></b> <a class="ref" href="/c/sfinkterion/">Сфинктерион</a>, барон <a class="ref" href="/c/baron-edvard/">Эдвард</a> и <a class="ref" href="/c/pelias/">Пэлиас</a> похищают щит у халифа <a class="ref" href="/c/halif-timuras/">Теймураза</a>; <a class="ref" href="/c/baron-edvard/">Эдвард</a> и <a class="ref" href="/c/pelias/">Пэлиас</a> гибнут, <a class="ref" href="/c/sfinkterion/">Сфинктерион</a> уносит щит.</li><li><b><a href="/ep/15/" title="Возвращение в Вёрджинвальд">#15</a></b> призрак барона <a class="ref" href="/c/baron-edvard/">Эдварда</a> привязан к щиту (не дальше 20 м); щит даёт речь лошади и крысе <a class="ref" href="/c/krysa-larisa/">Ларисе</a>, <a class="ref" href="/c/sfinkterion/">Сфинктерион</a> применяет некротическую молнию.</li><li><b><a href="/ep/19/" title="Час эльфийского суда">#19</a></b> халиф мстит за украденный щит; щит некротическим лучом испепеляет стражника, даёт <a class="ref" href="/c/krysa-larisa/">Ларисе</a> способность говорить.</li><li><b><a href="/ep/21a/" title="Часть 1 Судьба Властона">#21a</a></b> некротическая молния обращает офицеров в пыль, жизненная сила уходит в щит.</li><li><b><a href="/ep/21b/" title="Часть 2 Судьба Властона">#21b</a></b> заряды щита поглощает адская шкатулка.</li><li><b><a href="/ep/24/" title="Чёрный Геленбург">#24</a></b> щит прикрывает отряд от взрыва и поглощает почти весь урон бомбы <a class="ref" href="/c/lyucius/">Люциуса</a>.</li><li><b><a href="/ep/30/" title="Ультиматум Сфинктериона">#30</a></b> под магоблокирующей вышкой щит не работает; когда вышку разрушают, <a class="ref" href="/c/sfinkterion/">Сфинктерион</a> через щит множественным внушением велит героям отдать ребёнка, и <a class="ref" href="/c/kudrigar/">Кудрегар</a> отдаёт его Вале.</li><li><b><a href="/ep/35/" title="Второй Шанс">#35</a></b> животная речь щита используется для допроса голубей.</li><li><b><a href="/ep/46/" title="Операция &quot;Гром в аду&quot;">#46</a></b> <a class="ref" href="/c/sfinkterion/">Сфинктерион</a> впервые связывается через щит с <a class="ref" href="/c/brendon-tyomnyy-vlastelin/">Тёмным Властелином</a>.</li><li><b><a href="/ep/52/" title="Накопитель Любви">#52</a></b> в щите прячут ангельский паспорт <a class="ref" href="/c/angelin/">Ангелина</a>.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>11</small></h2><ul class="eplinks"><li style="--c:#C8423B"><span><a href="/ep/11/" title="Оазис Шиш Кебаб">#11</a><br><span class="dir">2022</span></span><span><a href="/ep/11/">Оазис Шиш Кебаб</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/15/" title="Возвращение в Вёрджинвальд">#15</a><br><span class="dir">2023</span></span><span><a href="/ep/15/">Возвращение в Вёрджинвальд</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/19/" title="Час эльфийского суда">#19</a><br><span class="dir">2023</span></span><span><a href="/ep/19/">Час эльфийского суда</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/21a/" title="Часть 1 Судьба Властона">#21a</a><br><span class="dir">2023</span></span><span><a href="/ep/21a/">Часть 1 Судьба Властона</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/21b/" title="Часть 2 Судьба Властона">#21b</a><br><span class="dir">2023</span></span><span><a href="/ep/21b/">Часть 2 Судьба Властона</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/24/" title="Чёрный Геленбург">#24</a><br><span class="dir">2024</span></span><span><a href="/ep/24/">Чёрный Геленбург</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/30/" title="Ультиматум Сфинктериона">#30</a><br><span class="dir">2024</span></span><span><a href="/ep/30/">Ультиматум Сфинктериона</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/35/" title="Второй Шанс">#35</a><br><span class="dir">2025</span></span><span><a href="/ep/35/">Второй Шанс</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/41/" title="Гонка за желанием">#41</a><br><span class="dir">2025</span></span><span><a href="/ep/41/">Гонка за желанием</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/46/" title="Операция &quot;Гром в аду&quot;">#46</a><br><span class="dir">2026</span></span><span><a href="/ep/46/">Операция &quot;Гром в аду&quot;</a> <span class="note">· Сфинктерион</span></span></li><li style="--c:#C8423B"><span><a href="/ep/52/" title="Накопитель Любви">#52</a><br><span class="dir">2026</span></span><span><a href="/ep/52/">Накопитель Любви</a> <span class="note">· Сфинктерион</span></span></li></ul></section>
 

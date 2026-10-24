@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>6</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/dava/">Дава</a><span class="note">богиня, хозяйка острова; погибла</span></div><div class="rel" style="--c:var(--link)"><i></i>Муй<span class="note">помощник Давы</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/kasper/">Каспер</a><span class="note">инженер, друг героев <a class="ref" href="/c/medium-pahom/">Пахома</a></span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/pshen/">Пшен</a><span class="note">бывший надзиратель <a class="ref" href="/place/fogelnest/">Фогельнеста</a>, поселился на острове</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/bulk/">Бульк</a><span class="note">русал, охрана острова</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/kraken-vk/">Кракен ВК</a><span class="note">порабощённый кракен, несший остров</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>3</small></h2><ul class="eplinks"><li style="--c:#7C5CD6"><span><a href="/ep/25/" title="Остров соблазна">#25</a><br><span class="dir">2024</span></span><span><a href="/ep/25/">Остров соблазна</a> <span class="note">· Пахом и Талала</span><br><span class="note"><a class="ref" href="/c/medium-pahom/">Пахом</a> находит инженера <a class="ref" href="/c/kasper/">Каспера</a>, разоблачает Даву и превращает её в портал в <a class="ref" href="/place/nebesnyy-mir/">Небесный мир</a>.</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/27/" title="Достучаться до небес">#27</a><br><span class="dir">2024</span></span><span><a href="/ep/27/">Достучаться до небес</a> <span class="note">· Пахом и Талала</span><br><span class="note">Через портал на острове Соблазна герои возвращаются с небес на землю.</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/31/" title="Культ Кракена">#31</a><br><span class="dir">2024</span></span><span><a href="/ep/31/">Культ Кракена</a> <span class="note">· Пахом и Талала</span><br><span class="note"><a class="ref" href="/c/gnomka-talala/">Талала</a> освобождает кракена и душу Динь-Диня и уничтожает портал.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>1</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/5202e8ade63f.webp" target="_blank" rel="noopener"><img src="/img/maps/5202e8ade63f-t.webp" alt="Остров соблазна" loading="lazy"><span class="t"><b>Остров соблазна</b><small>Из выпуска «Остров соблазна».</small></span></a></div></section>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/maps/5202e8ade63f.webp"><img src="/img/maps/5202e8ade63f.webp" alt="" loading="lazy"><figcaption>карта: Остров соблазна</figcaption></figure><figure data-full="/img/gallery/pzh-ostrovsoblazna-karta-25.webp"><img src="/img/gallery/pzh-ostrovsoblazna-karta-25.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

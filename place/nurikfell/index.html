@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>3</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/korol-nurik/">Нурик Луноликий</a><span class="note">король лесных эльфов</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/poluelf/">Полуэльф</a> (Игорь Балбеков)<span class="note">оракул-дипломат, бастард короля; казнён</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/halif-timuras/">Теймураз</a><span class="note">халиф <a class="ref" href="/place/shish-kebab/">Шиш Кебаба</a>, интриган (выпуск 19)</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>3</small></h2><ul class="eplinks"><li style="--c:#C8423B"><span><a href="/ep/19/" title="Час эльфийского суда">#19</a><br><span class="dir">2023</span></span><span><a href="/ep/19/">Час эльфийского суда</a> <span class="note">· Сфинктерион</span><br><span class="note">Посольство <a class="ref" href="/place/vyordzhinvald/">Вёрджинвальда</a> в Нурикфеле: обвинение подстроил халиф, <a class="ref" href="/c/krysa-larisa/">Лариса</a> освобождает джинна, <a class="ref" href="/c/poluelf/">Полуэльфа</a> казнят за убийство садовника.</span></span></li><li style="--c:#B8901C"><span><a href="/ep/49/" title="Раненый дракон">#49</a><br><span class="dir">2026</span></span><span><a href="/ep/49/">Раненый дракон</a> <span class="note">· Янус и дракон Гиммилут</span><br><span class="note"><a class="ref" href="/c/drakon-gimelut/">Дракон Гиммилут</a> заключает с <a class="ref" href="/c/korol-nurik/">Нуриком</a> смертельно обязывающий союз перед Великим древом и ложится на операцию.</span></span></li><li style="--c:#2F84C8"><span><a href="/ep/53/" title="В поисках Лёши">#53</a><br><span class="dir">2026</span></span><span><a href="/ep/53/">В поисках Лёши</a> <span class="note">· Эрик, София и Лёша</span><br><span class="note"><a class="ref" href="/c/lyosha/">Лёша</a> приходит сюда к Чаше познания смерти; <a class="ref" href="/c/venera/">Венера</a> лишает короля рта и забирает мальчика на небеса.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>1</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/ab74a9b6a5a1.webp" target="_blank" rel="noopener"><img src="/img/maps/ab74a9b6a5a1-t.webp" alt="Нурикфелл" loading="lazy"><span class="t"><b>Нурикфелл</b><small>Столица королевства эльфов.</small></span></a></div></section>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/maps/ab74a9b6a5a1.webp"><img src="/img/maps/ab74a9b6a5a1.webp" alt="" loading="lazy"><figcaption>карта: Нурикфелл</figcaption></figure><figure data-full="/img/gallery/pzh-pchk_19-1-0087.webp"><img src="/img/gallery/pzh-pchk_19-1-0087.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>

@@ -68,7 +68,37 @@
 <section class="ep-sec"><h2>Известные жители <small>2</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/byanka-sosunesku/">Бьянка Сосунеску</a><span class="note">вампирша, вдова графа Влада</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/florenta/">Флореан</a><span class="note">член Высшего вампирского совета; уничтожен</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>1</small></h2><ul class="eplinks"><li style="--c:#B03A7A"><span><a href="/ep/23/" title="Пробуждение Сосунеску">#23</a><br><span class="dir">2024</span></span><span><a href="/ep/23/">Пробуждение Сосунеску</a> <span class="note">· Вампиры Дан Балана</span><br><span class="note">Клан <a class="ref" href="/c/dan-balan/">Дан Балана</a> пробуждает <a class="ref" href="/c/byanka-sosunesku/">Бьянку Сосунеску</a>; она становится союзницей клана.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>1</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/210a8d4329bc.webp" target="_blank" rel="noopener"><img src="/img/maps/210a8d4329bc-t.webp" alt="Поместье «Гнездо Кукушки»" loading="lazy"><span class="t"><b>Поместье «Гнездо Кукушки»</b><small>Из выпуска «Пробуждение Сосунеску».</small></span></a></div></section>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/maps/210a8d4329bc.webp"><img src="/img/maps/210a8d4329bc.webp" alt="" loading="lazy"><figcaption>карта: Поместье «Гнездо Кукушки»</figcaption></figure><figure data-full="/img/gallery/pzh-pomeste-23.webp"><img src="/img/gallery/pzh-pomeste-23.webp" alt="" loading="lazy"><figcaption>podzem.cc</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>
