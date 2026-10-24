@@ -729,3 +729,27 @@ h3.sub-h small{color:var(--muted); letter-spacing:0; text-transform:none; font-w
 .lb-nx{right:16px; top:50%; transform:translateY(-50%)}
 .lb-n{position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font:12px var(--mono); color:#aaa}
 @media (max-width:600px){ .gal{grid-template-columns:repeat(auto-fill, minmax(110px, 1fr)); gap:8px} .lb-p, .lb-nx{top:auto; bottom:12px; transform:none} }
+/* способности с листа героя: отступы внутри раскрытого блока */
+details.abil-box{padding:0}
+details.abil-box > :not(summary){margin-left:16px; margin-right:16px}
+details.abil-box > p.note{margin-top:2px}
+details.abil-box > ul:last-child, details.abil-box > p:last-child{margin-bottom:14px}
+details.abil-box > h4:first-of-type{margin-top:10px}
+/* раздел целиком под спойлером (подкасты) */
+details.spoil.big > summary{padding:12px 16px}
+details.spoil.big .sp-h{font:700 20px var(--head); color:var(--text)}
+details.spoil.big .sp-h small{font:500 12px var(--mono); color:var(--faint); margin-left:6px}
+details.spoil.big .sp-body{padding:2px 16px 14px}
+/* выпуски и хронология на странице персонажа — компактная лента */
+.cev.mini{grid-template-columns:96px 22px minmax(0,1fr)}
+.cev.mini .when{font-size:11.5px; padding:10px 8px 0 0}
+.cev.mini .rail::before{left:10px}
+.cev.mini .rail::after{left:4px; top:11px; width:10px; height:10px}
+.cev.mini .card{padding:7px 12px; margin:4px 0; grid-template-columns:1fr; gap:3px}
+.cev.mini .card h4{font:600 14.5px var(--head)}
+.cev.mini .card h4 .note{font-weight:400}
+.cev.mini .card p{font-size:13.5px}
+.cev.mini .card p.note{color:var(--muted)}
+.cev-evs{display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:2px}
+.cev-ev{font:500 12.5px var(--head); color:var(--link)}
+@media (max-width:760px){ .cev.mini{grid-template-columns:20px minmax(0,1fr)} .cev.mini .when{padding:6px 0 0} }
