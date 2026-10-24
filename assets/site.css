@@ -216,6 +216,7 @@ h2.sect{font-size:22px; font-weight:600; padding-bottom:6px; border-bottom:1px s
 .linkto:hover{color:var(--link-h); text-decoration:underline}
 .ytb{display:inline-flex; gap:6px; align-items:center; font:600 13px var(--head); color:#000; background:var(--link); padding:7px 13px; border-radius:3px}
 .ytb:hover{background:var(--link-h); color:#000; text-decoration:none}
+.ytb[hidden]{display:none}
 
 /* список выпусков */
 .toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px}
