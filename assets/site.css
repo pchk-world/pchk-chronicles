@@ -700,3 +700,8 @@ h3.sub-h small{color:var(--muted); letter-spacing:0; text-transform:none; font-w
 .bar-c span{align-self:end; display:block; background:var(--roll); border-radius:3px 3px 0 0; min-height:1px}
 .bar-c b{font:600 11px var(--mono); color:var(--muted); padding-top:4px}
 .bar-c i{font:500 10px var(--mono); color:var(--faint); font-style:normal; min-height:12px}
+/* способности с листа героя (распознано с кадров) */
+.abil-box{margin-top:14px}
+.abil-box h4{font:600 12px var(--mono); letter-spacing:.1em; text-transform:uppercase; color:var(--link); margin:14px 0 6px}
+.abil{margin:0; padding-left:18px}
+.abil li{margin:3px 0; line-height:1.45}
