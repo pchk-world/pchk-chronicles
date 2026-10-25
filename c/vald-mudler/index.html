@@ -12,15 +12,12 @@
 <meta property="og:url" content="https://pchk.world/c/vald-mudler/">
 <meta property="og:title" content="Вальд Мудлер">
 <meta property="og:description" content="Вальд Мудлер — персонаж «Подземелий Чикен Карри»">
-<meta property="og:image" content="https://pchk.world/og-default.jpg">
+<meta property="og:image" content="https://pchk.world/img/gallery/f36-d-vald-mudler-5648.webp">
 <meta property="og:image:alt" content="Вальд Мудлер · Хроники Понии">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Вальд Мудлер">
 <meta name="twitter:description" content="Вальд Мудлер — персонаж «Подземелий Чикен Карри»">
-<meta name="twitter:image" content="https://pchk.world/og-default.jpg">
+<meta name="twitter:image" content="https://pchk.world/img/gallery/f36-d-vald-mudler-5648.webp">
 <meta name="twitter:image:alt" content="Вальд Мудлер · Хроники Понии">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +49,7 @@
 
 <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/c/">Персонажи</a> › Вальд Мудлер</div>
 <header class="ep-hero char-hero">
-  <span class="portrait big" aria-hidden="true">ВМ</span>
+  <img class="portrait big" src="/img/gallery/f36-d-vald-mudler-5648.webp" alt="" loading="lazy">
   <div>
     <span class="eyebrow">Неигровой персонаж · 1 вып.</span>
     <h1>Вальд Мудлер</h1>
@@ -71,8 +68,38 @@
 
 
 
-
-<section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/lyucius/"><img class="av" src="/img/chars/lyucius.webp" alt="" loading="lazy"><span>Люциус</span><small>1 общ.</small></a><a class="mate" href="/c/voron-baron/"><img class="av" src="/img/portraits/32f1c97364827953.webp" alt="" loading="lazy"><span>Ворон Барон</span><small>1 общ.</small></a><a class="mate" href="/c/krysa-larisa/"><img class="av" src="/img/gallery/f50-d-krysa-larisa-1587.webp" alt="" loading="lazy"><span>Крыса Лариса</span><small>1 общ.</small></a><a class="mate" href="/c/lob/"><img class="av" src="/img/chars/lob.webp" alt="" loading="lazy"><span>Лоб</span><small>1 общ.</small></a><a class="mate" href="/c/serzhant-tigril/"><img class="av" src="/img/gallery/f50-d-serzhant-tigril-2507.webp" alt="" loading="lazy"><span>Сержант Тигрил</span><small>1 общ.</small></a><a class="mate" href="/c/imperator-elon/"><img class="av" src="/img/chars/pchk_36-1-0308-portret2.webp" alt="" loading="lazy"><span>Император Элон</span><small>1 общ.</small></a><a class="mate" href="/c/panasiy/"><img class="av" src="/img/chars/pchk_36-1-0159.webp" alt="" loading="lazy"><span>Панасий</span><small>1 общ.</small></a></div></section>
+<section class="ep-sec" id="gallery"><h2>Облики <small>3 изображения · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="/img/gallery/f36-vald-mudler.webp"><img src="/img/gallery/f36-vald-mudler.webp" alt="" loading="lazy"><figcaption>карточка с плашки · <a href="/ep/36/#t=4627">#36</a></figcaption></figure><figure data-full="/img/gallery/f36-d-vald-mudler-5648.webp"><img src="/img/gallery/f36-d-vald-mudler-5648.webp" alt="" loading="lazy"><figcaption>карточка с плашки · <a href="/ep/36/#t=5648">#36</a></figcaption></figure><figure data-full="/img/gallery/f36-a-5652.webp"><img src="/img/gallery/f36-a-5652.webp" alt="" loading="lazy"><span class="gal-auto" title="Кто в кадре — определено автоматически по расшифровке и сходству кадров">авто</span><figcaption>кадр вставки · <a href="/ep/36/#t=5652">#36</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
+<section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/imperator-elon/"><img class="av" src="/img/gallery/f36-d-imperator-elon-6040.webp" alt="" loading="lazy"><span>Император Элон</span><small>1 общ.</small></a><a class="mate" href="/c/lob/"><img class="av" src="/img/gallery/f36-d-lob-3750.webp" alt="" loading="lazy"><span>Лоб</span><small>1 общ.</small></a><a class="mate" href="/c/panasiy/"><img class="av" src="/img/gallery/f36-panasiy.webp" alt="" loading="lazy"><span>Панасий</span><small>1 общ.</small></a><a class="mate" href="/c/lyucius/"><img class="av" src="/img/gallery/f44-d-lyucius-2393.webp" alt="" loading="lazy"><span>Люциус</span><small>1 общ.</small></a><a class="mate" href="/c/voron-baron/"><img class="av" src="/img/gallery/f44-d-voron-baron-4449.webp" alt="" loading="lazy"><span>Ворон Барон</span><small>1 общ.</small></a><a class="mate" href="/c/krysa-larisa/"><img class="av" src="/img/gallery/f50-d-krysa-larisa-1587.webp" alt="" loading="lazy"><span>Крыса Лариса</span><small>1 общ.</small></a><a class="mate" href="/c/serzhant-tigril/"><img class="av" src="/img/gallery/f50-d-serzhant-tigril-2507.webp" alt="" loading="lazy"><span>Сержант Тигрил</span><small>1 общ.</small></a></div></section>
 
 
 <section class="ep-sec" id="episodes"><h2>Выпуски и хронология Понии <small>1 вып. · в порядке времени Понии</small></h2><div class="chron"><div class="cev mini" style="--c:#DD7A2F"><div class="when">год 3–4</div><div class="rail"></div><div class="card"><h4><a href="/ep/36/" title="Руины Малестии">#36</a> <a href="/ep/36/">Руины Малестии</a> <span class="note">· Отряд крысы Ларисы · 2025</span></h4><p class=note>NPC · доктор, глава организации «Ренессанс», руководитель экспедиции</p><span class="fate">неизвестно (парализован, оставлен в тронном зале)</span></div></div></div></section>
