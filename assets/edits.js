@@ -6,7 +6,7 @@
   const me = document.currentScript;
   const API = me && me.dataset.api, SITEKEY = me && me.dataset.sitekey;
   if (!E || !API) return;
-  const SKIP = 'nav, header.site-nav, .site-nav, .lightbox, #ep-player, .ed-menu, .ed-tip, .ed-dlg, .ed-toast, a.brand, button, input, textarea';
+  const SKIP = '.ed-mark, nav, header.site-nav, .site-nav, .lightbox, #ep-player, .ed-menu, .ed-tip, .ed-dlg, .ed-toast, a.brand, button, input, textarea';
   let menu = null, tip = null, dlg = null, ts = { ready: null, id: null };
 
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };

@@ -794,3 +794,6 @@ details.spoil.big .sp-body{padding:2px 16px 14px}
 @media (max-width:600px){.ed-toast{left:16px; right:16px; bottom:16px}.ed-row{flex-wrap:wrap}}
 .ed-tip.below::after{bottom:auto; top:-6px; border-top:0; border-bottom:6px solid var(--link)}
 main img{-webkit-touch-callout:none}
+/* отметка принятой правки читателя «✎ #N» (viz/edits_layer.py) */
+.ed-mark{font:500 .72em var(--head); color:var(--link); margin-left:.25em; vertical-align:super; white-space:nowrap; opacity:.8}
+.ed-mark:hover{opacity:1; text-decoration:none}
