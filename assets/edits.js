@@ -161,7 +161,7 @@
        <label>Было</label><div class="ed-was">…${esc(s.before.slice(-80))} <del>${esc(s.sel)}</del> ${esc(s.after.slice(0, 80))}…</div>
        <label class="ed-fixl">Должно быть</label><textarea name="fix" maxlength="${E.MAX}">${esc(s.sel)}</textarea>
        <label>Источник (необязательно)</label><input type="text" name="source" maxlength="${E.MAX}" placeholder="ссылка на выпуск с таймкодом, подкаст, пост группы">`,
-      b => ({ kind: 'text', op: pick(b, 'op'), page: location.pathname, section: info.section, sel: s,
+      b => ({ kind: 'text', op: pick(b, 'op'), page: location.pathname, title: pageTitle().trim(), section: info.section, sel: s,
               fix: pick(b, 'op') === 'delete' ? '' : val(b, 'fix'), source: val(b, 'source') }));
     wireSeg(box, v => {
       const show = v !== 'delete';
@@ -182,7 +182,7 @@
        <label class="ed-repl" hidden>На что заменить</label><input class="ed-repl" type="text" name="replace" maxlength="${E.MAX}" placeholder="ссылка на картинку или «выпуск #54, 1:23:45»" hidden>
        <label>Почему (необязательно)</label><textarea name="why" maxlength="${E.MAX}"></textarea>
        <label>Источник (необязательно)</label><input type="text" name="source" maxlength="${E.MAX}" placeholder="ссылка на выпуск с таймкодом">`,
-      b => ({ kind: 'image', op: pick(b, 'op'), page: location.pathname, section: sectionOf(img),
+      b => ({ kind: 'image', op: pick(b, 'op'), page: location.pathname, title: pageTitle().trim(), section: sectionOf(img),
               image: { src, caption: cap.trim() }, replace: pick(b, 'op') === 'replace' ? val(b, 'replace') : '',
               why: val(b, 'why'), source: val(b, 'source') }));
     wireSeg(box, v => box.querySelectorAll('.ed-repl').forEach(x => { x.hidden = v !== 'replace'; }));
