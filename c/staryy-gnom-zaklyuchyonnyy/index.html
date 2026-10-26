@@ -12,15 +12,12 @@
 <meta property="og:url" content="https://pchk.world/c/staryy-gnom-zaklyuchyonnyy/">
 <meta property="og:title" content="Старый гном-заключённый">
 <meta property="og:description" content="Старый гном-заключённый — персонаж «Подземелий Чикен Карри»">
-<meta property="og:image" content="https://pchk.world/og-default.jpg">
+<meta property="og:image" content="https://pchk.world/img/chars/frame-ep05-anim-2998.webp">
 <meta property="og:image:alt" content="Старый гном-заключённый · Хроники Понии">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Старый гном-заключённый">
 <meta name="twitter:description" content="Старый гном-заключённый — персонаж «Подземелий Чикен Карри»">
-<meta name="twitter:image" content="https://pchk.world/og-default.jpg">
+<meta name="twitter:image" content="https://pchk.world/img/chars/frame-ep05-anim-2998.webp">
 <meta name="twitter:image:alt" content="Старый гном-заключённый · Хроники Понии">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,7 +49,7 @@
 
 <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/c/">Персонажи</a> › Старый гном-заключённый</div>
 <header class="ep-hero char-hero">
-  <span class="portrait big" aria-hidden="true">СГ</span>
+  <img class="portrait big" src="/img/chars/frame-ep05-anim-2998.webp" alt="" loading="lazy">
   <div>
     <span class="eyebrow">Неигровой персонаж · 1 вып.</span>
     <h1>Старый гном-заключённый</h1>
@@ -71,8 +68,38 @@
 
 
 
-
-<section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/sfinkterion/"><img class="av" src="/img/gallery/f52-d-sfinkterion-levenhart-3423.webp" alt="" loading="lazy"><span>Сфинктерион</span><small>1 общ.</small></a><a class="mate" href="/c/urs/"><img class="av" src="/img/portraits/443a7cab4a0cd6a0.webp" alt="" loading="lazy"><span>Урс</span><small>1 общ.</small></a><a class="mate" href="/c/kukanyaka/"><img class="av" src="/img/portraits/eb07462323309bed.webp" alt="" loading="lazy"><span>Кукан Яка</span><small>1 общ.</small></a><a class="mate" href="/c/gradvart/"><span class="av" aria-hidden="true">Г</span><span>Градварт</span><small>1 общ.</small></a><a class="mate" href="/c/zara/"><img class="av" src="/img/chars/zara.webp" alt="" loading="lazy"><span>Зара</span><small>1 общ.</small></a><a class="mate" href="/c/ragozin/"><img class="av" src="/img/gallery/pzc-pchk_07-1-0008.webp" alt="" loading="lazy"><span>Рогозий</span><small>1 общ.</small></a><a class="mate" href="/c/krysa-larisa/"><img class="av" src="/img/gallery/f50-d-krysa-larisa-1587.webp" alt="" loading="lazy"><span>Крыса Лариса</span><small>1 общ.</small></a><a class="mate" href="/c/eldi/"><img class="av" src="/img/portraits/1d602b0467477b86.webp" alt="" loading="lazy"><span>Илдэ</span><small>1 общ.</small></a><a class="mate" href="/c/erik-penisov/"><img class="av" src="/img/gallery/pzc-pchk_14-1-0015.webp" alt="" loading="lazy"><span>Эрик Пэнисов</span><small>1 общ.</small></a><a class="mate" href="/c/pelias/"><img class="av" src="/img/gallery/pzc-pchk_09-1-0004.webp" alt="" loading="lazy"><span>Пэлиас</span><small>1 общ.</small></a><a class="mate" href="/c/pancirnik-kesha/"><img class="av" src="/img/chars/kesha.webp" alt="" loading="lazy"><span>Панцирник Кеша</span><small>1 общ.</small></a><a class="mate" href="/c/lord-vlaston/"><img class="av" src="/img/chars/lord-vlaston.webp" alt="" loading="lazy"><span>Лорд Властон</span><small>1 общ.</small></a></div></section>
+<section class="ep-sec" id="gallery"><h2>Облики <small>2 изображения · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="/img/gallery/f05-a-2998.webp"><img src="/img/gallery/f05-a-2998.webp" alt="" loading="lazy"><span class="gal-auto" title="Кто в кадре — определено автоматически по расшифровке и сходству кадров">авто</span><figcaption>кадр вставки · <a href="/ep/05/#t=2998">#5</a></figcaption></figure><figure data-full="/img/gallery/f05-a-828.webp"><img src="/img/gallery/f05-a-828.webp" alt="" loading="lazy"><span class="gal-auto" title="Кто в кадре — определено автоматически по расшифровке и сходству кадров">авто</span><figcaption>кадр вставки · <a href="/ep/05/#t=828">#5</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
+<section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/pancirnik-kesha/"><img class="av" src="/img/chars/kesha.webp" alt="" loading="lazy"><span>Панцирник Кеша</span><small>1 общ.</small></a><a class="mate" href="/c/zara/"><img class="av" src="/img/gallery/f11-zara.webp" alt="" loading="lazy"><span>Зара</span><small>1 общ.</small></a><a class="mate" href="/c/eldi/"><img class="av" src="/img/portraits/1d602b0467477b86.webp" alt="" loading="lazy"><span>Илдэ</span><small>1 общ.</small></a><a class="mate" href="/c/sfinkterion/"><img class="av" src="/img/gallery/f52-d-sfinkterion-levenhart-3423.webp" alt="" loading="lazy"><span>Сфинктерион</span><small>1 общ.</small></a><a class="mate" href="/c/ragozin/"><img class="av" src="/img/gallery/pzc-pchk_07-1-0008.webp" alt="" loading="lazy"><span>Рогозий</span><small>1 общ.</small></a><a class="mate" href="/c/pelias/"><img class="av" src="/img/gallery/f19-elf-pelias.webp" alt="" loading="lazy"><span>Пэлиас</span><small>1 общ.</small></a><a class="mate" href="/c/erik-penisov/"><img class="av" src="/img/gallery/f14-erik-penisov.webp" alt="" loading="lazy"><span>Эрик Пэнисов</span><small>1 общ.</small></a><a class="mate" href="/c/kukanyaka/"><img class="av" src="/img/gallery/f26-d-kukan-yaka-1125.webp" alt="" loading="lazy"><span>Кукан Яка</span><small>1 общ.</small></a><a class="mate" href="/c/lord-vlaston/"><img class="av" src="/img/gallery/f21b-d-lord-vlaston-5132.webp" alt="" loading="lazy"><span>Лорд Властон</span><small>1 общ.</small></a><a class="mate" href="/c/krysa-larisa/"><img class="av" src="/img/gallery/f54-krysa-larisa.webp" alt="" loading="lazy"><span>Крыса Лариса</span><small>1 общ.</small></a><a class="mate" href="/c/urs/"><img class="av" src="/img/portraits/443a7cab4a0cd6a0.webp" alt="" loading="lazy"><span>Урс</span><small>1 общ.</small></a><a class="mate" href="/c/gradvart/"><span class="av" aria-hidden="true">Г</span><span>Градварт</span><small>1 общ.</small></a></div></section>
 
 
 <section class="ep-sec" id="episodes"><h2>Выпуски и хронология Понии <small>1 вып. · в порядке времени Понии</small></h2><div class="chron"><div class="cev mini" style="--c:#C8423B"><div class="when">год 0</div><div class="rail"></div><div class="card"><h4><a href="/ep/05/" title="Шахты Фогельнест">#5</a> <a href="/ep/05/">Шахты Фогельнест</a> <span class="note">· Сфинктерион · 2021</span></h4><p class=note>NPC · информатор о монстре</p><span class="fate">неизвестно</span></div></div></div></section>
