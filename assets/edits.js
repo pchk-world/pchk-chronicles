@@ -6,7 +6,7 @@
   const me = document.currentScript;
   const API = me && me.dataset.api, SITEKEY = me && me.dataset.sitekey;
   if (!E || !API) return;
-  const SKIP = 'nav, header, .site-nav, .lightbox, #ep-player, .ed-menu, .ed-tip, .ed-dlg, .ed-toast, a.brand, button, input, textarea';
+  const SKIP = 'nav, header.site-nav, .site-nav, .lightbox, #ep-player, .ed-menu, .ed-tip, .ed-dlg, .ed-toast, a.brand, button, input, textarea';
   let menu = null, tip = null, dlg = null, ts = { ready: null, id: null };
 
   const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
@@ -69,8 +69,12 @@
     if (text.length < 2 || text.length > E.MAX || !anc.closest('main') || anc.closest(SKIP)) return null;
     // контекст — текст ближайшего блока вокруг выделения
     const block = anc.closest('p, li, blockquote, td, dd, figcaption, h1, h2, h3, .ev, section') || anc;
-    const full = block.textContent.replace(/\s+/g, ' ');
-    const at = full.indexOf(text);
+    const norm = t => t.replace(/\s+/g, ' ');
+    const full = norm(block.textContent);
+    // смещение — по тексту от начала блока до начала выделения (то же вхождение, а не первое такое же слово)
+    const pre = document.createRange(); pre.setStart(block, 0); pre.setEnd(r.startContainer, r.startOffset);
+    let at = norm(pre.toString()).length;
+    if (full.slice(at, at + text.length) !== text) { const t2 = full.indexOf(text, Math.max(0, at - 5)); at = t2 >= 0 ? t2 : full.indexOf(text); }
     const sel = at >= 0 ? E.contextAround(full, at, at + text.length) : { before: '', sel: text, after: '' };
     return { range: r, sel, section: sectionOf(anc) };
   }
@@ -79,18 +83,33 @@
     setTimeout(() => {
       closeTip();
       const info = selectionInfo();
-      if (!info) return;
-      const b = info.range.getBoundingClientRect();
-      tip = el('button', 'ed-tip', '✎ Предложить исправление');
-      tip.type = 'button';
-      tip.addEventListener('mousedown', ev => ev.preventDefault());    // не снимать выделение
-      tip.addEventListener('click', () => { closeTip(); openTextDialog(info); });
-      document.body.appendChild(tip);
-      tip.style.left = Math.max(8, b.left + scrollX + b.width / 2 - tip.offsetWidth / 2) + 'px';
-      tip.style.top = Math.max(8, b.top + scrollY - tip.offsetHeight - 10) + 'px';
+      if (info) showTip(info, false);
     }, 10);
   });
-  document.addEventListener('selectionchange', () => { if (tip && !selectionInfo()) closeTip(); });
+  function showTip(info, below) {
+    const b = info.range.getBoundingClientRect();
+    tip = el('button', 'ed-tip' + (below ? ' below' : ''), '✎ Предложить исправление');
+    tip.type = 'button';
+    tip.addEventListener('mousedown', ev => ev.preventDefault());    // не снимать выделение
+    tip.addEventListener('click', () => { closeTip(); openTextDialog(info); });
+    document.body.appendChild(tip);
+    tip.style.left = Math.min(Math.max(8, b.left + scrollX + b.width / 2 - tip.offsetWidth / 2), scrollX + innerWidth - tip.offsetWidth - 8) + 'px';
+    tip.style.top = (below ? b.bottom + scrollY + 14 : Math.max(8, b.top + scrollY - tip.offsetHeight - 10)) + 'px';
+  }
+  // телефон: выделение долгим нажатием не даёт событий мыши — подсказка по selectionchange (с паузой), под выделением,
+  // чтобы её не закрыло системное меню выделения
+  let touchy = false, selTimer = null;
+  document.addEventListener('touchstart', () => { touchy = true; }, { passive: true, capture: true });
+  document.addEventListener('selectionchange', () => {
+    if (tip && !selectionInfo()) closeTip();
+    if (!touchy || dlg) return;
+    clearTimeout(selTimer);
+    selTimer = setTimeout(() => {
+      const info = selectionInfo();
+      if (!info) return;
+      closeTip(); showTip(info, true);
+    }, 600);
+  });
 
   // ---------- Turnstile ----------
   function loadTurnstile() {
@@ -98,15 +117,20 @@
     ts.ready = new Promise((ok, bad) => {
       if (window.turnstile) return ok(window.turnstile);
       const s = el('script'); s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async = true;
-      s.onload = () => ok(window.turnstile); s.onerror = () => { ts.ready = null; bad(new Error('turnstile')); };
+      s.onload = () => { if (window.turnstile) ok(window.turnstile); else { ts.ready = null; bad(new Error('turnstile')); } };
+      s.onerror = () => { ts.ready = null; bad(new Error('turnstile')); };
       document.head.appendChild(s);
     });
     return ts.ready;
   }
   function getToken(box) {
     return loadTurnstile().then(t => new Promise((ok, bad) => {
+      const fail = () => { clearTimeout(timer); bad(new Error('turnstile')); };
+      const timer = setTimeout(fail, 60000);                     // проверка не ответила за минуту
       if (ts.id !== null) { try { t.remove(ts.id); } catch (_) {} }
-      ts.id = t.render(box, { sitekey: SITEKEY, appearance: 'interaction-only', callback: ok, 'error-callback': () => bad(new Error('turnstile')) });
+      ts.id = t.render(box, { sitekey: SITEKEY, appearance: 'interaction-only',
+                              callback: tok => { clearTimeout(timer); ok(tok); },
+                              'error-callback': fail, 'timeout-callback': fail, 'expired-callback': fail, 'unsupported-callback': fail });
     }));
   }
 
@@ -132,7 +156,8 @@
         .then(token => fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ payload, token }) }))
         .then(r => r.json().catch(() => ({})).then(j => { if (!r.ok || !j.issue) throw new Error(j.error || 'Не получилось отправить, попробуйте ещё раз'); return j; }))
         .then(j => { closeDialog(); toast(j.issue, j.url); })
-        .catch(e => { err.textContent = e.message === 'turnstile' ? 'Проверка Turnstile не прошла — попробуйте ещё раз' : (e.message || 'Нет связи — попробуйте ещё раз'); })
+        .catch(e => { err.textContent = e.message === 'turnstile' ? 'Проверка Turnstile не прошла — попробуйте ещё раз'
+                                      : e instanceof TypeError ? 'Нет связи — попробуйте ещё раз' : (e.message || 'Нет связи — попробуйте ещё раз'); })
         .finally(() => { if (send.isConnected) { send.disabled = false; send.textContent = 'Отправить'; } });
     });
     document.body.append(shade, box);
@@ -173,7 +198,8 @@
   function openImageDialog(img) {
     const fig = img.closest('figure');
     const cap = (fig && fig.querySelector('figcaption') || {}).textContent || img.alt || '';
-    const src = new URL(img.getAttribute('src'), location.href).pathname;
+    const u = new URL(img.getAttribute('src'), location.href);
+    const src = u.origin === location.origin ? u.pathname : u.href;          // превью YouTube и др. — полным адресом
     const opts = [['remove', 'Удалить', 'не тот персонаж, мусор, повтор'], ['main', 'Сделать основной', 'показывать на всех страницах'],
                   ['replace', 'Заменить', 'ссылка на картинку или выпуск с таймкодом']];
     const box = dialog(`${pageTitle()}${cap ? ' · ' + cap.trim() : ''}`,

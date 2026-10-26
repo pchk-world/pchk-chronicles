@@ -9,7 +9,7 @@
 
   // Строки обрезаются до MAX знаков, пустые поля и пустые вложенные объекты выбрасываются.
   function clean(v) {
-    if (typeof v === "string") { const t = v.trim(); return t ? t.slice(0, MAX) : undefined; }
+    if (typeof v === "string") return v.trim() ? v.slice(0, MAX) : undefined;      // пробелы на стыках контекста важны
     if (v && typeof v === "object") {
       const o = {};
       for (const [k, x] of Object.entries(v)) { const c = clean(x); if (c !== undefined) o[k] = c; }

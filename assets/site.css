@@ -792,3 +792,5 @@ details.spoil.big .sp-body{padding:2px 16px 14px}
 .ed-toast{position:fixed; z-index:100; right:24px; bottom:24px; background:var(--nav-bg-2); border:1px solid var(--ok); border-radius:12px; padding:12px 16px; box-shadow:0 12px 32px rgba(0,0,0,.6); font:14px var(--body); max-width:min(380px,calc(100vw - 32px))}
 .ed-toast b{color:var(--ok); font-family:var(--head)}
 @media (max-width:600px){.ed-toast{left:16px; right:16px; bottom:16px}.ed-row{flex-wrap:wrap}}
+.ed-tip.below::after{bottom:auto; top:-6px; border-top:0; border-bottom:6px solid var(--link)}
+main img{-webkit-touch-callout:none}
