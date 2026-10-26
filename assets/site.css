@@ -753,3 +753,42 @@ details.spoil.big .sp-body{padding:2px 16px 14px}
 .cev-evs{display:flex; flex-wrap:wrap; gap:4px 12px; margin-top:2px}
 .cev-ev{font:500 12.5px var(--head); color:var(--link)}
 @media (max-width:760px){ .cev.mini{grid-template-columns:20px minmax(0,1fr)} .cev.mini .when{padding:6px 0 0} }
+
+/* правки читателей (viz/edits.js; макеты — docs/superpowers/specs/2026-10-26-reader-edits/) */
+.ed-menu{position:absolute; z-index:100; background:var(--nav-bg-2); border:1px solid var(--nav-border); border-radius:10px; box-shadow:0 12px 32px rgba(0,0,0,.6); padding:5px; font:500 14px var(--head); min-width:230px}
+.ed-item{padding:8px 12px; border-radius:7px; color:var(--nav-text); cursor:pointer}
+.ed-item:hover, .ed-item:focus{background:rgba(255,255,255,.08); box-shadow:inset 3px 0 var(--link); outline:none}
+.ed-tip{position:absolute; z-index:100; background:var(--link); color:#1e0c1b; font:600 13.5px var(--head); padding:6px 12px; border:0; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.55); cursor:pointer}
+.ed-tip::after{content:""; position:absolute; left:50%; bottom:-6px; margin-left:-6px; border:6px solid transparent; border-bottom:0; border-top-color:var(--link)}
+.ed-shade{position:fixed; inset:0; z-index:99; background:rgba(0,0,0,.6)}
+.ed-dlg{position:fixed; z-index:100; left:50%; top:50%; transform:translate(-50%,-50%); width:min(560px,calc(100vw - 32px)); max-height:calc(100vh - 32px); overflow-y:auto; background:var(--page); border:1px solid var(--border); border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.7); padding:20px 22px; font:14.5px/1.5 var(--body); color:var(--text)}
+.ed-dlg h3{font:700 19px var(--head); margin:0 0 4px}
+.ed-sub{color:var(--muted); font-size:13px; margin-bottom:14px}
+.ed-dlg label{display:block; font:600 12.5px var(--head); color:var(--muted); margin:12px 0 5px; text-transform:uppercase; letter-spacing:.05em}
+.ed-dlg label[hidden], .ed-dlg [hidden]{display:none}
+.ed-dlg textarea, .ed-dlg input[type=text]{width:100%; background:var(--accent); border:1px solid var(--border); border-radius:8px; color:var(--text); font:14.5px/1.45 var(--body); padding:9px 11px}
+.ed-dlg textarea{min-height:74px; resize:vertical}
+.ed-was{background:rgba(255,77,94,.08); border:1px dashed rgba(255,77,94,.45); border-radius:8px; padding:9px 11px; color:var(--muted)}
+.ed-was del{color:var(--alert)}
+.ed-seg{display:flex; gap:6px; flex-wrap:wrap}
+.ed-seg button{border:1px solid var(--border); border-radius:999px; padding:5px 12px; font:500 13.5px var(--head); color:var(--muted); background:transparent; cursor:pointer}
+.ed-seg button.on{border-color:var(--link); color:var(--link); background:rgba(255,197,0,.08)}
+.ed-opts{display:grid; gap:8px; flex:1}
+.ed-opt{display:flex; gap:10px; align-items:flex-start; text-align:left; border:1px solid var(--border); border-radius:10px; padding:10px 12px; background:transparent; color:var(--text); cursor:pointer; font:inherit}
+.ed-opt.on{border-color:var(--link); background:rgba(255,197,0,.06)}
+.ed-opt b{font:600 14.5px var(--head); display:block}
+.ed-opt small{color:var(--muted)}
+.ed-dot{width:16px; height:16px; border-radius:50%; border:2px solid var(--muted); flex:none; margin-top:3px}
+.ed-opt.on .ed-dot{border-color:var(--link); background:radial-gradient(var(--link) 45%,transparent 50%)}
+.ed-row{display:flex; gap:14px; align-items:center}
+.ed-top{align-items:flex-start}
+.ed-thumb{width:84px; height:118px; object-fit:cover; border-radius:8px; border:1px solid var(--border); flex:none}
+.ed-err{color:var(--alert); font-size:13.5px; margin-top:10px; min-height:1px}
+.ed-foot{display:flex; justify-content:space-between; align-items:center; margin-top:14px; gap:12px; flex-wrap:wrap}
+.ed-note{font-size:12px; color:var(--faint)}
+.ed-btn{font:600 14.5px var(--head); border-radius:999px; padding:9px 18px; border:1px solid var(--border); color:var(--text); background:transparent; cursor:pointer}
+.ed-pri{background:var(--link); color:#1e0c1b; border-color:var(--link)}
+.ed-btn:disabled{opacity:.6; cursor:default}
+.ed-toast{position:fixed; z-index:100; right:24px; bottom:24px; background:var(--nav-bg-2); border:1px solid var(--ok); border-radius:12px; padding:12px 16px; box-shadow:0 12px 32px rgba(0,0,0,.6); font:14px var(--body); max-width:min(380px,calc(100vw - 32px))}
+.ed-toast b{color:var(--ok); font-family:var(--head)}
+@media (max-width:600px){.ed-toast{left:16px; right:16px; bottom:16px}.ed-row{flex-wrap:wrap}}
