@@ -55,22 +55,52 @@
     <h1>Кристалл телепортации Пахома</h1>
     <div class="tags"><span class="tag pc">кристалл</span><span class="tag">утерян</span></div>
     <p class="note" style="margin:10px 0 0">Сейчас у: исчез вместе с <a class="ref" href="/c/medium-pahom/">Пахомом</a></p>
-    <p class="note" style="margin:4px 0 0">Владельцы: <a class="ref" href="/c/dyavolica-ada-ispugova/">Дьяволица Ада Испугова</a>, <a class="ref" href="/c/medium-pahom/">Пахом</a></p>
+    <p class="note" style="margin:4px 0 0">Владельцы: <a class="ref" href="/c/ada-ispugova/">Дьяволица Ада Испугова</a>, <a class="ref" href="/c/medium-pahom/">Пахом</a></p>
     <p class="note" style="margin:4px 0 0">Также: кристалл телепортации, малый кристалл, тёмный кристалл телепортации</p>
     <p class="lead">Кулон-кристалл, переносящий всех, кто касается его рукой; активируется фразой «<a class="ref" href="/c/kristal/">Кристалл</a>, кристалл, унеси меня в портал». Позже врастает в руку медиума <a class="ref" href="/c/medium-pahom/">Пахома</a> и чернеет от тёмной энергии ритуалов, ранит владельца при каждом использовании.</p>
     <div class="ep-nav">
       
-      <a class="btn" href="https://podzem.cc/predmety/kristall-teleportacii/" target="_blank" rel="noopener">Подробнее на podzem.cc ↗</a>
+      
       <button class="btn" data-copy="/a/kristall-teleportacii-pahoma/">Скопировать ссылку</button>
     </div>
   </div>
 </header>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>1 изображение</small></h2><div class="gal"><figure data-full="/img/artifacts/b7d2f0d9f507.webp"><img src="/img/artifacts/b7d2f0d9f507.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/06/" title="Адский поезд">#6</a></b> кристалл снимают с дьяволицы в адском поезде; <a class="ref" href="/c/medium-pahom/">Пахом</a> активирует его и уносится один.</li><li><b><a href="/ep/10/" title="Храм Юмора">#10</a></b> кристалл врос в руку <a class="ref" href="/c/medium-pahom/">Пахома</a>.</li><li><b><a href="/ep/17/" title="Демонизация">#17</a></b> кристалл заражён тёмной энергией, чернеет.</li><li><b><a href="/ep/25/" title="Остров соблазна">#25</a></b> малый кристалл в ладони <a class="ref" href="/c/medium-pahom/">Пахома</a>.</li><li><b><a href="/ep/27/" title="Достучаться до небес">#27</a></b> последняя телепортация сжигает <a class="ref" href="/c/medium-pahom/">Пахома</a>.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>5</small></h2><ul class="eplinks"><li style="--c:#7C5CD6"><span><a href="/ep/06/" title="Адский поезд">#6</a><br><span class="dir">2021</span></span><span><a href="/ep/06/">Адский поезд</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/10/" title="Храм Юмора">#10</a><br><span class="dir">2022</span></span><span><a href="/ep/10/">Храм Юмора</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/17/" title="Демонизация">#17</a><br><span class="dir">2023</span></span><span><a href="/ep/17/">Демонизация</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/25/" title="Остров соблазна">#25</a><br><span class="dir">2024</span></span><span><a href="/ep/25/">Остров соблазна</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/27/" title="Достучаться до небес">#27</a><br><span class="dir">2024</span></span><span><a href="/ep/27/">Достучаться до небес</a> <span class="note">· Пахом и Талала</span></span></li></ul></section>
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>
-<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Тексты, расшифровки и разборы выпусков — на <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a>, вики «Подземелий Чикен Карри»; оттуда же сверены факты, броски и часть портретов. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>.</footer>
+<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Конспекты, броски и кадры — по самим выпускам; часть дополнительной информации взята с <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a> и вики «Подземелий Чикен Карри», по ним же сверены факты. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>. <span class="reader-ver">Распознавание кадров: bbea93d от 26.10.2026; #8, #9 — b5cb29a от 25.10.2026; #12 — 35d04d1 от 25.10.2026.</span></footer>
 </div></main>
 <script>
 document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {

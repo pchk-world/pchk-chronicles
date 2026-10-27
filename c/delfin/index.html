@@ -58,7 +58,7 @@
     <p class="lead">вызываемый свистулькой</p>
     <div class="ep-nav">
       
-      <a class="btn" href="https://podzem.cc/npc/delfi/" target="_blank" rel="noopener">Подробнее на podzem.cc ↗</a>
+      
       
       <button class="btn" data-copy="/c/delfin/">Скопировать ссылку</button>
     </div>
@@ -68,8 +68,38 @@
 
 
 
-
-<section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/grifon-andrey/"><img class="av" src="/img/gallery/f51-grifon-andrey.webp" alt="" loading="lazy"><span>Грифон Андрей</span><small>1 общ.</small></a><a class="mate" href="/c/kisa/"><img class="av" src="/img/gallery/f42-kisa.webp" alt="" loading="lazy"><span>Киса</span><small>1 общ.</small></a><a class="mate" href="/c/zadira/"><img class="av" src="/img/gallery/f42-zadira.webp" alt="" loading="lazy"><span>Задира</span><small>1 общ.</small></a><a class="mate" href="/c/melissa/"><img class="av" src="/img/gallery/f42-melissa.webp" alt="" loading="lazy"><span>Мелисса</span><small>1 общ.</small></a><a class="mate" href="/c/strannyy-mark/"><span class="av" aria-hidden="true">СМ</span><span>Странный Марк</span><small>1 общ.</small></a><a class="mate" href="/c/bulbatarion/"><img class="av" src="/img/gallery/f42-d-bulbuterion-4973.webp" alt="" loading="lazy"><span>Бульбутерион</span><small>1 общ.</small></a><a class="mate" href="/c/milfeya/"><img class="av" src="/img/gallery/f51-d-milfeya-2889.webp" alt="" loading="lazy"><span>Милфея</span><small>1 общ.</small></a><a class="mate" href="/c/gnomka-talala/"><img class="av card" src="/img/gallery/f51-talala-x.webp" alt="" loading="lazy"><span>Гномка Талала</span><small>1 общ.</small></a><a class="mate" href="/c/dvoynik-byvalogo/"><span class="av" aria-hidden="true">ДБ</span><span>Двойник Бывалого</span><small>1 общ.</small></a><a class="mate" href="/c/sherif/"><img class="av" src="/img/gallery/f42-d-sherif-3411.webp" alt="" loading="lazy"><span>Шериф</span><small>1 общ.</small></a><a class="mate" href="/c/venera/"><img class="av" src="/img/chars/venera.webp" alt="" loading="lazy"><span>Венера</span><small>1 общ.</small></a><a class="mate" href="/c/byvalyy/"><img class="av" src="/img/gallery/f42-byvalyy.webp" alt="" loading="lazy"><span>Бывалый</span><small>1 общ.</small></a><a class="mate" href="/c/santa-tinderman/"><img class="av" src="/img/gallery/f27-santa-tinderman.webp" alt="" loading="lazy"><span>Санта Тиндерман</span><small>1 общ.</small></a><a class="mate" href="/c/zhanuariya/"><img class="av" src="/img/gallery/f42-d-zhenuariya-1698.webp" alt="" loading="lazy"><span>Женуария</span><small>1 общ.</small></a><a class="mate" href="/c/troll-grodya/"><img class="av" src="/img/gallery/f42-d-troll-grodya-4232.webp" alt="" loading="lazy"><span>Тролль Гродя</span><small>1 общ.</small></a></div></section>
+<section class="ep-sec" id="gallery"><h2>Облики <small>1 изображение · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="/img/gallery/f42-a-3851.webp"><img src="/img/gallery/f42-a-3851.webp" alt="" loading="lazy"><span class="gal-auto" title="Кто в кадре — определено автоматически по расшифровке и сходству кадров">авто</span><figcaption>кадр вставки · <a href="/ep/42/#t=3851">#42</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
+<section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/milfeya/"><img class="av" src="/img/gallery/f51-d-milfeya-2889.webp" alt="" loading="lazy"><span>Милфея</span><small>1 общ.</small></a><a class="mate" href="/c/dvoynik-byvalogo/"><span class="av" aria-hidden="true">ДБ</span><span>Двойник Бывалого</span><small>1 общ.</small></a><a class="mate" href="/c/troll-grodya/"><img class="av" src="/img/gallery/f42-d-troll-grodya-4232.webp" alt="" loading="lazy"><span>Тролль Гродя</span><small>1 общ.</small></a><a class="mate" href="/c/kisa/"><img class="av" src="/img/gallery/f42-kisa.webp" alt="" loading="lazy"><span>Киса</span><small>1 общ.</small></a><a class="mate" href="/c/venera/"><img class="av" src="/img/chars/venera.webp" alt="" loading="lazy"><span>Венера</span><small>1 общ.</small></a><a class="mate" href="/c/gnomka-talala/"><img class="av card" src="/img/gallery/f51-talala-x.webp" alt="" loading="lazy"><span>Гномка Талала</span><small>1 общ.</small></a><a class="mate" href="/c/grifon-andrey/"><img class="av" src="/img/gallery/f51-grifon-andrey.webp" alt="" loading="lazy"><span>Грифон Андрей</span><small>1 общ.</small></a><a class="mate" href="/c/melissa/"><img class="av" src="/img/gallery/f42-melissa.webp" alt="" loading="lazy"><span>Мелисса</span><small>1 общ.</small></a><a class="mate" href="/c/santa-tinderman/"><img class="av" src="/img/gallery/f27-santa-tinderman.webp" alt="" loading="lazy"><span>Санта Тиндерман</span><small>1 общ.</small></a><a class="mate" href="/c/sherif/"><img class="av" src="/img/gallery/f42-d-sherif-3411.webp" alt="" loading="lazy"><span>Шериф</span><small>1 общ.</small></a><a class="mate" href="/c/bulbatarion/"><img class="av" src="/img/gallery/f42-d-bulbuterion-4973.webp" alt="" loading="lazy"><span>Бульбутерион</span><small>1 общ.</small></a><a class="mate" href="/c/strannyy-mark/"><span class="av" aria-hidden="true">СМ</span><span>Странный Марк</span><small>1 общ.</small></a><a class="mate" href="/c/zhanuariya/"><img class="av" src="/img/gallery/f42-d-zhenuariya-1698.webp" alt="" loading="lazy"><span>Женуария</span><small>1 общ.</small></a><a class="mate" href="/c/zadira/"><img class="av" src="/img/gallery/f42-zadira.webp" alt="" loading="lazy"><span>Задира</span><small>1 общ.</small></a><a class="mate" href="/c/byvalyy/"><img class="av" src="/img/gallery/f42-byvalyy.webp" alt="" loading="lazy"><span>Бывалый</span><small>1 общ.</small></a></div></section>
 
 
 <section class="ep-sec" id="episodes"><h2>Выпуски и хронология Понии <small>1 вып. · в порядке времени Понии</small></h2><div class="chron"><div class="cev mini" style="--c:#7C5CD6"><div class="when">год 4</div><div class="rail"></div><div class="card"><h4><a href="/ep/42/" title="Чудная Долина">#42</a> <a href="/ep/42/">Чудная Долина</a> <span class="note">· Пахом и Талала · 2025</span></h4><p class=note>NPC · вызываемый свистулькой</p><span class="fate">взял на себя проклятие ожерелья</span></div></div></div></section>
@@ -78,7 +108,7 @@
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>
-<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Тексты, расшифровки и разборы выпусков — на <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a>, вики «Подземелий Чикен Карри»; оттуда же сверены факты, броски и часть портретов. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>.</footer>
+<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Конспекты, броски и кадры — по самим выпускам; часть дополнительной информации взята с <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a> и вики «Подземелий Чикен Карри», по ним же сверены факты. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>. <span class="reader-ver">Распознавание кадров: bbea93d от 26.10.2026; #8, #9 — b5cb29a от 25.10.2026; #12 — 35d04d1 от 25.10.2026.</span></footer>
 </div></main>
 <script>
 document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {

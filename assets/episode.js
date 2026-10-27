@@ -91,7 +91,7 @@
       </div>
     </div>
     <ol class="scenes" id="scenes">${items.map((it, i) => it.type === 'roll'
-      ? `<li class="scene roll" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body">${rollLine(it.r)}</div></li>`
+      ? `<li class="scene roll" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"${it.r.img ? ` data-roll-img="${esc(it.r.img)}"` : ''}${it.r.ok === true ? ' data-ok="1"' : it.r.ok === false ? ' data-ok="0"' : ''}><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body">${rollLine(it.r)}</div></li>`
       : it.type === 'scene'
       ? `<li class="scene${it.key ? ' key' : ' minor'}" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec ?? ''}"><span class="t">${it.sec != null ? `<a href="${yt(it.sec)}" target="_blank" rel="noopener" title="Смотреть с этого момента">${esc(it.t)}</a>` : esc(it.t || '')}</span><span class="rail"></span><div class="body">${it.html}${it.sec != null ? `<button class="share" data-copy="${epUrl(D.key)}#t=${fmt(it.sec)}" title="Скопировать ссылку на этот момент">🔗</button>` : ''}</div></li>`
       : `<li class="scene coin" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body"><b>${link(it.e.who_url, it.e.who || 'Игрок')}</b> ${coinLabel(it.e)}${it.e.to ? ' → ' + esc(it.e.to) : ''}: ${it.e.reason_html || esc(it.e.reason || '')}${it.e.result ? ` <span class="note">(${esc(it.e.result)})</span>` : ''}</div></li>`).join('')}</ol>

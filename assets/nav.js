@@ -80,3 +80,26 @@
   window.navSync = sync;
   sync();
 })();
+
+/* Кадр плашки броска во всплывающей подсказке: строки бросков с data-roll-img (страницы персонажей, выпусков, /rolls/). */
+(() => {
+  let tip = null, cur = null;
+  const place = e => {
+    const w = tip.offsetWidth, h = tip.offsetHeight, m = 14;
+    let x = e.clientX + m, y = e.clientY + m;
+    if (x + w > innerWidth - 8) x = Math.max(8, e.clientX - w - m);
+    if (y + h > innerHeight - 8) y = Math.max(8, e.clientY - h - m);
+    tip.style.transform = `translate(${x}px, ${y}px)`;
+  };
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest && e.target.closest('[data-roll-img]');
+    if (el === cur) return;
+    cur = el;
+    if (!el) { if (tip) tip.hidden = true; return; }
+    if (!tip) { tip = document.createElement('div'); tip.className = 'roll-tip'; tip.setAttribute('aria-hidden', 'true'); tip.innerHTML = '<img alt="">'; document.body.append(tip); }
+    tip.firstChild.src = el.dataset.rollImg;
+    tip.hidden = false; place(e);
+  });
+  document.addEventListener('mousemove', e => { if (cur && tip && !tip.hidden) place(e); }, { passive: true });
+  addEventListener('scroll', () => { if (tip) tip.hidden = true; cur = null; }, { passive: true });
+})();

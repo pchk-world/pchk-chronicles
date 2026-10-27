@@ -801,3 +801,14 @@ main img{-webkit-touch-callout:none}
 /* отметка принятой правки читателя «✎ #N» (viz/edits_layer.py) */
 .ed-mark{font:500 .72em var(--head); color:var(--link); margin-left:.25em; vertical-align:super; white-space:nowrap; opacity:.8}
 .ed-mark:hover{opacity:1; text-decoration:none}
+/* кадр плашки броска при наведении (nav.js) */
+.roll-tip{position:fixed; left:0; top:0; z-index:60; pointer-events:none; width:min(420px, 80vw); border-radius:8px; overflow:hidden;
+  box-shadow:0 8px 28px rgba(0,0,0,.45); border:1px solid var(--border); background:#000}
+.roll-tip img{display:block; width:100%; height:auto}
+[data-roll-img]{cursor:default}
+/* броски на плашке выпуска (template.html diceHTML): удачные / неудачные / всего */
+.dice{display:inline-flex; gap:5px; font:600 12px var(--mono)}
+.dice b{font-weight:600; color:var(--muted)}
+.dice b.ok{color:var(--ok)}
+.dice b.bad{color:var(--alert)}
+.dice::before{content:""; width:9px; height:9px; margin:auto 1px auto 0; border:1.5px solid currentColor; border-radius:2px; transform:rotate(45deg); opacity:.7}

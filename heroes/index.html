@@ -66,7 +66,7 @@
 </div></main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
-<script src="/assets/data.js?v=4ed4f975a2"></script>
+<script src="/assets/data.js?v=189f9093e9"></script>
 <script>
 (() => {  // в функции: при мягком переходе (viz/player.js) скрипт запускается заново
 const PAGE = 'chars';
@@ -248,13 +248,19 @@ function scrollToStation(k){
 let rz; if (PAGE === 'map') window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(renderMap, 150); });
 
 /* выпуски */
+/* броски выпуска на плашке: удачные — зелёным, неудачные — красным, всего — приглушённо; подписи — только во всплывающей */
+function diceHTML(d){
+  if (!d) return '';
+  const [n, ok, bad] = d;
+  return ` · <span class="dice" title="Бросков: ${n}; удачных: ${ok}; неудачных: ${bad}; остальные — без сложности на экране"><b class="ok">${ok}</b><b class="bad">${bad}</b><b>${n}</b></span>`;
+}
 function renderList(){
   const q = ($('#q').value||'').trim().toLowerCase();
   const items = EP.filter(e => active.has(e.branch) && (!q || e.search.includes(q))).reverse();  // от новых к старым
   $('#qcount').textContent = `${items.length} из ${EP.length}`;
   $('#eplist').innerHTML = items.map(e => `<article class="ep" style="--c:${brOf(e.branch).color}" data-k="${e.key}" tabindex="0">
     <img src="https://i.ytimg.com/vi/${e.video_id}/mqdefault.jpg" alt="" loading="lazy">
-    <div class="body"><div class="top"><span>#${esc(e.label)} · ${esc(e.date.slice(0,4))}</span><span>${esc(e.branch)}</span></div>
+    <div class="body"><div class="top"><span>#${esc(e.label)} · ${esc(e.date.slice(0,4))}${diceHTML(e.dice)}</span><span>${esc(e.branch)}</span></div>
     <h3>${esc(e.title)}</h3><p>${esc(e.brief)}</p></div></article>`).join('');
   document.querySelectorAll('.ep').forEach(a => { const go = () => { location.href = '/ep/' + a.dataset.k + '/'; }; a.onclick = go; a.onkeydown = ev => { if (ev.key==='Enter') go(); }; });
 }

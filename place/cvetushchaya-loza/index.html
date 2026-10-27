@@ -58,7 +58,7 @@
     <p class="lead">Небольшая деревушка в Мёртвых топях недалеко от поместья графа <a class="ref" href="/c/graf-vlad-sosunesku/">Влада Сосунеску</a>. В таверне «Весёлый утопец» произошёл пожар, а винодельня взорвана в финале выпуска 16. Здесь же дом сироты и лачуга болотной твари Нины.</p>
     <div class="ep-nav">
       
-      <a class="btn" href="https://podzem.cc/lokacii/derevnya-cvetuschaya-loza/" target="_blank" rel="noopener">Подробнее на podzem.cc ↗</a>
+      
       <a class="btn" href="/map/">На карте Понии</a>
       <button class="btn" data-copy="/place/cvetushchaya-loza/">Скопировать ссылку</button>
     </div>
@@ -68,11 +68,41 @@
 <section class="ep-sec"><h2>Известные жители <small>2</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i>Нина<span class="note">болотная тварь</span></div><div class="rel" style="--c:var(--link)"><i></i>Сирота<span class="note">подросток, разбудивший графа</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>1</small></h2><ul class="eplinks"><li style="--c:#B03A7A"><span><a href="/ep/16/" title="Вампиры Мёртвых топей">#16</a><br><span class="dir">2023</span></span><span><a href="/ep/16/">Вампиры Мёртвых топей</a> <span class="note">· Вампиры Дан Балана</span><br><span class="note">Клан <a class="ref" href="/c/dan-balan/">Дан Балана</a> ищет подростков-сирот; сгорают таверна «Весёлый утопец» и винодельня, селяне сжигают поместье графа.</span></span></li></ul></section>
 <section class="ep-sec"><h2>Карты и планы <small>1</small></h2><div class="mapgrid"><a class="mapcard" href="/img/maps/face7ee749eb.webp" target="_blank" rel="noopener"><img src="/img/maps/face7ee749eb-t.webp" alt="Таверна «Весёлый утопец»" loading="lazy"><span class="t"><b>Таверна «Весёлый утопец»</b><small>Деревня Цветущая Лоза в Мёртвых топях.</small></span></a></div></section>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>1 изображение</small></h2><div class="gal"><figure data-full="/img/maps/face7ee749eb.webp"><img src="/img/maps/face7ee749eb.webp" alt="" loading="lazy"><figcaption>карта: Таверна «Весёлый утопец»</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>
-<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Тексты, расшифровки и разборы выпусков — на <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a>, вики «Подземелий Чикен Карри»; оттуда же сверены факты, броски и часть портретов. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>.</footer>
+<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Конспекты, броски и кадры — по самим выпускам; часть дополнительной информации взята с <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a> и вики «Подземелий Чикен Карри», по ним же сверены факты. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>. <span class="reader-ver">Распознавание кадров: bbea93d от 26.10.2026; #8, #9 — b5cb29a от 25.10.2026; #12 — 35d04d1 от 25.10.2026.</span></footer>
 </div></main>
 <script>
 document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {

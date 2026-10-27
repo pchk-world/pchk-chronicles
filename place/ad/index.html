@@ -58,7 +58,7 @@
     <p class="lead">Загробный мир грешных душ. Сюда идёт адский поезд по морю лавы, здесь же Вокзал грешных душ, откуда локомотивы везут демонов в <a class="ref" href="/place/chyornyy-gelenburg/">Чёрный Геленбург</a>. <a class="ref" href="/c/lord-vlaston/">Властон</a> заключил контракт с Лордом тьмы, и после его смерти <a class="ref" href="/place/gelenburg/">Геленбург</a> провалился в преисподнюю. Бесы вроде Миши и <a class="ref" href="/c/bes-kapuchino/">Капучин</a> не хотят вторжения на землю.</p>
     <div class="ep-nav">
       
-      <a class="btn" href="https://podzem.cc/lokacii/vokzal-greshnyh-dush/" target="_blank" rel="noopener">Подробнее на podzem.cc ↗</a>
+      
       <a class="btn" href="/map/">На карте Понии</a>
       <button class="btn" data-copy="/place/ad/">Скопировать ссылку</button>
     </div>
@@ -68,11 +68,41 @@
 <section class="ep-sec"><h2>Известные жители <small>6</small></h2><div style="display:grid;gap:8px"><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/ada-ispugova/">Ада Испугова</a><span class="note">дьяволица, хозяйка поезда</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/barbara/">Барбара</a><span class="note">суккуб</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/koldun-filipp/">Филипп</a><span class="note">дух колдуна</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/bes-misha/">Миша</a><span class="note">бес</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/bes-kapuchino/">Капучин</a><span class="note">бес</span></div><div class="rel" style="--c:var(--link)"><i></i><a class="ref" href="/c/shafran-desperado/">Шафран</a><span class="note">дварф, вызволен из ада</span></div></div></section>
 <section class="ep-sec"><h2>Что здесь происходило <small>4</small></h2><ul class="eplinks"><li style="--c:#7C5CD6"><span><a href="/ep/06/" title="Адский поезд">#6</a><br><span class="dir">2021</span></span><span><a href="/ep/06/">Адский поезд</a> <span class="note">· Пахом и Талала</span><br><span class="note">Герои падают на адский поезд; <a class="ref" href="/c/medium-pahom/">Пахом</a> уходит с кристаллом, <a class="ref" href="/c/din-din/">Динь-Динь</a>, <a class="ref" href="/c/zhanna/">Жанна</a> и <a class="ref" href="/c/volodimir/">Володимир</a> остаются в аду.</span></span></li><li style="--c:#C8423B"><span><a href="/ep/21b/" title="Часть 2 Судьба Властона">#21b</a><br><span class="dir">2023</span></span><span><a href="/ep/21b/">Часть 2 Судьба Властона</a> <span class="note">· Сфинктерион</span><br><span class="note">С гибелью <a class="ref" href="/c/lord-vlaston/">Властона</a> исполняется контракт: <a class="ref" href="/place/gelenburg/">Геленбург</a> проваливается в преисподнюю, море вокруг превращается в лаву.</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/31/" title="Культ Кракена">#31</a><br><span class="dir">2024</span></span><span><a href="/ep/31/">Культ Кракена</a> <span class="note">· Пахом и Талала</span><br><span class="note">Душа Динь-Диня освобождена из ада.</span></span></li><li style="--c:#3E9A5E"><span><a href="/ep/47/" title="Вокзал грешных душ">#47</a><br><span class="dir">2026</span></span><span><a href="/ep/47/">Вокзал грешных душ</a> <span class="note">· Фронт</span><br><span class="note">Десант проникает на Вокзал грешных душ и выводит из строя один из двух локомотивов.</span></span></li></ul></section>
 
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>1 изображение</small></h2><div class="gal"><figure data-full="/img/gallery/pzh-pchk_47-1-0008.webp"><img src="/img/gallery/pzh-pchk_47-1-0008.webp" alt="" loading="lazy"><figcaption>кадр выпуска</figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 
 
 <section class="comments"><h2>Обсуждение</h2><script async src="https://comments.app/js/widget.js?3" data-comments-app-website="8Vm1YAFo" data-limit="10" data-color="FFC500" data-dark="1" data-outlined="1" data-colorful="1"></script></section>
-<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Тексты, расшифровки и разборы выпусков — на <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a>, вики «Подземелий Чикен Карри»; оттуда же сверены факты, броски и часть портретов. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>.</footer>
+<footer>Собрано по канону: выпуски, подкасты «Ответы на вопросы» и «Хроники Леониса Парфия». Конспекты, броски и кадры — по самим выпускам; часть дополнительной информации взята с <a href="https://podzem.cc/" target="_blank" rel="noopener">podzem.cc</a> и вики «Подземелий Чикен Карри», по ним же сверены факты. Портреты и данные инфобоксов — с <a href="https://pck.fandom.com/ru/" target="_blank" rel="noopener">вики «Подземелья Чикен Карри» на Fandom</a> (CC BY-SA). Фанатский проект, не связан с авторами шоу. <a href="#" data-intro>О проекте</a> · Автор — <a href="https://t.me/yetanothermike" target="_blank" rel="noopener">@yetanothermike</a> в Telegram. Сайт и конспекты выпусков открыты: <a href="https://github.com/pchk-world/pchk-chronicles" target="_blank" rel="noopener">репозиторий на GitHub</a>. <span class="reader-ver">Распознавание кадров: bbea93d от 26.10.2026; #8, #9 — b5cb29a от 25.10.2026; #12 — 35d04d1 от 25.10.2026.</span></footer>
 </div></main>
 <script>
 document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
