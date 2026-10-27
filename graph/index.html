@@ -162,21 +162,23 @@ function renderChron(){
   document.querySelectorAll('#chronlist [data-copy]').forEach(bindCopy);
 }
 
-/* карта ветвей: растягивается на всю ширину */
+/* карта ветвей: растягивается на всю ширину; подписи ветвей слева закреплены, прокручиваются только выпуски */
 function renderMap(){
   const box = $('#mapbox');
-  const laneH = 64, left = 210, top = 46;
+  const laneH = 64, left = box.clientWidth < 600 ? 172 : 210, top = 46;
   const step = Math.max(38, (box.clientWidth - left - 30) / EP.length);
   const lanes = BR.map(b => b.name);
-  const W = Math.round(left + EP.length*step + 30), H = top + lanes.length*laneH + 14;
-  const x = i => left + i*step + step/2, y = b => top + lanes.indexOf(b)*laneH + laneH/2;
+  const W = Math.round(EP.length*step + 40), H = top + lanes.length*laneH + 14;
+  const x = i => 10 + i*step + step/2, y = b => top + lanes.indexOf(b)*laneH + laneH/2;
+  let f = `<svg width="${left}" height="${H}" viewBox="0 0 ${left} ${H}" aria-hidden="true">`;
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Карта сюжетных ветвей по выпускам">`;
   lanes.forEach((b,i) => {
     const yy = top + i*laneH;
-    if (i%2===0) s += `<rect x="0" y="${yy}" width="${W}" height="${laneH}" fill="#ffffff" opacity=".035"/>`;
+    if (i%2===0) { f += `<rect x="0" y="${yy}" width="${left}" height="${laneH}" fill="#ffffff" opacity=".035"/>`;
+                   s += `<rect x="0" y="${yy}" width="${W}" height="${laneH}" fill="#ffffff" opacity=".035"/>`; }
     const n = EP.filter(e=>e.branch===b).length;
-    s += `<rect x="12" y="${yy+laneH/2-15}" width="4" height="30" rx="2" fill="${brOf(b).color}"/>`;
-    s += `<text class="lane-label" x="24" y="${yy+laneH/2-2}">${esc(b)}</text><text class="lane-sub" x="24" y="${yy+laneH/2+14}">${n} ${plural(n,'выпуск','выпуска','выпусков')}</text>`;
+    f += `<rect x="12" y="${yy+laneH/2-15}" width="4" height="30" rx="2" fill="${brOf(b).color}"/>`;
+    f += `<text class="lane-label" x="24" y="${yy+laneH/2-2}">${esc(b)}</text><text class="lane-sub" x="24" y="${yy+laneH/2+14}">${n} ${plural(n,'выпуск','выпуска','выпусков')}</text>`;
   });
   let prevY = '';
   EP.forEach((e,i) => { const yr = e.date.slice(0,4); if (yr !== prevY){ prevY = yr;
@@ -196,7 +198,7 @@ function renderMap(){
       <title>#${esc(e.label)} ${esc(e.title)} · ${esc(e.date)}</title>
       <circle class="halo" r="19"/><circle class="o" r="14" stroke="${brOf(e.branch).color}"/><text y="4">${esc(e.label)}</text></g>`;
   });
-  box.innerHTML = s + '</svg>';
+  box.innerHTML = `<div class="mapfix">${f}</svg></div><div class="mapscroll" id="mapscroll">${s}</svg></div>`;
   document.querySelectorAll('.stn').forEach(g => {
     g.onclick = () => select(g.dataset.k);
     g.onkeydown = ev => { if (ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(g.dataset.k);} };
@@ -243,7 +245,7 @@ function select(k, quiet){
   document.querySelectorAll('#panel .linkto[data-ch]').forEach(a => a.onclick = () => openChar(a.dataset.ch));
 }
 function scrollToStation(k){
-  const g = document.querySelector(`.stn[data-k="${k}"]`), box = $('#mapbox'); if (!g) return;
+  const g = document.querySelector(`.stn[data-k="${k}"]`), box = $('#mapscroll'); if (!g) return;
   const tx = +g.getAttribute('transform').match(/translate\(([\d.]+)/)[1];
   box.scrollTo({left: Math.max(0, tx - box.clientWidth/2), behavior:'smooth'});
 }

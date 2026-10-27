@@ -172,7 +172,10 @@ h2.sect{font-size:22px; font-weight:600; padding-bottom:6px; border-bottom:1px s
 }
 
 /* широкая карта ветвей */
-.mapbox{background:rgba(0,0,0,.35); border:1px solid var(--border); border-radius:4px; overflow-x:auto; overflow-y:hidden}
+.mapbox{background:rgba(0,0,0,.35); border:1px solid var(--border); border-radius:4px; overflow:hidden; display:flex}
+.mapfix{flex:none; border-right:1px solid var(--border)}
+.mapscroll{flex:1; min-width:0; overflow-x:auto; overflow-y:hidden}
+@media (max-width:599px){.mapfix .lane-label{font-size:11px}}
 .mapbox svg{display:block}
 .lane-label{font:600 13px var(--head); fill:var(--text)}
 .lane-sub{font:500 10.5px var(--mono); fill:var(--faint)}
