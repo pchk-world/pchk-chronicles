@@ -415,6 +415,9 @@ a.ref:hover{color:var(--link); border-bottom-style:solid; text-decoration:none}
 @media (max-width:820px){.char-hero.wide{grid-template-columns:1fr}.char-hero.wide .pic, .char-hero.wide .minimap{max-width:560px}}
 .portrait.big{width:100%; max-width:260px; aspect-ratio:4/5; height:auto; border-radius:4px; object-fit:cover; object-position:top; border:1px solid var(--border); background:var(--page2); display:grid; place-items:center; font:600 54px var(--head); color:var(--faint)}
 .portrait.big.card{aspect-ratio:79/111; object-fit:contain; border:0; border-radius:0; background:none}
+.portrait.big.card.intro{aspect-ratio:auto; border-radius:4px}
+.char-short{margin:8px 0 0; max-width:68ch; color:var(--text); font-size:15px; line-height:1.55}
+.char-short b{color:var(--muted); font-weight:600}
 .char-hero .infobox{max-width:520px; margin-top:16px}
 .mates{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:8px}
 .mate{display:grid; grid-template-columns:auto 1fr auto; gap:8px; align-items:center; background:var(--accent); border:1px solid var(--border); border-radius:3px; padding:6px 10px; color:var(--text); font-size:13.5px}
@@ -805,6 +808,12 @@ main img{-webkit-touch-callout:none}
 .roll-tip{position:fixed; left:0; top:0; z-index:60; pointer-events:none; width:min(420px, 80vw); border-radius:8px; overflow:hidden;
   box-shadow:0 8px 28px rgba(0,0,0,.45); border:1px solid var(--border); background:#000}
 .roll-tip img{display:block; width:100%; height:auto}
+.roll-tip p{margin:0; padding:8px 11px; font:13px/1.45 var(--body); color:var(--text); background:var(--nav-bg-2, #241626); white-space:pre-line}
+.roll-tip.text-only{width:auto; max-width:min(360px, 80vw)}
+[data-tip]{text-decoration:underline dotted color-mix(in srgb, currentColor 45%, transparent); text-underline-offset:3px; cursor:help}
+.abil-use{display:inline-block; margin-left:6px; font:600 11.5px var(--mono); color:var(--link); white-space:nowrap; text-decoration:none}
+.abil-use::before{content:"✦ "}
+.abil-chips{display:flex; flex-wrap:wrap; gap:4px 10px}
 [data-roll-img]{cursor:default}
 /* броски на плашке выпуска (template.html diceHTML): удачные / неудачные / всего */
 .dice{display:inline-flex; gap:5px; font:600 12px var(--mono)}

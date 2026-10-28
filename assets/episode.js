@@ -31,7 +31,7 @@
 
   const T = D.duration;
   const anchor = (it, i) => 't-' + (it.sec != null ? fmt(it.sec).replace(/:/g, '-') : 'x') + (it.type === 'scene' ? '' : '-' + it.type + i);
-  const rollLine = r => `🎲 <b>${link(r.who_url, r.who)}</b>${r.to ? ' → ' + link(r.to_url, r.to) : ''}${r.act ? ': ' + esc(r.act) : ''}${r.check ? ` <span class="note">· ${esc(r.check)}</span>` : ''}${r.res ? ` <span class="roll-res${r.nat === 20 ? ' crit' : r.nat === 1 ? ' fail' : ''}">${esc(r.res)}${r.nat === 20 ? ' · крит' : r.nat === 1 ? ' · единица' : ''}</span>` : ''}`;
+  const rollLine = r => `🎲 <b>${link(r.who_url, r.who)}</b>${r.to ? ' → ' + link(r.to_url, r.to) : ''}${r.act ? ': ' + esc(r.act) : ''}${r.check ? ` <span class="note">· ${esc(r.check)}</span>` : ''}${r.res ? ` <span class="roll-res${r.nat === 20 ? ' crit' : r.nat === 1 ? ' fail' : ''}">${esc(r.res)}${r.nat === 20 ? ' · крит' : r.nat === 1 ? ' · единица' : ''}</span>` : ''}${(r.cards || []).map(c => `<span class="abil-use"${c.img ? ` data-roll-img="${esc(c.img)}"` : ''} data-tip="${esc(c.name + (c.text ? ': ' + c.text : ''))}">${esc(c.name)}</span>`).join('')}`;
   const rollsOf = url => url ? rolls.filter(r => r.who_url === url).length : 0;
   const pct = s => (Math.min(T, Math.max(0, s)) / T * 100).toFixed(3) + '%';
   const ticks = []; const stepT = T > 6000 ? 1800 : 900;

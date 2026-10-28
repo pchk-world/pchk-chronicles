@@ -81,7 +81,8 @@
   sync();
 })();
 
-/* Кадр плашки броска во всплывающей подсказке: строки бросков с data-roll-img (страницы персонажей, выпусков, /rolls/). */
+/* Всплывающая подсказка: data-roll-img — картинка (кадр плашки броска, игровая карта), data-tip — текст (характеристики
+   предмета, описание способности); у вложенных элементов — своя подсказка (значок способности внутри строки броска). */
 (() => {
   let tip = null, cur = null;
   const place = e => {
@@ -92,12 +93,15 @@
     tip.style.transform = `translate(${x}px, ${y}px)`;
   };
   document.addEventListener('mouseover', e => {
-    const el = e.target.closest && e.target.closest('[data-roll-img]');
+    const el = e.target.closest && e.target.closest('[data-roll-img],[data-tip]');
     if (el === cur) return;
     cur = el;
     if (!el) { if (tip) tip.hidden = true; return; }
-    if (!tip) { tip = document.createElement('div'); tip.className = 'roll-tip'; tip.setAttribute('aria-hidden', 'true'); tip.innerHTML = '<img alt="">'; document.body.append(tip); }
-    tip.firstChild.src = el.dataset.rollImg;
+    if (!tip) { tip = document.createElement('div'); tip.className = 'roll-tip'; tip.setAttribute('aria-hidden', 'true'); tip.innerHTML = '<img alt=""><p></p>'; document.body.append(tip); }
+    const [im, tx] = tip.children, src = el.dataset.rollImg || '', text = el.dataset.tip || '';
+    im.hidden = !src; if (src) im.src = src;
+    tx.hidden = !text; tx.textContent = text;
+    tip.classList.toggle('text-only', !src);
     tip.hidden = false; place(e);
   });
   document.addEventListener('mousemove', e => { if (cur && tip && !tip.hidden) place(e); }, { passive: true });
