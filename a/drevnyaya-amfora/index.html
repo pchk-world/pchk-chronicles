@@ -12,15 +12,12 @@
 <meta property="og:url" content="https://pchk.world/a/drevnyaya-amfora/">
 <meta property="og:title" content="Древняя амфора">
 <meta property="og:description" content="Древний кувшин, найденный Властоном в море; якобы подчинил его волю.">
-<meta property="og:image" content="https://pchk.world/og-default.jpg">
+<meta property="og:image" content="https://pchk.world/img/gallery/f04-art-3785.webp">
 <meta property="og:image:alt" content="Древняя амфора · Хроники Понии">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Древняя амфора">
 <meta name="twitter:description" content="Древний кувшин, найденный Властоном в море; якобы подчинил его волю.">
-<meta name="twitter:image" content="https://pchk.world/og-default.jpg">
+<meta name="twitter:image" content="https://pchk.world/img/gallery/f04-art-3785.webp">
 <meta name="twitter:image:alt" content="Древняя амфора · Хроники Понии">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +48,8 @@
 <main class="wrap"><div class="page">
 
 <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/a/">Артефакты</a> › Древняя амфора</div>
-<header class="ep-hero char-hero" style="grid-template-columns:1fr">
-  
+<header class="ep-hero char-hero wide">
+  <img class="pic" src="/img/gallery/f04-art-3785.webp" alt="">
   <div>
     <span class="eyebrow">Артефакт · 2 вып.</span>
     <h1>Древняя амфора</h1>
@@ -68,7 +65,37 @@
     </div>
   </div>
 </header>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>1 изображение</small></h2><div class="gal"><figure data-full="/img/gallery/f04-art-3785.webp"><img src="/img/gallery/f04-art-3785.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/04/#t=3785">#4</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/04/" title="Дворец Лорда Властона">#4</a></b> амфора разбита, выпускает синюю энергию; <a class="ref" href="/c/lord-vlaston/">Властон</a> зол по собственной воле.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>2</small></h2><ul class="eplinks"><li style="--c:#7C5CD6"><span><a href="/ep/04/" title="Дворец Лорда Властона">#4</a><br><span class="dir">2021</span></span><span><a href="/ep/04/">Дворец Лорда Властона</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/06/" title="Адский поезд">#6</a><br><span class="dir">2021</span></span><span><a href="/ep/06/">Адский поезд</a> <span class="note">· Пахом и Талала</span></span></li></ul></section>
 

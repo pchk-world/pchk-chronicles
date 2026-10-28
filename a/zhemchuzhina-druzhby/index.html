@@ -12,15 +12,12 @@
 <meta property="og:url" content="https://pchk.world/a/zhemchuzhina-druzhby/">
 <meta property="og:title" content="Жемчужина дружбы">
 <meta property="og:description" content="Жемчужина, символ дружбы русалов.">
-<meta property="og:image" content="https://pchk.world/og-default.jpg">
+<meta property="og:image" content="https://pchk.world/img/gallery/f31-art-2155.webp">
 <meta property="og:image:alt" content="Жемчужина дружбы · Хроники Понии">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Жемчужина дружбы">
 <meta name="twitter:description" content="Жемчужина, символ дружбы русалов.">
-<meta name="twitter:image" content="https://pchk.world/og-default.jpg">
+<meta name="twitter:image" content="https://pchk.world/img/gallery/f31-art-2155.webp">
 <meta name="twitter:image:alt" content="Жемчужина дружбы · Хроники Понии">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +48,8 @@
 <main class="wrap"><div class="page">
 
 <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/a/">Артефакты</a> › Жемчужина дружбы</div>
-<header class="ep-hero char-hero" style="grid-template-columns:1fr">
-  
+<header class="ep-hero char-hero wide">
+  <img class="pic" src="/img/gallery/f31-art-2155.webp" alt="">
   <div>
     <span class="eyebrow">Артефакт · 3 вып.</span>
     <h1>Жемчужина дружбы</h1>
@@ -68,7 +65,37 @@
     </div>
   </div>
 </header>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>3 изображения</small></h2><div class="gal"><figure data-full="/img/gallery/f31-art-2155.webp"><img src="/img/gallery/f31-art-2155.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/31/#t=2155">#31</a></figcaption></figure><figure data-full="/img/gallery/f31-art-2251.webp"><img src="/img/gallery/f31-art-2251.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/31/#t=2251">#31</a></figcaption></figure><figure data-full="/img/gallery/f42-art-1093.webp"><img src="/img/gallery/f42-art-1093.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/42/#t=1093">#42</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/25/" title="Остров соблазна">#25</a></b> <a class="ref" href="/c/bulk/">Бульк</a> дарит жемчужину <a class="ref" href="/c/pshen/">Пшену</a>.</li><li><b><a href="/ep/31/" title="Культ Кракена">#31</a></b> <a class="ref" href="/c/bulbatarion/">Бульбутерион</a> дарит акулам.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>3</small></h2><ul class="eplinks"><li style="--c:#7C5CD6"><span><a href="/ep/25/" title="Остров соблазна">#25</a><br><span class="dir">2024</span></span><span><a href="/ep/25/">Остров соблазна</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/31/" title="Культ Кракена">#31</a><br><span class="dir">2024</span></span><span><a href="/ep/31/">Культ Кракена</a> <span class="note">· Пахом и Талала</span></span></li><li style="--c:#7C5CD6"><span><a href="/ep/42/" title="Чудная Долина">#42</a><br><span class="dir">2025</span></span><span><a href="/ep/42/">Чудная Долина</a> <span class="note">· Пахом и Талала</span></span></li></ul></section>
 

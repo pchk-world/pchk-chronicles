@@ -12,15 +12,12 @@
 <meta property="og:url" content="https://pchk.world/a/vino-cvetushchaya-loza/">
 <meta property="og:title" content="Вино «Цветущая Лоза»">
 <meta property="og:description" content="Дешёвое вино из болотных газов: горючее и взрывоопасное.">
-<meta property="og:image" content="https://pchk.world/og-default.jpg">
+<meta property="og:image" content="https://pchk.world/img/gallery/f16-art-4271.webp">
 <meta property="og:image:alt" content="Вино «Цветущая Лоза» · Хроники Понии">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Вино «Цветущая Лоза»">
 <meta name="twitter:description" content="Дешёвое вино из болотных газов: горючее и взрывоопасное.">
-<meta name="twitter:image" content="https://pchk.world/og-default.jpg">
+<meta name="twitter:image" content="https://pchk.world/img/gallery/f16-art-4271.webp">
 <meta name="twitter:image:alt" content="Вино «Цветущая Лоза» · Хроники Понии">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +48,8 @@
 <main class="wrap"><div class="page">
 
 <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/a/">Артефакты</a> › Вино «Цветущая Лоза»</div>
-<header class="ep-hero char-hero" style="grid-template-columns:1fr">
-  
+<header class="ep-hero char-hero wide">
+  <img class="pic" src="/img/gallery/f16-art-4271.webp" alt="">
   <div>
     <span class="eyebrow">Артефакт · 3 вып.</span>
     <h1>Вино «Цветущая Лоза»</h1>
@@ -68,7 +65,37 @@
     </div>
   </div>
 </header>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>2 изображения</small></h2><div class="gal"><figure data-full="/img/gallery/f16-art-4271.webp"><img src="/img/gallery/f16-art-4271.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/16/#t=4271">#16</a></figcaption></figure><figure data-full="/img/gallery/f16-art-4363.webp"><img src="/img/gallery/f16-art-4363.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/16/#t=4363">#16</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/16/" title="Вампиры Мёртвых топей">#16</a></b> вампиры делают коктейли Молотова из вина.</li><li>Вып. 22 и 40: вино снова упомянуто.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>3</small></h2><ul class="eplinks"><li style="--c:#B03A7A"><span><a href="/ep/16/" title="Вампиры Мёртвых топей">#16</a><br><span class="dir">2023</span></span><span><a href="/ep/16/">Вампиры Мёртвых топей</a> <span class="note">· Вампиры Дан Балана</span></span></li><li style="--c:#2F84C8"><span><a href="/ep/22/" title="Отряд Солнца">#22</a><br><span class="dir">2023</span></span><span><a href="/ep/22/">Отряд Солнца</a> <span class="note">· Эрик, София и Лёша</span></span></li><li style="--c:#B03A7A"><span><a href="/ep/40/" title="Паспорт хорошей твари">#40</a><br><span class="dir">2025</span></span><span><a href="/ep/40/">Паспорт хорошей твари</a> <span class="note">· Вампиры Дан Балана</span></span></li></ul></section>
 

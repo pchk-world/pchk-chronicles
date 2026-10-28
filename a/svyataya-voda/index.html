@@ -12,15 +12,12 @@
 <meta property="og:url" content="https://pchk.world/a/svyataya-voda/">
 <meta property="og:title" content="Святая вода">
 <meta property="og:description" content="Повторяющееся оружие против нечисти и бесов.">
-<meta property="og:image" content="https://pchk.world/og-default.jpg">
+<meta property="og:image" content="https://pchk.world/img/gallery/f45-art-3397.webp">
 <meta property="og:image:alt" content="Святая вода · Хроники Понии">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Святая вода">
 <meta name="twitter:description" content="Повторяющееся оружие против нечисти и бесов.">
-<meta name="twitter:image" content="https://pchk.world/og-default.jpg">
+<meta name="twitter:image" content="https://pchk.world/img/gallery/f45-art-3397.webp">
 <meta name="twitter:image:alt" content="Святая вода · Хроники Понии">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,8 +48,8 @@
 <main class="wrap"><div class="page">
 
 <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/a/">Артефакты</a> › Святая вода</div>
-<header class="ep-hero char-hero" style="grid-template-columns:1fr">
-  
+<header class="ep-hero char-hero wide">
+  <img class="pic" src="/img/gallery/f45-art-3397.webp" alt="">
   <div>
     <span class="eyebrow">Артефакт · 6 вып.</span>
     <h1>Святая вода</h1>
@@ -68,7 +65,37 @@
     </div>
   </div>
 </header>
-
+<section class="ep-sec" id="gallery"><h2>Галерея <small>3 изображения</small></h2><div class="gal"><figure data-full="/img/gallery/f45-art-3397.webp"><img src="/img/gallery/f45-art-3397.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/45/#t=3397">#45</a></figcaption></figure><figure data-full="/img/gallery/f47-art-1841.webp"><img src="/img/gallery/f47-art-1841.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/47/#t=1841">#47</a></figcaption></figure><figure data-full="/img/gallery/f47-art-2254.webp"><img src="/img/gallery/f47-art-2254.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/47/#t=2254">#47</a></figcaption></figure></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/18/" title="Охота на младенца">#18</a></b> бурдюк на 10 л.</li><li><b><a href="/ep/47/" title="Вокзал грешных душ">#47</a></b> бочка на 30 л.</li><li><b><a href="/ep/53/" title="В поисках Лёши">#53</a></b> фляга святой воды превращена в бидон-бомбу.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>6</small></h2><ul class="eplinks"><li style="--c:#2F84C8"><span><a href="/ep/18/" title="Охота на младенца">#18</a><br><span class="dir">2023</span></span><span><a href="/ep/18/">Охота на младенца</a> <span class="note">· Эрик, София и Лёша</span></span></li><li style="--c:#2F84C8"><span><a href="/ep/22/" title="Отряд Солнца">#22</a><br><span class="dir">2023</span></span><span><a href="/ep/22/">Отряд Солнца</a> <span class="note">· Эрик, София и Лёша</span></span></li><li style="--c:#3E9A5E"><span><a href="/ep/37/" title="Добровольцы">#37</a><br><span class="dir">2025</span></span><span><a href="/ep/37/">Добровольцы</a> <span class="note">· Фронт</span></span></li><li style="--c:#2F84C8"><span><a href="/ep/45/" title="Реинкарнации Лёши">#45</a><br><span class="dir">2025</span></span><span><a href="/ep/45/">Реинкарнации Лёши</a> <span class="note">· Эрик, София и Лёша</span></span></li><li style="--c:#3E9A5E"><span><a href="/ep/47/" title="Вокзал грешных душ">#47</a><br><span class="dir">2026</span></span><span><a href="/ep/47/">Вокзал грешных душ</a> <span class="note">· Фронт</span></span></li><li style="--c:#2F84C8"><span><a href="/ep/53/" title="В поисках Лёши">#53</a><br><span class="dir">2026</span></span><span><a href="/ep/53/">В поисках Лёши</a> <span class="note">· Эрик, София и Лёша</span></span></li></ul></section>
 
