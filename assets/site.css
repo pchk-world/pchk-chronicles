@@ -501,9 +501,10 @@ table.coins td.num:nth-child(3){color:var(--alert)}
 .hs.nolink{cursor:default}
 .hs.nolink i{background:var(--muted); box-shadow:none}
 /* герои на карте: кружки вокруг города, последнее известное место */
-.cdot{position:absolute; width:9px; height:9px; margin:-4.5px 0 0 -4.5px; border-radius:50%; background:#6fe3ff; border:1px solid #06222b; box-shadow:0 0 0 1px rgba(0,0,0,.35); z-index:3; transition:transform .1s}
-.cdot.npc{background:#e9b8ff; border-color:#2a1136; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; display:none}
-.cdot:hover,.cdot:focus-visible{z-index:6; transform:var(--o) scale(1.7)}
+.cdot{position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; border-radius:50%; background:#2a1136 center 14%/cover no-repeat; border:1.5px solid #6fe3ff; box-shadow:0 0 0 1px rgba(0,0,0,.5); z-index:3; transition:transform .1s;
+  color:#fff; font:700 10px/19px var(--mono); text-align:center; text-decoration:none; overflow:hidden}
+.cdot.npc{border-color:#e9b8ff; width:18px; height:18px; margin:-9px 0 0 -9px; line-height:15px; font-size:9px; display:none}
+.cdot:hover,.cdot:focus-visible{z-index:6; transform:var(--o) scale(2.2); text-decoration:none}
 .imap.show-npc .cdot.npc{display:block}
 .imap.no-chars .cdot{display:none!important}
 .mapctl{display:flex; flex-wrap:wrap; gap:6px 18px; margin:8px 0 0; font:13px var(--body); color:var(--muted)}
@@ -831,13 +832,14 @@ main img{-webkit-touch-callout:none}
 .roll-tip p{margin:0; padding:8px 11px; font:13px/1.45 var(--body); color:var(--text); background:var(--nav-bg-2, #241626); white-space:pre-line}
 .roll-tip.text-only{width:auto; max-width:min(360px, 80vw)}
 /* подсказка сущности: фото и одно предложение (nav.js) */
-.ent-tip{position:fixed; left:0; top:0; z-index:60; pointer-events:none; display:flex; gap:10px; align-items:flex-start; width:min(340px, 80vw); padding:9px 11px; border-radius:8px;
-  box-shadow:0 8px 28px rgba(0,0,0,.45); border:1px solid var(--border); background:var(--nav-bg-2, #241626); color:var(--text); line-height:1.4}
+.ent-tip{position:fixed; left:0; top:0; z-index:60; pointer-events:none; width:min(230px, 70vw); border-radius:8px; overflow:hidden;
+  box-shadow:0 8px 28px rgba(0,0,0,.45); border:1px solid var(--border); background:var(--nav-bg-2, #241626); color:var(--text); line-height:1.35}
 .ent-tip[hidden]{display:none}
-.ent-tip img{flex:none; width:68px; max-height:96px; object-fit:cover; object-position:top; border-radius:5px}
+.ent-tip img{display:block; width:100%; height:auto; max-height:310px; object-fit:cover; object-position:top}
+.ent-tip div{padding:7px 10px 8px}
 .ent-tip b{display:block; font:600 14px var(--head)}
-.ent-tip p{margin:3px 0 0; font:13px/1.4 var(--body)}
-.ent-tip small{display:block; margin-top:4px; font:12px var(--mono); color:var(--link)}
+.ent-tip p{margin:2px 0 0; font:12.5px/1.35 var(--body)}
+.ent-tip small{display:block; margin-top:3px; font:11.5px var(--mono); color:var(--link)}
 [data-tip]{text-decoration:underline dotted color-mix(in srgb, currentColor 45%, transparent); text-underline-offset:3px; cursor:help}
 .abil-use{display:inline-block; margin-left:6px; font:600 11.5px var(--mono); color:var(--link); white-space:nowrap; text-decoration:none}
 .abil-use::before{content:"✦ "}
