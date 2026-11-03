@@ -82,28 +82,63 @@
 })();
 
 /* Всплывающая подсказка: data-roll-img — картинка (кадр плашки броска, игровая карта), data-tip — текст (характеристики
-   предмета, описание способности); у вложенных элементов — своя подсказка (значок способности внутри строки броска). */
+   предмета, описание способности); ссылка на персонажа, предмет, место или участника — фото и одно предложение из
+   /assets/tips.json (грузится при первом наведении; собирает viz/tips.py), data-where — приписка (метка на карте).
+   У вложенных элементов — своя подсказка: срабатывает ближайший к курсору. */
 (() => {
-  let tip = null, cur = null;
-  const place = e => {
-    const w = tip.offsetWidth, h = tip.offsetHeight, m = 14;
+  let tip = null, ent = null, cur = null, tips = null, loading = null, last = null;
+  const ENT = /^\/(c|a|place|p)\/[^/]+\/$/;
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const load = () => loading = loading || fetch('/assets/tips.json').then(r => r.json()).then(j => { tips = j; }).catch(() => { loading = null; });
+  const place = (box, e) => {
+    const w = box.offsetWidth, h = box.offsetHeight, m = 14;
     let x = e.clientX + m, y = e.clientY + m;
     if (x + w > innerWidth - 8) x = Math.max(8, e.clientX - w - m);
     if (y + h > innerHeight - 8) y = Math.max(8, e.clientY - h - m);
-    tip.style.transform = `translate(${x}px, ${y}px)`;
+    box.style.transform = `translate(${x}px, ${y}px)`;
   };
+  const hide = () => { if (tip) tip.hidden = true; if (ent) ent.hidden = true; };
+  const box = () => tip && !tip.hidden ? tip : ent && !ent.hidden ? ent : null;
+  /* адрес сущности под ссылкой или строкой .linkto (на страницах-таблицах персонаж — span с id) */
+  function entUrl(el) {
+    if (el.matches('.linkto[data-ch]')) { const c = window.DATA && DATA.chars[el.dataset.ch]; return c && c.url; }
+    if (el.origin !== location.origin || !ENT.test(el.pathname) || el.pathname === location.pathname) return null;
+    return el.pathname;
+  }
+  function showEnt(el, url, e) {
+    const t = tips[url]; if (!t) { hide(); return; }
+    if (tip) tip.hidden = true;
+    if (!ent) { ent = document.createElement('div'); ent.className = 'ent-tip'; ent.setAttribute('aria-hidden', 'true'); document.body.append(ent); }
+    const [name, img, text] = t;
+    ent.innerHTML = `${img ? `<img src="${esc(img)}" alt="">` : ''}<div><b>${esc(name)}</b>${text ? `<p>${esc(text)}</p>` : ''}${el.dataset.where ? `<small>${esc(el.dataset.where)}</small>` : ''}</div>`;
+    ent.hidden = false; place(ent, e);
+  }
   document.addEventListener('mouseover', e => {
-    const el = e.target.closest && e.target.closest('[data-roll-img],[data-tip]');
+    const t = e.target; if (!t.closest) return;
+    last = e;
+    const data = t.closest('[data-roll-img],[data-tip]'), link = t.closest('a[href],.linkto[data-ch]');
+    const url = link && !(data && link.contains(data)) ? entUrl(link) : null;   // подсказка внутри ссылки — ближе к курсору
+    const el = url ? link : data;
     if (el === cur) return;
     cur = el;
-    if (!el) { if (tip) tip.hidden = true; return; }
+    if (!el) { hide(); return; }
+    if (url) {
+      if (tips) showEnt(el, url, e);
+      else { hide(); load().then(() => { if (cur === el && tips) showEnt(el, url, last); }); }
+      return;
+    }
+    if (ent) ent.hidden = true;
     if (!tip) { tip = document.createElement('div'); tip.className = 'roll-tip'; tip.setAttribute('aria-hidden', 'true'); tip.innerHTML = '<img alt=""><p></p>'; document.body.append(tip); }
     const [im, tx] = tip.children, src = el.dataset.rollImg || '', text = el.dataset.tip || '';
     im.hidden = !src; if (src) im.src = src;
     tx.hidden = !text; tx.textContent = text;
     tip.classList.toggle('text-only', !src);
-    tip.hidden = false; place(e);
+    tip.classList.toggle('ok-1', el.dataset.ok === '1'); tip.classList.toggle('ok-0', el.dataset.ok === '0');
+    tip.hidden = false; place(tip, e);
   });
-  document.addEventListener('mousemove', e => { if (cur && tip && !tip.hidden) place(e); }, { passive: true });
-  addEventListener('scroll', () => { if (tip) tip.hidden = true; cur = null; }, { passive: true });
+  document.addEventListener('mousemove', e => { last = e; const b = cur && box(); if (b) place(b, e); }, { passive: true });
+  const reset = () => { hide(); cur = null; };
+  addEventListener('scroll', reset, { passive: true });
+  document.addEventListener('click', reset);
+  document.addEventListener('pchk:leave', reset);
 })();

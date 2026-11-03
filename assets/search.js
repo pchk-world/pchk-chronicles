@@ -74,6 +74,7 @@ window.pchkSearch = window.pchkSearch || (() => {
       if (i >= 0) { input.setAttribute('aria-activedescendant', opts[i].id); opts[i].scrollIntoView({block: 'nearest'}); } else input.removeAttribute('aria-activedescendant');
     };
     const all = q => '/search/?q=' + encodeURIComponent(q);
+    const open = url => { close(); input.value = ''; input.blur(); (window.pchkOpen || (u => { location.href = u; }))(url); };   // открытый плеер не прерывать
     function render(){
       const q = input.value.trim();
       if (!q) { close(); return; }
@@ -96,11 +97,11 @@ window.pchkSearch = window.pchkSearch || (() => {
         if (list.hidden) { render(); return; }
         e.preventDefault(); const n = opts.length; if (!n) return;
         setCur(e.key === 'ArrowDown' ? (cur + 1) % n : (cur <= 0 ? n - 1 : cur - 1));
-      } else if (e.key === 'Enter' && cur >= 0) { e.preventDefault(); location.href = opts[cur].dataset.url; close(); }
+      } else if (e.key === 'Enter' && cur >= 0) { e.preventDefault(); open(opts[cur].dataset.url); }
       else if (e.key === 'Escape') { if (!list.hidden) { e.preventDefault(); e.stopPropagation(); close(); } else input.blur(); }
     });
     list.addEventListener('mousedown', e => e.preventDefault());
-    list.addEventListener('click', e => { const o = e.target.closest('[data-url]'); if (o) { location.href = o.dataset.url; close(); } });
+    list.addEventListener('click', e => { const o = e.target.closest('[data-url]'); if (o) open(o.dataset.url); });
     input.addEventListener('blur', close);
     form.addEventListener('submit', e => { if (!input.value.trim()) e.preventDefault(); });
   }

@@ -68,7 +68,7 @@
 </div></main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
-<script src="/assets/data.js?v=445afbb54d"></script>
+<script src="/assets/data.js?v=aafa413bee"></script>
 <script>
 (() => {  // в функции: при мягком переходе (viz/player.js) скрипт запускается заново
 const PAGE = 'lore';
@@ -156,7 +156,7 @@ function renderChron(){
           <div class="epl">${e.eps.map(k => `<span class="linkto" data-k="${k}" title="${esc(byKey[k].title)}">#${esc(byKey[k].label)} ${esc(byKey[k].title)}</span>`).join('')}</div>
         </div></div>`; }).join('');
   }).join('');
-  document.querySelectorAll('#chronlist .linkto[data-k]').forEach(a => a.onclick = () => { location.href = '/ep/' + a.dataset.k + '/'; });
+  document.querySelectorAll('#chronlist .linkto[data-k]').forEach(a => a.onclick = () => { goTo('/ep/' + a.dataset.k + '/'); });
   document.querySelectorAll('#chronlist [data-copy]').forEach(bindCopy);
 }
 
@@ -264,7 +264,7 @@ function renderList(){
     <img src="https://i.ytimg.com/vi/${e.video_id}/mqdefault.jpg" alt="" loading="lazy">
     <div class="body"><div class="top"><span>#${esc(e.label)} · ${esc(e.date.slice(0,4))}${diceHTML(e.dice)}</span><span>${esc(e.branch)}</span></div>
     <h3>${esc(e.title)}</h3><p>${esc(e.brief)}</p></div></article>`).join('');
-  document.querySelectorAll('.ep').forEach(a => { const go = () => { location.href = '/ep/' + a.dataset.k + '/'; }; a.onclick = go; a.onkeydown = ev => { if (ev.key==='Enter') go(); }; });
+  document.querySelectorAll('.ep').forEach(a => { const go = () => { goTo('/ep/' + a.dataset.k + '/'); }; a.onclick = go; a.onkeydown = ev => { if (ev.key==='Enter') go(); }; });
 }
 if ($('#q')) $('#q').oninput = renderList;
 
@@ -310,12 +310,13 @@ function charCardHTML(id, inDialog){
     ${(c.mentions||[]).length ? `<div class="sec"><h3>Упоминания на вики</h3><ul class="plain">${c.mentions.map(m=>`<li><a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.title)}</a>${m.snippet?` <span class="note">— ${esc(m.snippet)}</span>`:''}</li>`).join('')}</ul></div>` : ''}`;
 }
 function bindCard(root){
-  root.querySelectorAll('.linkto[data-k]').forEach(a => a.onclick = () => { location.href = '/ep/' + a.dataset.k + '/'; });
+  root.querySelectorAll('.linkto[data-k]').forEach(a => a.onclick = () => { goTo('/ep/' + a.dataset.k + '/'); });
   root.querySelectorAll('.linkto[data-ch]').forEach(a => a.onclick = () => openChar(a.dataset.ch));
   root.querySelectorAll('.linkto[data-gch]').forEach(a => a.onclick = () => graphFocus(a.dataset.gch));
-  root.querySelectorAll('[data-graph]').forEach(a => a.onclick = () => { location.href = TAB_URL.graph + '?c=' + encodeURIComponent(CH[a.dataset.graph].slug); });
+  root.querySelectorAll('[data-graph]').forEach(a => a.onclick = () => { goTo(TAB_URL.graph + '?c=' + encodeURIComponent(CH[a.dataset.graph].slug)); });
 }
-function openChar(id){ const c = CH[id]; if (c) location.href = c.url; }
+function goTo(url){ (window.pchkOpen || (u => { location.href = u; }))(url); }   // открытый плеер не прерывать
+function openChar(id){ const c = CH[id]; if (c) goTo(c.url); }
 const SLUG2ID = Object.fromEntries(Object.values(CH).map(c => [c.slug, c.id]));
 function graphFocus(id){
   if (!CH[id]) return;
@@ -430,7 +431,7 @@ if (PAGE === 'chars') (function(){
     }).join('') + '</tr>';
   });
   $('#mx').innerHTML = h + '</tbody></table>';
-  document.querySelectorAll('#mx thead th[data-k]').forEach(t => t.onclick = () => { location.href = '/ep/' + t.dataset.k + '/'; });
+  document.querySelectorAll('#mx thead th[data-k]').forEach(t => t.onclick = () => { goTo('/ep/' + t.dataset.k + '/'); });
   
 })();
 

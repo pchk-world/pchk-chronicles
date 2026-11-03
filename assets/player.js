@@ -106,6 +106,13 @@
     if (cur) bar();
     if (typeof gtag === 'function') gtag('event', 'page_view', { page_location: location.href, page_title: document.title });
   }
+  /* переход из кода (подсказки поиска, строки таблиц): при открытом плеере — мягкий, иначе обычный */
+  window.pchkOpen = url => {
+    const u = new URL(url, location.href);
+    if (!box || u.origin !== location.origin || SKIP.test(u.pathname)) { location.href = u.href; return; }
+    if (u.pathname === location.pathname && u.search === location.search) { if (u.hash) location.hash = u.hash; return; }
+    go(u.href, true);
+  };
   document.addEventListener('click', e => {
     if (!box || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const a = e.target.closest('a[href]'); if (!a || a.target && a.target !== '_self' || a.hasAttribute('download')) return;
