@@ -418,6 +418,8 @@ a.ref:hover{color:var(--link); border-bottom-style:solid; text-decoration:none}
 .portrait.big.card.intro{aspect-ratio:auto; border-radius:4px}
 .char-short{margin:8px 0 0; max-width:68ch; color:var(--text); font-size:15px; line-height:1.55}
 .char-short b{color:var(--muted); font-weight:600}
+.char-where{margin:8px 0 0; max-width:68ch; font-size:15px; line-height:1.55}
+.char-where b{color:var(--muted); font-weight:600}
 .char-hero .infobox{max-width:520px; margin-top:16px}
 .mates{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:8px}
 .mate{display:grid; grid-template-columns:auto 1fr auto; gap:8px; align-items:center; background:var(--accent); border:1px solid var(--border); border-radius:3px; padding:6px 10px; color:var(--text); font-size:13.5px}
@@ -741,6 +743,9 @@ h3.sub-h small{color:var(--muted); letter-spacing:0; text-transform:none; font-w
 .gal img{display:block; width:100%; aspect-ratio:3/4; object-fit:cover; object-position:50% 15%}
 .gal figcaption{padding:6px 8px 7px; font:11.5px/1.35 var(--mono); color:var(--faint)}
 .gal figcaption a{color:var(--link)}
+.gal.sheet-gal{grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); margin:8px 0 12px}
+.gal.sheet-gal img{aspect-ratio:16/9; object-position:50% 40%}
+.abil-ep + .abil-ep{margin-top:18px; padding-top:12px; border-top:1px solid var(--border)}
 .gal-auto{position:absolute; top:6px; right:6px; font:600 10px var(--mono); letter-spacing:.06em; text-transform:uppercase; padding:2px 6px; border-radius:999px;
   background:rgba(20,14,30,.8); color:#f3d58a; border:1px solid rgba(232,182,76,.5)}
 .lightbox{position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; background:rgba(8,6,12,.92); padding:16px}
