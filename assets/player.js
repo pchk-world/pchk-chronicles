@@ -64,13 +64,26 @@
   const loaded = () => new Set([...document.scripts].map(s => s.src).filter(Boolean));
   const RERUN = /\/assets\/episode\.js$/;  // скрипты страницы, которые надо запускать заново
 
+  /* страница начинает грузиться, когда курсор задержался на ссылке или кнопка мыши нажата, — к щелчку она обычно уже
+     пришла; запрос живёт минуту и используется один раз */
+  const pre = new Map();  // адрес без якоря → {at, p: Promise<текст страницы>}
+  const keyOf = url => { const u = new URL(url, location.href); u.hash = ''; return u.href; };
+  function page(url, take) {
+    const k = keyOf(url), c = pre.get(k);
+    if (c && Date.now() - c.at < 60000) { if (take) pre.delete(k); return c.p; }
+    const p = fetch(k, { credentials: 'same-origin' }).then(r => { if (!r.ok && r.status !== 404) throw new Error(r.status); return r.text(); });
+    p.catch(() => pre.delete(k));
+    if (!take) { pre.set(k, { at: Date.now(), p }); if (pre.size > 12) pre.delete(pre.keys().next().value); }
+    return p;
+  }
+
   async function go(url, push) {
     let doc;
+    document.documentElement.classList.add('soft-wait');   // полоска загрузки сверху, пока ждём страницу
     try {
-      const r = await fetch(url, { credentials: 'same-origin' });
-      if (!r.ok && r.status !== 404) throw new Error(r.status);
-      doc = new DOMParser().parseFromString(await r.text(), 'text/html');
+      doc = new DOMParser().parseFromString(await page(url, true), 'text/html');
     } catch (e) { location.href = url; return; }
+    finally { document.documentElement.classList.remove('soft-wait'); }
     const main = doc.querySelector('main');
     if (!main || !document.querySelector('main')) { location.href = url; return; }
     document.dispatchEvent(new CustomEvent('pchk:leave'));
@@ -113,12 +126,27 @@
     if (u.pathname === location.pathname && u.search === location.search) { if (u.hash) location.hash = u.hash; return; }
     go(u.href, true);
   };
+  /* ссылка, которую откроет мягкий переход, или null */
+  function softUrl(t) {
+    const a = t && t.closest && t.closest('a[href]'); if (!a || a.target && a.target !== '_self' || a.hasAttribute('download')) return null;
+    const u = new URL(a.href, location.href);
+    if (u.origin !== location.origin || SKIP.test(u.pathname)) return null;
+    if (u.pathname === location.pathname && u.search === location.search && u.hash) return null;  // якорь на этой же странице
+    return u;
+  }
+  let hover = 0;
+  document.addEventListener('mouseover', e => {
+    if (!box) return;
+    clearTimeout(hover); const u = softUrl(e.target);
+    if (u && keyOf(u.href) !== keyOf(location.href)) hover = setTimeout(() => page(u.href).catch(() => {}), 60);
+  }, { passive: true });
+  document.addEventListener('pointerdown', e => {
+    if (!box || e.button !== 0) return;
+    const u = softUrl(e.target); if (u) page(u.href).catch(() => {});
+  }, { passive: true });
   document.addEventListener('click', e => {
     if (!box || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    const a = e.target.closest('a[href]'); if (!a || a.target && a.target !== '_self' || a.hasAttribute('download')) return;
-    const u = new URL(a.href, location.href);
-    if (u.origin !== location.origin || SKIP.test(u.pathname)) return;
-    if (u.pathname === location.pathname && u.search === location.search && u.hash) return;  // якорь на этой же странице
+    const u = softUrl(e.target); if (!u) return;
     e.preventDefault(); go(u.href, true);
   });
   document.addEventListener('submit', e => {
