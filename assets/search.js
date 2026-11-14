@@ -143,3 +143,23 @@ window.pchkSearch = window.pchkSearch || (() => {
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', ready) : ready();
   return {load, search, attach, page};
 })();
+
+/* «Мне повезёт»: кубик d20 рядом с поиском открывает случайную страницу (/lucky.json, собирает viz/search.py) */
+if (!window.pchkLucky) {
+  window.pchkLucky = true;
+  let list = null;
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.nav-lucky'); if (!b) return;
+    e.preventDefault();
+    b.classList.add('rolling');
+    const go = urls => {
+      const here = location.pathname, pick = urls.filter(u => u !== here);
+      if (!pick.length) return;
+      const u = pick[Math.floor(Math.random() * pick.length)];
+      setTimeout(() => { location.href = u; }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450);
+    };
+    (list ? Promise.resolve(list) : fetch('/lucky.json').then(r => r.json()).then(j => (list = j)))
+      .then(go).catch(() => b.classList.remove('rolling'));
+  });
+  addEventListener('pageshow', () => document.querySelectorAll('.nav-lucky.rolling').forEach(b => b.classList.remove('rolling')));
+}

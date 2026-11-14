@@ -36,6 +36,14 @@ a.brand:hover{text-decoration:none; color:var(--text)}
 .nav-sec:hover, .nav-sec.peek{color:var(--nav-text); text-decoration:none}
 .nav-sec.on{font-weight:700; color:var(--nav-text); border-bottom-color:var(--nav-accent)}
 .nav-sec:focus-visible{outline-offset:-4px}
+.nav-tools{justify-self:end; display:flex; align-items:center; gap:10px}
+.nav-lucky{display:grid; place-items:center; padding:0; background:none; border:0; cursor:pointer; color:inherit}
+.nav-d20{width:44px; height:44px; border-radius:999px}
+.nav-d20:hover{background:var(--nav-bg-2)}
+.nav-lucky .d20{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.nav-lucky:hover .d20{transform:rotate(-20deg)}
+.nav-lucky.rolling .d20{transform:rotate(720deg); transition-duration:.6s}
+@media (prefers-reduced-motion:reduce){.nav-lucky .d20{transition:none}}
 .nav-search{justify-self:end; position:relative; display:flex; align-items:center; width:clamp(200px,22vw,280px); height:44px}
 @media (max-width:1099.98px){.nav-search kbd{display:none}.nav-search input{padding-right:14px}}
 .nav-search svg{position:absolute; left:14px; color:var(--nav-muted); pointer-events:none}
@@ -85,7 +93,7 @@ a.brand:hover{text-decoration:none; color:var(--text)}
 @media (max-width:899.98px){
   :root{--nav-h:61px}
   .nav-row1 .nav-in{height:60px; display:flex; justify-content:space-between; gap:12px}
-  .nav-main, .nav-search, .nav-row2{display:none}
+  .nav-main, .nav-search, .nav-tools, .nav-row2{display:none}
   .nav-btns{display:flex; gap:4px; margin-right:-8px}
   .nav-btn{display:grid; place-items:center; width:44px; height:44px; color:var(--nav-text); background:none; border:0; border-radius:8px; cursor:pointer}
   .nav-btn:hover{background:rgba(255,255,255,.07); color:var(--nav-text)}
