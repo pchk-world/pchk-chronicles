@@ -41,6 +41,21 @@
   if (D.frames && D.frames.length) toc.splice(toc.findIndex(t => t[0] === 'people') + 1, 0, ['frames', 'Кадры']);
   if (D.pod_html) toc.push(['pod', 'Из подкастов']);
 
+  /* кадры с выпуска: в превью — несколько кадров равномерно по выпуску (на телефоне CSS оставляет один), остальное — в галерее */
+  function frPreview() {
+    const n = D.frames.length, m = Math.min(8, n);
+    return [...new Set(Array.from({ length: m }, (_, j) => Math.floor((j + 0.5) * n / m)))];
+  }
+  const frScenes = D.scenes.filter(x => x.sec != null && !String(x.t || '').startsWith('≈')).sort((a, b) => a.sec - b.sec);
+  function frCaption(sec) {          // сцена конспекта, идущая в этот момент (без сносок и кнопок)
+    let sc = null;
+    for (const x of frScenes) { if (x.sec <= sec + 2) sc = x; else break; }
+    if (!sc) return '';
+    const t = document.createElement('div'); t.innerHTML = sc.html;
+    t.querySelectorAll('button, .fnb, .share').forEach(x => x.remove());
+    return t.innerHTML.trim();
+  }
+
   $('#app').innerHTML = `
   <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/ep/">Выпуски</a> › #${esc(D.label)}</div>
   <article class="ep-article">
@@ -113,8 +128,9 @@
   </section>
 
   ${D.frames && D.frames.length ? `<section class="ep-sec" id="frames"><h2>Кадры с выпуска <small>${D.frames.length}</small></h2>
-    <p class="note" style="margin:0 0 10px">Рисованные кадры анимационных вставок, собранные из видео. Нажмите на кадр — выпуск откроется с этого места.</p>
-    <div class="ep-frames">${D.frames.map(f => `<a href="${yt(f.sec)}" target="_blank" rel="noopener" title="Смотреть с ${fmt(f.sec)}"><img src="${esc(f.img)}" alt="Кадр выпуска, ${fmt(f.sec)}" loading="lazy" width="640" height="360"><span>${fmt(f.sec)}</span></a>`).join('')}</div>
+    <p class="note" style="margin:0 0 10px">Рисованные кадры анимационных вставок, собранные из видео; подпись — что происходит в этот момент по конспекту выпуска.</p>
+    <div class="ep-frames">${frPreview().map(i => `<button type="button" class="ep-frame" data-i="${i}" aria-label="Кадр ${fmt(D.frames[i].sec)}: открыть галерею"><img src="${esc(D.frames[i].img)}" alt="" loading="lazy" width="640" height="360"><span>${fmt(D.frames[i].sec)}</span></button>`).join('')}</div>
+    <button type="button" class="btn ep-frames-all" data-i="0">Смотреть все кадры (${D.frames.length})</button>
   </section>` : ''}
 
   <section class="ep-sec" id="links"><h2>Связи с другими выпусками</h2>
@@ -134,6 +150,44 @@
   <nav class="ep-foot-nav">${D.prev ? `<a class="btn" href="${epUrl(D.prev.key)}">← #${esc(D.prev.label)} ${esc(D.prev.title)}</a>` : '<span></span>'}${D.next ? `<a class="btn" href="${epUrl(D.next.key)}">#${esc(D.next.label)} ${esc(D.next.title)} →</a>` : ''}</nav>
   ${D.comments ? '<section class="ep-sec comments" id="comments"><h2>Обсуждение</h2></section>' : ''}
   <footer>${D.footer}</footer>`;
+
+  /* галерея кадров: стрелки, свайп, Esc; подпись — сцена конспекта */
+  if (D.frames && D.frames.length) {
+    let lb = null, cur = 0;
+    const show = () => {
+      const f = D.frames[cur], cap = frCaption(f.sec);
+      lb.querySelector('img').src = f.img;
+      lb.querySelector('img').alt = 'Кадр выпуска, ' + fmt(f.sec);
+      lb.querySelector('figcaption').innerHTML = `<b class="lb-t">${fmt(f.sec)}</b>${cap ? ' ' + cap : ''}`;
+      lb.querySelector('.lb-n').textContent = `${cur + 1} / ${D.frames.length}`;
+      const nx = D.frames[(cur + 1) % D.frames.length]; if (nx) new Image().src = nx.img;   // следующий — заранее
+    };
+    const step = d => { cur = (cur + d + D.frames.length) % D.frames.length; show(); };
+    const close = () => { lb && lb.classList.remove('on'); document.body.style.overflow = ''; };
+    const open = i => {
+      if (!lb) {
+        lb = document.createElement('div'); lb.className = 'lightbox ep-lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-label', 'Кадры с выпуска');
+        lb.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+        document.body.appendChild(lb);
+        ac.signal.addEventListener('abort', () => { close(); lb.remove(); });   // мягкий переход на другую страницу
+        lb.addEventListener('click', e => {
+          if (e.target.closest('.lb-p')) step(-1);
+          else if (e.target.closest('.lb-nx')) step(1);
+          else if (e.target.closest('.lb-x') || e.target === lb) close();
+        });
+        let x0 = null;
+        lb.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+        lb.addEventListener('touchend', e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1); });
+        document.addEventListener('keydown', e => {
+          if (!lb.classList.contains('on')) return;
+          if (e.key === 'Escape') close(); else if (e.key === 'ArrowRight') step(1); else if (e.key === 'ArrowLeft') step(-1);
+        }, sig);
+      }
+      cur = i; show(); lb.classList.add('on'); document.body.style.overflow = 'hidden';
+      lb.querySelector('.lb-x').focus();
+    };
+    $('#frames').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) open(+b.dataset.i); });
+  }
 
   /* сноски из подкастов: номер раскрывает скрытый текст записи */
   document.addEventListener('click', e => {

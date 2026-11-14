@@ -406,9 +406,15 @@ footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--border); fo
 .person h3{font-size:15.5px; line-height:1.25}
 .person p{margin:0}
 .person .sub{font-size:12.5px; color:var(--muted); margin-top:2px}
-.ep-frames{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px}
-.ep-frames a{position:relative; display:block; border-radius:4px; overflow:hidden; background:#000}
+.ep-frames{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+@media (max-width:900px){.ep-frames{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ep-frame{position:relative; display:block; padding:0; border:0; border-radius:4px; overflow:hidden; background:#000; cursor:zoom-in}
+.ep-frame:hover img{opacity:.85}
 .ep-frames img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover}
+.ep-frames-all{margin-top:10px}
+@media (max-width:600px){.ep-frames{grid-template-columns:1fr}.ep-frame:nth-child(n+2){display:none}}
+.ep-lb figcaption{max-width:760px; margin:12px auto 0; text-align:left; font:15px/1.5 var(--body); color:#e8e4ec}
+.ep-lb .lb-t{font:600 13px var(--mono); color:#aaa; margin-right:4px}
 .ep-frames span{position:absolute; left:6px; bottom:5px; padding:1px 5px; border-radius:3px; background:rgba(0,0,0,.65); color:#fff; font:600 11px var(--mono)}
 .person .other{display:flex; flex-wrap:wrap; gap:3px 8px; margin-top:6px; font:500 11.5px var(--mono)}
 .person .other .lbl{color:var(--faint)}
