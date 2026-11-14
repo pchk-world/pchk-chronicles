@@ -38,6 +38,7 @@
   for (let s = stepT; s < T - 300; s += stepT) ticks.push(s);
 
   const toc = [['story', 'История'], ['timeline', 'Таймлайн'], ['coins', 'Монеты'], ['people', 'Персонажи'], ['links', 'Связи'], ['world', 'Мир и цитаты']];
+  if (D.frames && D.frames.length) toc.splice(toc.findIndex(t => t[0] === 'people') + 1, 0, ['frames', 'Кадры']);
   if (D.pod_html) toc.push(['pod', 'Из подкастов']);
 
   $('#app').innerHTML = `
@@ -110,6 +111,11 @@
     <div class="people">${D.cast.map(person).join('')}</div>
     ${D.npcs.length ? `<h3 style="font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--link);margin:22px 0 10px">Неигровые персонажи</h3><div class="people">${D.npcs.map(person).join('')}</div>` : ''}
   </section>
+
+  ${D.frames && D.frames.length ? `<section class="ep-sec" id="frames"><h2>Кадры с выпуска <small>${D.frames.length}</small></h2>
+    <p class="note" style="margin:0 0 10px">Рисованные кадры анимационных вставок, собранные из видео. Нажмите на кадр — выпуск откроется с этого места.</p>
+    <div class="ep-frames">${D.frames.map(f => `<a href="${yt(f.sec)}" target="_blank" rel="noopener" title="Смотреть с ${fmt(f.sec)}"><img src="${esc(f.img)}" alt="Кадр выпуска, ${fmt(f.sec)}" loading="lazy" width="640" height="360"><span>${fmt(f.sec)}</span></a>`).join('')}</div>
+  </section>` : ''}
 
   <section class="ep-sec" id="links"><h2>Связи с другими выпусками</h2>
     ${D.links.length ? `<ul class="eplinks">${D.links.map(l => `<li style="--c:${l.color}"><span><a href="${epUrl(l.key)}" style="font:600 14px var(--mono)">#${esc(l.label)}</a><br><span class="dir">${l.dir === 'back' ? 'ссылается сюда' : 'отсылка'}</span></span><span><a href="${epUrl(l.key)}">${esc(l.title)}</a><br><span class="note">${l.note_html}</span></span></li>`).join('')}</ul>` : '<p class="note">Связей не найдено.</p>'}

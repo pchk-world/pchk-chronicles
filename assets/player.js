@@ -6,6 +6,21 @@
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const wide = matchMedia('(min-width: 1100px)');
   let yt = null, box = null, cur = null;  // cur: {videoId, label, url}
+  /* YouTube иногда просит войти прямо во встроенном плеере («подтвердите, что вы не бот», возраст): внутри чужого сайта
+     браузер не отдаёт ему вход на youtube.com. Если видео не пошло за 8 с — подсказка и ссылка на YouTube с того же места */
+  let guard = null, wantSec = 0;
+  const ytUrl = () => `https://www.youtube.com/watch?v=${encodeURIComponent(cur.videoId)}&t=${Math.floor(ready() ? yt.getCurrentTime() || wantSec : wantSec)}s`;
+  function hint(show) {
+    if (!box) return;
+    const h = box.querySelector('.ep-player-hint');
+    h.hidden = !show;
+    if (show) h.querySelector('a').href = ytUrl();
+  }
+  function arm(sec) {
+    wantSec = Math.floor(sec || 0); hint(false); clearTimeout(guard);
+    guard = setTimeout(() => { const s = ready() ? yt.getPlayerState() : -1; if (s !== 1 && s !== 3) hint(true); }, 8000);
+  }
+  function onState(e) { if (e.data === 1 || e.data === 3) { clearTimeout(guard); hint(false); } }
 
   function loadApi() {
     if (window.YT && YT.Player) return Promise.resolve();
@@ -26,23 +41,31 @@
     cur = { videoId, label, url };
     if (!box) {
       box = document.createElement('div'); box.className = 'ep-player'; box.id = 'ep-player';
-      box.innerHTML = '<div class="ep-player-bar"><span class="ep-player-t"></span><button type="button" class="ep-player-x" aria-label="Закрыть плеер">×</button></div><div class="ep-player-frame"><div id="yt-frame"></div></div>';
+      box.innerHTML = '<div class="ep-player-bar"><span class="ep-player-t"></span><a class="ep-player-yt" target="_blank" rel="noopener" title="Открыть на YouTube с этого места">YouTube ↗</a><button type="button" class="ep-player-x" aria-label="Закрыть плеер">×</button></div><div class="ep-player-frame"><div id="yt-frame"></div></div>'
+        + '<p class="ep-player-hint" hidden>Не запускается? YouTube может просить войти — во встроенном плеере он не видит вход на youtube.com. <a target="_blank" rel="noopener">Смотреть на YouTube с этого места ↗</a></p>';
       document.body.appendChild(box);
       box.querySelector('.ep-player-x').addEventListener('click', stop);
+      const yl = box.querySelector('.ep-player-yt');
+      const fresh = () => { yl.href = ytUrl(); };
+      ['pointerdown', 'focus', 'mouseenter'].forEach(ev => yl.addEventListener(ev, fresh));
+      fresh();
       bar();
+      arm(sec);
       await loadApi();
       await new Promise(res => {
         yt = new YT.Player('yt-frame', { videoId, playerVars: { start: Math.floor(sec), autoplay: 1, rel: 0, playsinline: 1 },
-          events: { onReady: () => { yt.playVideo(); res(); } } });
+          events: { onReady: () => { yt.playVideo(); res(); }, onStateChange: onState, onError: () => hint(true) } });
       });
     } else {
       bar();
+      arm(sec);
       if (same) { yt.seekTo(sec, true); yt.playVideo(); } else yt.loadVideoById({ videoId, startSeconds: Math.floor(sec) });
     }
     return true;
   }
   function stop() {
     if (!box) return;
+    clearTimeout(guard);
     try { yt && yt.destroy(); } catch (e) {}
     yt = null; box.remove(); box = null; cur = null;
     document.body.classList.remove('mini');
