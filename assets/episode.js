@@ -42,6 +42,7 @@
 
   $('#app').innerHTML = `
   <div class="crumbs"><a href="/">Хроники Понии</a> › <a href="/ep/">Выпуски</a> › #${esc(D.label)}</div>
+  <article class="ep-article">
   <header class="ep-hero">
     <a href="${yt()}" target="_blank" rel="noopener"><img class="thumb" src="https://i.ytimg.com/vi/${esc(D.video_id)}/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${esc(D.video_id)}/hqdefault.jpg'" alt="Обложка выпуска"></a>
     <div>
@@ -96,15 +97,15 @@
       : `<li class="scene coin" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body"><b>${link(it.e.who_url, it.e.who || 'Игрок')}</b> ${coinLabel(it.e)}${it.e.to ? ' → ' + esc(it.e.to) : ''}: ${it.e.reason_html || esc(it.e.reason || '')}${it.e.result ? ` <span class="note">(${esc(it.e.result)})</span>` : ''}</div></li>`).join('')}</ol>
   </section>
 
-  <section class="ep-sec" id="coins"><h2>Монеты <small>${D.coins ? coinEv.filter(e => e.kind === 'earn').length + ' выдано · ' + coinEv.filter(e => e.kind === 'spend').length + ' потрачено' : 'нет данных'}</small></h2>
+  <section class="ep-sec entry" id="coins"><h2>Монеты <small>${D.coins ? coinEv.filter(e => e.kind === 'earn').length + ' выдано · ' + coinEv.filter(e => e.kind === 'spend').length + ' потрачено' : 'нет данных'}</small></h2>
     ${D.coins ? `
-      <div class="coins-sum">${(D.coins.totals || []).map(t => `<div class="coin-card">${img(t.img, 'av', t.who)}<b>${link(t.who_url, t.who || '—')}</b><span>${link(t.actor_url, t.actor || '')} · <em>+${t.earned || 0}</em> / −${t.spent || 0}</span></div>`).join('')}</div>
+      <div class="coins-sum">${(D.coins.totals || []).map(t => `<div class="coin-card">${img(t.img, 'av', t.who)}<b>${link(t.who_url, t.who || '—')}</b><p class="cc">${link(t.actor_url, t.actor || '')} · <em>+${t.earned || 0}</em> / −${t.spent || 0}</p></div>`).join('')}</div>
       ${D.coins.notes ? `<p class="note" style="margin:0 0 10px">${esc(D.coins.notes)}</p>` : ''}
       <ul class="plain">${(D.coins.events || []).map(e => `<li>${e.sec != null ? `<a href="${yt(e.sec)}" target="_blank" rel="noopener" style="font:500 12px var(--mono)">${esc(e.t)}</a> ` : ''}<b style="font-weight:600">${link(e.who_url, e.who || 'Игрок')}</b> — ${e.kind === 'loot' ? 'деньги в игре' : coinLabel(e)}${e.to ? ' → ' + esc(e.to) : ''}: ${e.reason_html || esc(e.reason || '')}</li>`).join('')}</ul>`
       : '<p class="note">Разбор монет для этого выпуска пока не готов.</p>'}
   </section>
 
-  <section class="ep-sec" id="people"><h2>Персонажи <small>${D.cast.length} в партии · ${D.npcs.length} NPC</small></h2>
+  <section class="ep-sec entry" id="people"><h2>Персонажи <small>${D.cast.length} в партии · ${D.npcs.length} NPC</small></h2>
     <h3 class="note" style="font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--link);margin:0 0 10px">Партия</h3>
     <div class="people">${D.cast.map(person).join('')}</div>
     ${D.npcs.length ? `<h3 style="font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--link);margin:22px 0 10px">Неигровые персонажи</h3><div class="people">${D.npcs.map(person).join('')}</div>` : ''}
@@ -122,6 +123,7 @@
     <p class="note" style="margin-top:16px">Полный конспект: <a href="/summaries/ep${esc(D.key)}.md">summaries/ep${esc(D.key)}.md</a></p>
   </section>
   ${D.pod_html || ''}
+  </article>
 
   <nav class="ep-foot-nav">${D.prev ? `<a class="btn" href="${epUrl(D.prev.key)}">← #${esc(D.prev.label)} ${esc(D.prev.title)}</a>` : '<span></span>'}${D.next ? `<a class="btn" href="${epUrl(D.next.key)}">#${esc(D.next.label)} ${esc(D.next.title)} →</a>` : ''}</nav>
   ${D.comments ? '<section class="ep-sec comments" id="comments"><h2>Обсуждение</h2></section>' : ''}
@@ -150,15 +152,15 @@
 
   function person(p) {
     const pic = p.url ? `<a href="${esc(p.url)}" tabindex="-1">${img(p.img, 'portrait', p.name)}</a>` : img(p.img, 'portrait', p.name);
-    return `<article class="person${isDead(p.fate) ? ' dead' : ''}">
+    return `<div class="person entry${isDead(p.fate) ? ' dead' : ''}">
       ${pic}
       <div><h3>${link(p.url, p.name)}</h3>
-        <div class="sub">${[p.actor ? link(p.actor_url, p.actor) : '', esc(p.race || p.role)].filter(Boolean).join(' · ')}</div>
-        ${p.fate ? `<div class="${isDead(p.fate) ? 'fate d' : 'fate'}" style="margin-top:3px">${esc(p.fate)}</div>` : ''}
+        <p class="sub">${[p.actor ? link(p.actor_url, p.actor) : '', esc(p.race || p.role)].filter(Boolean).join(' · ')}</p>
+        ${p.fate ? `<p class="${isDead(p.fate) ? 'fate d' : 'fate'}" style="margin-top:3px">${esc(p.fate)}</p>` : ''}
         ${rollsOf(p.url) ? `<div class="roll-n" title="Бросков на экране в этом выпуске">🎲 ${rollsOf(p.url)} ${plural(rollsOf(p.url), 'бросок', 'броска', 'бросков')}</div>` : ''}
         ${p.fn_html ? `<div class="fnrow">${p.fn_html}</div>` : ''}
         ${p.other.length ? `<div class="other"><span class="lbl">Ещё в:</span>${p.other.map(o => epLink(o.key, o.label, o.title)).join('')}</div>` : ''}
-      </div></article>`;
+      </div></div>`;
   }
 
   /* таймлайн: шкала ↔ прокрутка списка (или ↔ встроенный плеер в режиме просмотра) */
