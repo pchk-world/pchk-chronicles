@@ -70,12 +70,17 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
 </script>
 <script>
 (function(){
+  /* фильтр карточек: «е» находит и «ё», запрос — в адресе (?q=), чтобы ссылкой можно было поделиться */
   const q = document.getElementById('flt'), cards = [...document.querySelectorAll('[data-q]')], cnt = document.getElementById('fcnt');
   if (!q) return;
-  const run = () => { const v = q.value.trim().toLowerCase(); let n = 0;
-    cards.forEach(c => { const ok = !v || c.dataset.q.includes(v); c.hidden = !ok; if (ok) n++; });
+  const norm = s => (s || '').toLowerCase().replace(/ё/g, 'е');
+  cards.forEach(c => { c._q = norm(c.dataset.q); });
+  try { q.value = new URLSearchParams(location.search).get('q') || q.value; } catch (e) {}
+  const run = () => { const v = norm(q.value.trim()); let n = 0;
+    cards.forEach(c => { const ok = !v || c._q.includes(v); c.hidden = !ok; if (ok) n++; });
     document.querySelectorAll('.ep-sec[data-grp]').forEach(s => s.hidden = !s.querySelector('[data-q]:not([hidden])'));
-    cnt.textContent = n + ' из ' + cards.length; };
+    cnt.textContent = n + ' из ' + cards.length;
+    try { const u = new URL(location.href); v ? u.searchParams.set('q', q.value.trim()) : u.searchParams.delete('q'); history.replaceState(history.state, '', u); } catch (e) {} };
   q.addEventListener('input', run); run();
 })();
 </script>

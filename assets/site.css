@@ -577,6 +577,7 @@ dialog#mapdlg .x{float:right}
 /* места и артефакты */
 .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px}
 a.card2{display:flex; gap:12px; background:var(--accent); border:1px solid var(--border); border-radius:4px; padding:10px 12px; color:var(--text); align-items:flex-start}
+a.card2[hidden], .ep-sec[hidden]{display:none!important}   /* фильтр карточек (FILTER_JS) прячет атрибутом hidden */
 a.card2:hover{border-color:var(--link); text-decoration:none}
 a.card2 img,a.card2 .ph{width:64px; height:64px; flex:none; object-fit:cover; border-radius:3px; background:var(--page2); border:1px solid var(--border); display:grid; place-items:center; font:700 20px var(--head); color:var(--faint)}
 a.card2 b{display:block; font:600 15px var(--head)}
