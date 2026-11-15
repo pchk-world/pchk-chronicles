@@ -552,6 +552,8 @@ table.coins td.num:nth-child(3){color:var(--alert)}
 .offmap p{margin:3px 0}
 .offmap .npc{display:none}
 .offmap.show-npc .npc{display:inline}
+.offmap p.npc{display:none} .offmap.show-npc p.npc{display:block}
+.offmap span + span::before{content:", "}
 .offmap.no-chars{display:none}
 .chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
 .chips a{font:500 12.5px var(--head); background:var(--accent); border:1px solid var(--border); border-radius:99px; padding:3px 11px; color:var(--text)}
@@ -752,6 +754,9 @@ body.mini main.wrap{padding-right:calc(var(--player-w) + 40px)}
 .roll-tip.ok-1{border:2px solid #9be7a7}
 .roll-tip.ok-0{border:2px solid #ff9d9d}
 .roll-res.crit{color:#000; background:var(--link); border-color:var(--link)}
+/* бросок урона или воздействия (data-eff, viz/frames_data.py → effect): не проверка — нейтральный серый, без исхода */
+.roll-res.eff{color:var(--muted); border-color:color-mix(in srgb, var(--muted) 45%, transparent)}
+.roll-tip.tap{left:50%; top:50%; transform:translate(-50%, -50%)!important; width:min(440px, 92vw); pointer-events:auto}
 .roll-res.fail{color:#fff; background:#a3324a; border-color:#a3324a}
 
 /* таблицы бросков и листов героев */

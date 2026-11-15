@@ -137,8 +137,25 @@
     tip.hidden = false; place(tip, e);
   });
   document.addEventListener('mousemove', e => { last = e; const b = cur && box(); if (b) place(b, e); }, { passive: true });
-  const reset = () => { hide(); cur = null; };
-  addEventListener('scroll', reset, { passive: true });
-  document.addEventListener('click', reset);
+  const reset = () => { hide(); cur = null; if (tip) tip.classList.remove('tap'); };
+  /* на телефоне наведения нет: касание броска (мимо ссылок в строке) показывает вырезанную плашку посередине экрана,
+     следующее касание — закрывает */
+  let touch = false;
+  document.addEventListener('pointerdown', e => { touch = e.pointerType === 'touch' || e.pointerType === 'pen'; }, { passive: true, capture: true });
+  addEventListener('scroll', () => { if (!(tip && tip.classList.contains('tap'))) reset(); }, { passive: true });
+  document.addEventListener('click', e => {
+    const open = tip && !tip.hidden && tip.classList.contains('tap');
+    const row = touch && e.target.closest && e.target.closest('[data-roll-img]');
+    if (open || !row || e.target.closest('a[href],button,summary,input,select')) { reset(); if (open) e.preventDefault(); return; }
+    if (ent) ent.hidden = true;
+    if (!tip) { tip = document.createElement('div'); tip.className = 'roll-tip'; tip.setAttribute('aria-hidden', 'true'); tip.innerHTML = '<img alt=""><p></p>'; document.body.append(tip); }
+    const [im, tx] = tip.children, text = row.dataset.tip || '';
+    im.hidden = false; im.src = row.dataset.rollImg;
+    tx.hidden = !text; tx.textContent = text;
+    tip.classList.remove('text-only');
+    tip.classList.toggle('ok-1', row.dataset.ok === '1'); tip.classList.toggle('ok-0', row.dataset.ok === '0');
+    tip.classList.add('tap'); tip.hidden = false; cur = row;
+    e.preventDefault();
+  });
   document.addEventListener('pchk:leave', reset);
 })();

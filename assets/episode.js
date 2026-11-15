@@ -31,8 +31,9 @@
 
   const T = D.duration;
   const anchor = (it, i) => 't-' + (it.sec != null ? fmt(it.sec).replace(/:/g, '-') : 'x') + (it.type === 'scene' ? '' : '-' + it.type + i);
-  const rollLine = r => `🎲 <b>${link(r.who_url, r.who)}</b>${r.to ? ' → ' + link(r.to_url, r.to) : ''}${r.act ? ': ' + esc(r.act) : ''}${r.check ? ` <span class="note">· ${esc(r.check)}</span>` : ''}${r.res ? ` <span class="roll-res${r.nat === 20 ? ' crit' : r.nat === 1 ? ' fail' : ''}">${esc(r.res)}${r.nat === 20 ? ' · крит' : r.nat === 1 ? ' · единица' : ''}</span>` : ''}${(r.cards || []).map(c => `<span class="abil-use"${c.img ? ` data-roll-img="${esc(c.img)}"` : ''} data-tip="${esc(c.name + (c.text ? ': ' + c.text : ''))}">${esc(c.name)}</span>`).join('')}`;
-  const rollsOf = url => url ? rolls.filter(r => r.who_url === url).length : 0;
+  const rollLine = r => `🎲 <b>${link(r.who_url, r.who)}</b>${r.to ? ' → ' + link(r.to_url, r.to) : ''}${r.act ? ': ' + esc(r.act) : ''}${r.check ? ` <span class="note">· ${esc(r.check)}</span>` : ''}${r.res ? (r.effect ? ` <span class="roll-res eff" title="Бросок урона или воздействия: не проверка, в статистику бросков не входит">${esc(r.res)}</span>` : ` <span class="roll-res${r.nat === 20 ? ' crit' : r.nat === 1 ? ' fail' : ''}">${esc(r.res)}${r.nat === 20 ? ' · крит' : r.nat === 1 ? ' · единица' : ''}</span>`) : ''}${(r.cards || []).map(c => `<span class="abil-use"${c.img ? ` data-roll-img="${esc(c.img)}"` : ''} data-tip="${esc(c.name + (c.text ? ': ' + c.text : ''))}">${esc(c.name)}</span>`).join('')}`;
+  const checks = rolls.filter(r => !r.effect);       // урон и воздействие — не броски-проверки, в счёт не идут
+  const rollsOf = url => url ? checks.filter(r => r.who_url === url).length : 0;
   const pct = s => (Math.min(T, Math.max(0, s)) / T * 100).toFixed(3) + '%';
   const ticks = []; const stepT = T > 6000 ? 1800 : 900;
   for (let s = stepT; s < T - 300; s += stepT) ticks.push(s);
@@ -88,7 +89,7 @@
     </div>
   </section>
 
-  <section class="ep-sec" id="timeline"><h2>Таймлайн выпуска <small>${D.scenes.length} сцен · ${coinEv.length} событий с монетами${rolls.length ? ` · ${rolls.length} бросков` : ''}</small></h2>
+  <section class="ep-sec" id="timeline"><h2>Таймлайн выпуска <small>${D.scenes.length} сцен · ${coinEv.length} событий с монетами${checks.length ? ` · ${checks.length} бросков` : ''}</small></h2>
     <div class="scrub" id="scrub">
       <div class="read"><span class="now" id="now">0:00:00</span><span class="what" id="what"></span><span class="read-btns"><button type="button" class="ytb" id="watch-here" data-label="▶ Смотреть здесь" hidden>▶ Смотреть здесь</button><a class="dur" id="watch" href="${yt(0)}" target="_blank" rel="noopener">▶ на YouTube с этого места</a></span></div>
       <div class="track" id="track">
@@ -107,7 +108,7 @@
       </div>
     </div>
     <ol class="scenes" id="scenes">${items.map((it, i) => it.type === 'roll'
-      ? `<li class="scene roll" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"${it.r.img ? ` data-roll-img="${esc(it.r.img)}"` : ''}${it.r.ok === true ? ' data-ok="1"' : it.r.ok === false ? ' data-ok="0"' : ''}><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body">${rollLine(it.r)}</div></li>`
+      ? `<li class="scene roll" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"${it.r.img ? ` data-roll-img="${esc(it.r.img)}"` : ''}${it.r.effect ? ' data-eff="1"' : it.r.ok === true ? ' data-ok="1"' : it.r.ok === false ? ' data-ok="0"' : ''}><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body">${rollLine(it.r)}</div></li>`
       : it.type === 'scene'
       ? `<li class="scene${it.key ? ' key' : ' minor'}" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec ?? ''}"><span class="t">${it.sec != null ? `<a href="${yt(it.sec)}" target="_blank" rel="noopener" title="Смотреть с этого момента">${esc(it.t)}</a>` : esc(it.t || '')}</span><span class="rail"></span><div class="body">${it.html}${it.sec != null ? `<button class="share" data-copy="${epUrl(D.key)}#t=${fmt(it.sec)}" title="Скопировать ссылку на этот момент">🔗</button>` : ''}</div></li>`
       : `<li class="scene coin" id="${anchor(it, i)}" data-i="${i}" data-sec="${it.sec}"><span class="t"><a href="${yt(it.sec)}" target="_blank" rel="noopener">${esc(it.t)}</a></span><span class="rail"></span><div class="body"><b>${link(it.e.who_url, it.e.who || 'Игрок')}</b> ${coinLabel(it.e)}${it.e.to ? ' → ' + esc(it.e.to) : ''}: ${it.e.reason_html || esc(it.e.reason || '')}${it.e.result ? ` <span class="note">(${esc(it.e.result)})</span>` : ''}</div></li>`).join('')}</ol>
