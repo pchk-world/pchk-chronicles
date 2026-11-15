@@ -332,8 +332,20 @@ dialog .x{position:sticky; top:0; float:right; background:var(--accent); color:v
 .mx tbody th .av{width:24px; height:24px; border-width:1px; font-size:10px}
 .mx tbody th small{color:var(--faint); font-weight:400}
 .mx td{width:20px; text-align:center}
-.mx td span{display:inline-block; width:13px; height:13px; border-radius:3px; background:var(--c)}
-.mx td span.gone{background:none; border:2px solid var(--alert)}
+.mx-cell{display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:3px; background:var(--c, var(--muted));
+  color:#1e0c1b; font:700 11px/1 var(--body); text-decoration:none!important; cursor:pointer; vertical-align:middle}
+.mx a.mx-cell:hover,.mx a.mx-cell:focus-visible{outline:2px solid var(--text); outline-offset:1px}
+.mx-cell.gone{background:#120a12; color:#ff8080; box-shadow:inset 0 0 0 2px var(--c, var(--alert)); font-size:12px}
+.mx thead th a{color:inherit; text-decoration:none}
+.mx thead th a:hover{color:var(--link)}
+.mx thead th.mx-name,.mx thead th.mx-pl,.mx thead th.mx-sum{writing-mode:horizontal-tb; transform:none; width:auto; text-align:left; padding:6px 10px; vertical-align:bottom; cursor:default}
+.mx thead th.mx-name{position:sticky; left:0; background:var(--page); z-index:2}
+.mx td.mx-pl,.mx td.mx-sum{width:auto; text-align:left; padding:0 10px; white-space:nowrap; font-size:12px; color:var(--muted)}
+.mx td.mx-sum a{font:500 12px var(--mono)}
+.mx-legend{margin:2px 0 10px}
+.mx-legend .chip{cursor:default}
+.mx-legend .chip:hover{background:none}
+.mx-key .mx-cell{--c:var(--muted)}
 .mx tbody tr:nth-child(odd) td{background:rgba(255,255,255,.03)}
 .comments{margin-top:26px}
 .comments h2{font-size:20px; margin-bottom:12px}
@@ -481,6 +493,10 @@ a.dbc:hover{text-decoration:none}
 .stat b{display:block; font:700 24px var(--mono); color:var(--text); font-variant-numeric:tabular-nums; line-height:1.2}
 .stat span{font:500 11px var(--mono); letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
 .stat.main b{color:var(--link)}
+.st-arr{font-style:normal; font-weight:700; text-decoration:none!important; cursor:help}
+.st-arr.up{color:#7fd49b}
+.st-arr.down{color:#ff8a8a}
+.stat .st-arr{font-size:.75em; vertical-align:.15em}
 .statgrid.small{grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; margin:10px 0}
 .statgrid.small .stat{padding:5px 4px}
 .statgrid.small .stat b{font-size:17px}
@@ -883,3 +899,7 @@ main img{-webkit-touch-callout:none}
 .dice b.ok{color:var(--ok)}
 .dice b.bad{color:var(--alert)}
 .dice::before{content:""; width:9px; height:9px; margin:auto 1px auto 0; border:1.5px solid currentColor; border-radius:2px; transform:rotate(45deg); opacity:.7}
+.abil-art{color:#ff8a8a}
+.abil-art a{color:inherit; text-decoration:underline; text-underline-offset:3px}
+.abil-pool{color:#ffb86b}
+a.art-ref{color:var(--link)}

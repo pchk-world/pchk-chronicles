@@ -69,7 +69,7 @@
 </div></main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
-<script src="/assets/data.js?v=3f6d965b6e"></script>
+<script src="/assets/data.js?v=f722bbce9e"></script>
 <script>
 (() => {  // в функции: при мягком переходе (viz/player.js) скрипт запускается заново
 const PAGE = 'lore';
@@ -267,7 +267,7 @@ function renderList(){
     <h3>${esc(e.title)}</h3><p>${esc(e.brief)}</p></div></article>`).join('');
   document.querySelectorAll('.ep').forEach(a => { const go = () => { goTo('/ep/' + a.dataset.k + '/'); }; a.onclick = go; a.onkeydown = ev => { if (ev.key==='Enter') go(); }; });
 }
-if ($('#q')) $('#q').oninput = renderList;
+if (PAGE === 'eps') urlBind([['q','q','']], renderList);
 
 /* участники */
 function renderActors(){
@@ -285,7 +285,7 @@ function renderActors(){
   </article>`).join('');
   
 }
-if ($('#qa')) { $('#qa').oninput = renderActors; $('#sa').onchange = renderActors; }
+if (PAGE === 'cast') urlBind([['qa','q',''],['sa','sort','eps']], renderActors);
 
 /* карточка персонажа: в окне и в боковой панели графа */
 const NODE_IDS = new Set(DATA.relations.nodes.map(n => n.id));
@@ -328,25 +328,44 @@ function graphFocus(id){
 
 /* каталог персонажей */
 const ALLC = Object.values(CH);
+const DB_KEYS = [['qd','q',''],['fk','kind',''],['fs','status',''],['fb','branch',''],['fr','race',''],['fp','player',''],['fo','sort','eps'],['fi','img','']];
+/* поиск, фильтры и сортировка — в адресе страницы (?q=…&race=…): ссылкой можно поделиться, «назад» возвращает к выбору */
+function urlBind(keys, render){
+  const P = new URLSearchParams(location.search);
+  keys.forEach(([id, key]) => { const el = $('#'+id), v = P.get(key); if (!el || v == null) return;
+    if (el.type === 'checkbox') el.checked = v === '1'; else if (el.tagName !== 'SELECT' || [...el.options].some(o => o.value === v)) el.value = v; });
+  const save = () => { const Q = new URLSearchParams();
+    keys.forEach(([id, key, def = '']) => { const el = $('#'+id); if (!el) return;
+      const v = el.type === 'checkbox' ? (el.checked ? '1' : '') : (el.value||'').trim(); if (v && v !== def) Q.set(key, v); });
+    const qs = Q.toString(); history.replaceState(history.state, '', location.pathname + (qs ? '?' + qs : '') + location.hash); };
+  keys.forEach(([id]) => { const el = $('#'+id); if (el) { el.oninput = null; el.onchange = null; el.addEventListener('input', () => { save(); render(); }); } });
+}
 if (PAGE === 'db') (function initDB(){
   $('#fb').innerHTML += BR.map(b => `<option>${esc(b.name)}</option>`).join('');
-  const races = {}; ALLC.forEach(c => { const r = (c.race||'').split(/[,;(]/)[0].trim(); if (r) races[r] = (races[r]||0)+1; });
-  $('#fr').innerHTML += Object.entries(races).sort((a,b)=>b[1]-a[1]).map(([r,n]) => `<option value="${esc(r)}">${esc(r)} (${n})</option>`).join('');
-  ['qd','fk','fs','fb','fr','fo','fi'].forEach(id => $('#'+id).addEventListener('input', renderDB));
+  const races = {}; ALLC.forEach(c => { const r = c.race_base; if (r) races[r] = (races[r]||0)+1; });
+  $('#fr').innerHTML += Object.entries(races).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0],'ru')).map(([r,n]) => `<option value="${esc(r)}">${esc(r)} (${n})</option>`).join('');
+  const pl = {}; ALLC.forEach(c => (c.actors||[]).forEach(a => { pl[a] = (pl[a]||0)+1; }));
+  $('#fp').innerHTML += Object.entries(pl).sort((a,b)=>a[0].localeCompare(b[0],'ru')).map(([a,n]) => `<option value="${esc(a)}">${esc(a)} (${n})</option>`).join('');
+  urlBind(DB_KEYS, renderDB);
 })();
 function renderDB(){
-  const q = ($('#qd').value||'').trim().toLowerCase(), k = $('#fk').value, st = $('#fs').value, b = $('#fb').value, r = $('#fr').value, o = $('#fo').value, im = $('#fi').checked;
+  const q = ($('#qd').value||'').trim().toLowerCase(), k = $('#fk').value, st = $('#fs').value, b = $('#fb').value, r = $('#fr').value,
+    pl = $('#fp').value, o = $('#fo').value, im = $('#fi').checked;
   let list = ALLC.filter(c => (!k || c.kind === k) && (!st || (st === 'dead') === !!c.dead) && (!b || c.branches.includes(b))
-    && (!r || (c.race||'').startsWith(r)) && (!im || c.img)
+    && (!r || c.race_base === r) && (!pl || (c.actors||[]).includes(pl)) && (!im || c.img)
     && (!q || [c.name, c.race, c.actors.join(' '), c.roles.join(' '), (c.infobox||{})['На вики']||'', c.summary].join(' ').toLowerCase().includes(q)));
-  const first = c => c.eps.length ? EP.findIndex(e => e.key === c.eps[0]) : 999;
-  list.sort(o === 'az' ? (a,b)=>a.name.localeCompare(b.name,'ru') : o === 'first' ? (a,b)=>first(a)-first(b) : (a,b)=>b.eps.length-a.eps.length || a.name.localeCompare(b.name,'ru'));
+  const idx = k => { const i = EP.findIndex(e => e.key === k); return i < 0 ? 999 : i; };
+  const firstIn = c => (c.eps_in||[]).length ? idx(c.eps_in[0]) : 999, firstAny = c => c.eps.length ? idx(c.eps[0]) : 999;
+  const byName = (a,b) => a.name.localeCompare(b.name,'ru');
+  list.sort(o === 'az' ? byName : o === 'first' ? (a,b)=>firstIn(a)-firstIn(b) || firstAny(a)-firstAny(b) || byName(a,b)
+    : o === 'ment' ? (a,b)=>firstAny(a)-firstAny(b) || firstIn(a)-firstIn(b) || byName(a,b) : (a,b)=>b.eps.length-a.eps.length || byName(a,b));
+  const sub = c => o === 'first' && (c.eps_in||[]).length ? `впервые в #${esc((byKey[c.eps_in[0]]||{}).label||c.eps_in[0])}`
+    : o === 'ment' && c.eps.length ? `упомянут в #${esc((byKey[c.eps[0]]||{}).label||c.eps[0])}` : '';
   $('#qdcount').textContent = `${list.length} из ${ALLC.length}`;
   $('#dbgrid').innerHTML = list.map(c => `<a class="dbc${c.dead?' dead':''}" href="${esc(c.url)}">
     ${avatar(c,'portrait')}<div class="b"><b>${esc(c.name)}</b>
     <small>${esc(c.race || (c.roles[0]||''))}</small>
-    <div class="tags">${c.kind==='pc'?'<span class="tag pc">игровой</span>':'<span class="tag">NPC</span>'}${c.dead?'<span class="tag d">погиб</span>':''}<span class="tag">${c.eps.length} вып.</span></div></div></a>`).join('');
-  
+    <div class="tags">${c.kind==='pc'?'<span class="tag pc">игровой</span>':'<span class="tag">NPC</span>'}${c.dead?'<span class="tag d">погиб</span>':''}<span class="tag">${c.eps.length} вып.</span>${sub(c) ? `<span class="tag">${sub(c)}</span>` : ''}</div></div></a>`).join('');
 }
 
 /* граф связей */
@@ -422,18 +441,37 @@ document.querySelectorAll('#lorebody [data-ep]').forEach(a => { a.href = '/ep/' 
 
 /* матрица */
 if (PAGE === 'chars') (function(){
-  let h = '<table><thead><tr><th style="writing-mode:horizontal-tb;transform:none;width:auto"></th>' +
-    EP.map(e => `<th data-k="${e.key}" title="${esc(e.title)}">${esc(e.label)}</th>`).join('') + '</tr></thead><tbody>';
-  DATA.characters.forEach(c => {
-    const ch = CH[c.id];
-    h += `<tr><th><div class="row">${avatar(ch,'av',c.name)}${lnk(ch && ch.url, c.name)}<small>${esc(c.role||'')}</small></div></th>` + EP.map(e => {
-      if (!c.eps.includes(e.key)) return '<td></td>';
-      return `<td title="#${esc(e.label)} ${esc(e.title)}"><span class="${(c.gone||[]).includes(e.key)?'gone':''}" style="--c:${brOf(e.branch).color}"></span></td>`;
-    }).join('') + '</tr>';
-  });
-  $('#mx').innerHTML = h + '</tbody></table>';
-  document.querySelectorAll('#mx thead th[data-k]').forEach(t => t.onclick = () => { goTo('/ep/' + t.dataset.k + '/'); });
-  
+  const HEROES = DATA.characters.map(c => ({...c, ch: CH[c.id], actors: (CH[c.id] && CH[c.id].actors) || [...new Set(Object.values(c.info||{}).map(x => x.actor).filter(Boolean))]}));
+  const used = new Set(HEROES.flatMap(c => c.eps.map(k => byKey[k] && byKey[k].branch)));
+  $('#hb').innerHTML += BR.filter(b => used.has(b.name)).map(b => `<option>${esc(b.name)}</option>`).join('');
+  const pl = {}; HEROES.forEach(c => c.actors.forEach(a => { pl[a] = (pl[a]||0)+1; }));
+  $('#hp').innerHTML += Object.entries(pl).sort((a,b)=>a[0].localeCompare(b[0],'ru')).map(([a,n]) => `<option value="${esc(a)}">${esc(a)} (${n})</option>`).join('');
+  $('#hlegend').innerHTML = BR.filter(b => used.has(b.name)).map(b => `<span class="chip" style="--c:${b.color}"><i></i>${esc(b.name)}</span>`).join('')
+    + '<span class="chip mx-key"><span class="mx-cell"></span>герой в выпуске</span><span class="chip mx-key"><span class="mx-cell gone">✝</span>погиб в выпуске</span>';
+  const tipOf = (c, e) => { const x = (c.info||{})[e.key] || {};
+    return [`#${e.label} ${e.title} (${e.date})`, `Ветвь: ${e.branch}`, x.actor ? `Играет: ${x.actor}` : (x.npc ? 'Неигровой персонаж' : ''),
+      x.rc ? (x.npc ? 'Роль: ' : 'Раса и класс: ') + x.rc : '', x.fate ? `Судьба: ${x.fate}` : ''].filter(Boolean).join('\n'); };
+  function render(){
+    const b = $('#hb').value, p = $('#hp').value, st = $('#hs').value;
+    const dead = c => (c.dead_in||[]).length > 0 || !!(c.ch && c.ch.dead);
+    const list = HEROES.filter(c => (!b || c.eps.some(k => byKey[k] && byKey[k].branch === b)) && (!p || c.actors.includes(p)) && (!st || (st === 'dead') === dead(c)));
+    const cols = EP.filter(e => !b || e.branch === b);
+    $('#hcount').textContent = `${list.length} из ${HEROES.length}`;
+    let h = '<table><thead><tr><th class="mx-name">Герой</th><th class="mx-pl">Играет</th>' +
+      cols.map(e => `<th><a href="/ep/${e.key}/" data-tip="${esc('#' + e.label + ' ' + e.title + '\nВетвь: ' + e.branch)}">${esc(e.label)}</a></th>`).join('') + '<th class="mx-sum">Итог</th></tr></thead><tbody>';
+    list.forEach(c => {
+      const mine = c.eps.filter(k => byKey[k]), f = mine[0], l = mine[mine.length - 1];
+      h += `<tr><th class="mx-name"><div class="row">${avatar(c.ch,'av',c.name)}${lnk(c.ch && c.ch.url, c.name)}<small>${esc(c.role||'')}</small></div></th>`
+        + `<td class="mx-pl">${c.actors.map(a => lnk(actorUrl(a), a)).join(', ')}</td>` + cols.map(e => {
+        if (!c.eps.includes(e.key)) return '<td></td>';
+        const g = (c.dead_in||[]).includes(e.key);
+        return `<td><a class="mx-cell${g ? ' gone' : ''}" href="/ep/${e.key}/" style="--c:${brOf(e.branch).color}" data-tip="${esc(tipOf(c, e))}" aria-label="${esc('#' + e.label + (g ? ', погиб' : ''))}">${g ? '✝' : ''}</a></td>`;
+      }).join('') + `<td class="mx-sum">${mine.length} ${plural(mine.length,'выпуск','выпуска','выпусков')}${f ? ` · <a href="/ep/${f}/">#${esc(byKey[f].label)}</a>${l !== f ? `–<a href="/ep/${l}/">#${esc(byKey[l].label)}</a>` : ''}` : ''}</td></tr>`;
+    });
+    $('#mx').innerHTML = h + '</tbody></table>';
+  }
+  urlBind([['hb','branch',''],['hp','player',''],['hs','status','']], render);
+  render();
 })();
 
 ({chron: () => renderChron(), map: () => { renderLegend(); renderMap(); const k = EP[EP.length-1].key; select(k); setTimeout(() => scrollToStation(k), 30); }, eps: () => { renderLegend(); renderList(); },

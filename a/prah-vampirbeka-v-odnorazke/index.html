@@ -70,6 +70,37 @@
   </div>
 </header>
 
+<section class="ep-sec" id="sheet"><h2>С листа героя <small>2</small></h2><p class="note">Свойства предмета так, как они напечатаны на листе героя в выпуске; снимок листа — кадр выпуска.</p><div class="abil-ep"><h3 class="sub-h">#26 · <a href="/ep/26/">Четвёртая фабрика</a> · <a href="/c/dan-balan/">Дан Балан</a></h3><p><b>Солевая одноразка (от внука Супербигдикгана)</b>: Выпускает ядовитое облако на 3 метра перед тобой, урон 1d12. Спасбросок Выносливости 13.</p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep26/p000.webp"><img src="/img/sheets/ep26/p000.webp" alt="" loading="lazy"><figcaption>лист героя, #26</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#28a · <a href="/ep/28a/">Часть 1 Чёрное небо вампиров</a> · <a href="/c/dan-balan/">Дан Балан</a></h3><p><b>Солевая одноразка с прахом Вампирбека, Юры с Четвертой фабрики и волка.</b></p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep28a/p000.webp"><img src="/img/sheets/ep28a/p000.webp" alt="" loading="lazy"><figcaption>лист героя, #28a</figcaption></figure></div></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/26/" title="Четвёртая фабрика">#26</a></b> пепел собирают.</li><li><b><a href="/ep/28a/" title="Часть 1 Чёрное небо вампиров">#28a</a></b> <a class="ref" href="/c/dan-balan/">Дан Балан</a> носит прах.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>3</small></h2><ul class="eplinks"><li style="--c:#B03A7A"><span><a href="/ep/26/" title="Четвёртая фабрика">#26</a><br><span class="dir">2024</span></span><span><a href="/ep/26/">Четвёртая фабрика</a> <span class="note">· Вампиры Дан Балана</span></span></li><li style="--c:#B03A7A"><span><a href="/ep/28a/" title="Часть 1 Чёрное небо вампиров">#28a</a><br><span class="dir">2024</span></span><span><a href="/ep/28a/">Часть 1 Чёрное небо вампиров</a> <span class="note">· Вампиры Дан Балана</span></span></li><li style="--c:#B03A7A"><span><a href="/ep/28b/" title="Часть 2 Чёрное небо вампиров">#28b</a><br><span class="dir">2024</span></span><span><a href="/ep/28b/">Часть 2 Чёрное небо вампиров</a> <span class="note">· Вампиры Дан Балана</span></span></li></ul></section>
 

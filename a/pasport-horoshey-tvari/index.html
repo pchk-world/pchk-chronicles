@@ -70,6 +70,37 @@
   </div>
 </header>
 
+<section class="ep-sec" id="sheet"><h2>С листа героя <small>5</small></h2><p class="note">Свойства предмета так, как они напечатаны на листе героя в выпуске; снимок листа — кадр выпуска.</p><div class="abil-ep"><h3 class="sub-h">#43 · <a href="/ep/43/">Груз Кристиночки</a> · <a href="/c/bes-misha/">Бес Миша</a></h3><p><b>Паспорт хорошей твари</b>: Позволяет тебе жить на территории королевства Пония, демонстрирует твою лояльность королю Понию V.</p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep43/p018.webp"><img src="/img/sheets/ep43/p018.webp" alt="" loading="lazy"><figcaption>лист героя, #43</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#48 · <a href="/ep/48/">Ночь в музее</a> · <a href="/c/dan-balan/">Дан Балан</a></h3><p><b>Поддельный паспорт Хорошей твари</b></p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep48/p002.webp"><img src="/img/sheets/ep48/p002.webp" alt="" loading="lazy"><figcaption>лист героя, #48</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#48 · <a href="/ep/48/">Ночь в музее</a> · <a href="/c/vampir-bek/">Вампирбек</a></h3><p><b>Паспорт хорошей твари</b></p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep48/p008.webp"><img src="/img/sheets/ep48/p008.webp" alt="" loading="lazy"><figcaption>лист героя, #48</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#48 · <a href="/ep/48/">Ночь в музее</a> · <a href="/c/vladislav/">Бладислав</a></h3><p><b>Паспорт хорошей твари</b></p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep48/p012.webp"><img src="/img/sheets/ep48/p012.webp" alt="" loading="lazy"><figcaption>лист героя, #48</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#48 · <a href="/ep/48/">Ночь в музее</a> · <a href="/c/krovozhadina/">Кровожадина</a></h3><p><b>Паспорт хорошей твари</b>: Позволяет охотиться на территории Королевства.</p><div class="gal sheet-gal"><figure data-full="/img/sheets/ep48/p019.webp"><img src="/img/sheets/ep48/p019.webp" alt="" loading="lazy"><figcaption>лист героя, #48</figcaption></figure></div></div><script>
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
+  if (window.__galBound) return; window.__galBound = true;
+  let box, items = [], i = 0;
+  function show() {
+    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+  }
+  function open(fig) {
+    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox';
+      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+      document.body.appendChild(box);
+      box.addEventListener('click', e => {
+        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
+      });
+    }
+    show(); box.classList.add('on');
+  }
+  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+  document.addEventListener('keydown', e => {
+    if (!box || !box.classList.contains('on')) return;
+    if (e.key === 'Escape') box.classList.remove('on');
+    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+  });
+})();
+</script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/40/" title="Паспорт хорошей твари">#40</a></b> клан <a class="ref" href="/c/dan-balan/">Балан</a> получает паспорта; Дану <a class="ref" href="/c/dan-balan/">Балану</a> отказано по записке тайной канцелярии.</li><li>Вып. 43 и 48: паспорт упомянут снова.</li></ul></section>
 <section class="ep-sec"><h2>Выпуски <small>3</small></h2><ul class="eplinks"><li style="--c:#B03A7A"><span><a href="/ep/40/" title="Паспорт хорошей твари">#40</a><br><span class="dir">2025</span></span><span><a href="/ep/40/">Паспорт хорошей твари</a> <span class="note">· Вампиры Дан Балана</span></span></li><li style="--c:#B8901C"><span><a href="/ep/43/" title="Груз Кристиночки">#43</a><br><span class="dir">2025</span></span><span><a href="/ep/43/">Груз Кристиночки</a> <span class="note">· Янус и дракон Гиммилут</span></span></li><li style="--c:#B03A7A"><span><a href="/ep/48/" title="Ночь в музее">#48</a><br><span class="dir">2026</span></span><span><a href="/ep/48/">Ночь в музее</a> <span class="note">· Вампиры Дан Балана</span></span></li></ul></section>
 
