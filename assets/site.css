@@ -271,6 +271,8 @@ h2.sect{font-size:22px; font-weight:600; padding-bottom:6px; border-bottom:1px s
 .dbc small{font-size:12px; color:var(--muted)}
 .tags{display:flex; flex-wrap:wrap; gap:4px; margin-top:2px}
 .tag{font:600 10.5px var(--mono); padding:1px 6px; border-radius:2px; background:var(--page2); color:var(--muted); border:1px solid var(--border)}
+a.tag{text-decoration:none}
+a.tag:hover{color:var(--link); border-color:var(--link)}
 .tag.pc{color:#000; background:var(--link); border-color:var(--link)}
 .tag.d{color:var(--alert); border-color:var(--alert)}
 dialog#chardlg{background:var(--page); color:var(--text); border:1px solid var(--border); border-radius:4px; padding:22px; width:min(760px,calc(100vw - 32px)); max-height:calc(100vh - 48px); overflow:auto; box-shadow:0 10px 40px rgba(0,0,0,.7)}

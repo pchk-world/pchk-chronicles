@@ -296,7 +296,7 @@ function charCardHTML(id, inDialog){
   const rels = DATA.relations.edges.filter(r => r.s === id || r.t === id);
   const T = DATA.relations.types;
   const tags = [c.kind==='pc' ? '<span class="tag pc">игровой</span>' : '<span class="tag">NPC</span>',
-    c.dead ? '<span class="tag d">погиб</span>' : '', c.race ? `<span class="tag">${esc(c.race)}</span>` : ''].join('');
+    c.dead ? '<span class="tag d">погиб</span>' : '', c.race ? `<a class="tag" href="/c/?race=${encodeURIComponent(c.race_base||c.race)}" title="Все персонажи этой расы">${esc(c.race)}</a>` : ''].join('');
   return `<div class="hd">${avatar(c,'portrait')}<div><h3>${lnk(c.url, c.name)}</h3><div class="tags" style="margin-top:6px">${tags}</div>
       ${c.actors.length ? `<div class="note" style="margin-top:6px">Играет: ${c.actors.map(a => lnk(actorUrl(a), a)).join(', ')}</div>` : ''}
       <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="${esc(c.url)}">Страница персонажа →</a>
@@ -305,7 +305,7 @@ function charCardHTML(id, inDialog){
     ${c.summary ? `<p>${c.summary_html || esc(c.summary)}</p>` : ''}
     ${!c.summary && c.roles.length ? `<p>${esc(c.roles.join('; '))}</p>` : ''}
     ${c.stats ? `<div class="statgrid small">${['Класс брони','Здоровье','Сила','Ловкость','Выносливость','Мудрость','Интеллект','Харизма'].filter(k=>c.stats[k]).map(k=>`<div class="stat${k==='Класс брони'||k==='Здоровье'?' main':''}"><b>${esc(c.stats[k])}</b><span>${esc(k)}</span></div>`).join('')}</div>` : ''}
-    ${Object.keys(c.infobox||{}).length ? `<dl class="infobox">${Object.entries(c.infobox).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>` : ''}
+    ${Object.keys(c.infobox||{}).filter(k=>k!=='На вики').length ? `<dl class="infobox">${Object.entries(c.infobox).filter(([k])=>k!=='На вики').map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>` : ''}
     ${c.eps.length ? `<div class="sec"><h3>Выпуски (${c.eps.length})</h3><div style="display:flex;flex-wrap:wrap;gap:6px 10px">${c.eps.map(k=>byKey[k]?`<span class="linkto" data-k="${k}" style="font:500 12.5px var(--mono)" title="${esc(byKey[k].title)}">#${esc(byKey[k].label)}</span>`:'').join('')}</div></div>` : ''}
     ${(c.portraits||[]).length > 1 ? `<div class="sec"><h3>Облик по выпускам</h3><div class="gallery">${c.portraits.map(p=>`<figure><img src="${esc(imgUrl(p.thumb))}" alt="" loading="lazy"><figcaption>#${esc(p.ep)}</figcaption></figure>`).join('')}</div></div>` : ''}
     ${rels.length ? `<div class="sec"><h3>Связи</h3><div style="display:grid;gap:6px">${rels.map(r => { const o = r.s === id ? r.t : r.s; return `<div class="rel" style="--c:${T[r.type].color}"><i></i><span class="linkto" data-gch="${esc(o)}">${esc(CH[o] ? CH[o].name : o)}</span><span class="note">${esc(r.label)}</span></div>`; }).join('')}</div></div>` : ''}
