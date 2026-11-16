@@ -363,6 +363,7 @@ footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--border); fo
 .ep-sec{margin-top:30px; scroll-margin-top:calc(var(--nav-h) + 18px)}
 .ep-sec > h2{font-size:22px; font-weight:600; padding-bottom:6px; border-bottom:1px solid var(--border); margin:0 0 14px; display:flex; justify-content:space-between; align-items:baseline; gap:12px}
 .ep-sec > h2 small{font:500 12px var(--mono); color:var(--faint)}
+.char-video video{display:block; width:100%; max-width:360px; aspect-ratio:9/16; border-radius:12px; background:#000}
 .ep-toc{display:flex; flex-wrap:wrap; gap:6px; margin-top:16px}
 .ep-cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:24px}
 .party-line{margin:0 0 16px; font-size:14px}
