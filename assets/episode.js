@@ -4,7 +4,7 @@
   const $ = s => document.querySelector(s);
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const initials = s => String(s || '?').replace(/[«»"()]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
-  const img = (src, cls, name) => src ? `<img class="${cls}" src="/${esc(src)}" alt="" loading="lazy">` : `<span class="${cls}" aria-hidden="true">${esc(initials(name))}</span>`;
+  const img = (src, cls, name) => src ? `<img class="${cls}" src="${esc(/^(https?:)?\//.test(src) ? src : '/' + src)}" alt="" loading="lazy">` : `<span class="${cls}" aria-hidden="true">${esc(initials(name))}</span>`;   // картинки — полным адресом img.pchk.world (viz/img_base.py) или путём сайта
   const fmt = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return `${h}:${String(m).padStart(2, '0')}:${String(x).padStart(2, '0')}`; };
   const yt = sec => `https://youtu.be/${D.video_id}` + (sec != null ? `?t=${Math.round(sec)}` : '');
   const epLink = (k, label, title) => `<a href="/ep/${esc(k)}/" title="${esc(title || '')}">#${esc(label)}</a>`;
