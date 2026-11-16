@@ -199,7 +199,7 @@
     const fig = img.closest('figure');
     const cap = (fig && fig.querySelector('figcaption') || {}).textContent || img.alt || '';
     const u = new URL(img.getAttribute('src'), location.href);
-    const src = u.origin === location.origin ? u.pathname : u.href;          // превью YouTube и др. — полным адресом
+    const src = u.origin === location.origin || u.host === 'img.pchk.world' ? u.pathname : u.href;   // картинки сайта (и с img.pchk.world) — путём /img/…, превью YouTube и др. — полным адресом
     const opts = [['remove', 'Удалить', 'не тот персонаж, мусор, повтор'], ['main', 'Сделать основной', 'показывать на всех страницах'],
                   ['replace', 'Заменить', 'ссылка на картинку или выпуск с таймкодом']];
     const box = dialog(`${pageTitle()}${cap ? ' · ' + cap.trim() : ''}`,

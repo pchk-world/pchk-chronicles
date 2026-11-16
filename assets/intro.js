@@ -12,7 +12,7 @@
     dlg.innerHTML = `
       <button class="intro-x" type="button" aria-label="Закрыть">×</button>
       <figure class="intro-pic">
-        <img src="/img/intro-dobromraz.webp" width="214" height="312" alt="Добромраз, жулик-контрабандист">
+        <img src="https://img.pchk.world/img/intro-dobromraz.webp" width="214" height="312" alt="Добромраз, жулик-контрабандист">
         <figcaption>*Читать голосом Руслана «Кубик в Кубе». Добромраз ручается за каждое слово. Почти за каждое.</figcaption>
       </figure>
       <div class="intro-text">

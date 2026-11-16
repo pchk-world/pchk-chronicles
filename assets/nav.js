@@ -175,7 +175,7 @@
   const KEY = 'pchk.chickens', LAST = 'pchk.chickens.peek';
   const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
                   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
-  const src = n => `/img/chickens/${n}.webp`;
+  const src = n => `https://img.pchk.world/img/chickens/${n}.webp`;
   let toastEl = null, toastT = 0;
   function toast(text) {
     if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'chick-toast'; toastEl.setAttribute('role', 'status'); document.body.append(toastEl); }
