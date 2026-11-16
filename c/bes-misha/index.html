@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Беглый бес помог <a class="ref" href="/c/medium-pahom/">Пахому</a> украсть кристалл, потом притворялся союзником <a class="ref" href="/c/sfinkterion/">Сфинктериона</a>, а сам сжёг тело <a class="ref" href="/c/erik-penisov/">Эрика Пэнисова</a>, чтобы оно не досталось Тёмному <a class="ref" href="/c/brendon-tyomnyy-vlastelin/">Властелину</a>. Живёт в столице по паспорту хорошей твари и охраняет <a class="ref" href="/c/kristina/">Кристину</a> по контракту.</p>
     <p class="char-where"><b>Где сейчас:</b> <a href="/place/gnilaya-gavan/">Гнилая Гавань</a> — бордель «Налево от сосны» на старом тракте к Кёнигпону, с отрядом <span class="note">· по итогам <a href="/ep/43/" title="Груз Кристиночки">#43</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%9C%D0%B8%D1%88%D0%B0" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       <a class="btn" href="/graph/?c=bes-misha">На графе связей</a>
       <button class="btn" data-copy="/c/bes-misha/">Скопировать ссылку</button>
@@ -150,6 +150,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

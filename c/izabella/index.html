@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Считая мужа погибшим, готовилась к свадьбе с наместником <a class="ref" href="/c/prohor-fon-de-liz/">Прохором</a> фон де Лизом; сын <a class="ref" href="/c/sfinkterion/">Сфинктерион</a> с <a class="ref" href="/c/krysa-larisa/">Ларисой</a> проникли в замок, и она освобождена от проклятия, жива в отвоёванном <a class="ref" href="/place/vyordzhinvald/">Вёрджинвальде</a>.</p>
     <p class="char-where"><b>Где сейчас:</b> <a href="/place/vyordzhinvald/">Вёрджинвальд</a> — в замке Вёрджинвальд, проклятие снято <span class="note">· по итогам <a href="/ep/15/" title="Возвращение в Вёрджинвальд">#15</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%98%D0%B7%D0%B0%D0%B1%D0%B5%D0%BB%D0%BB%D0%B0" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       
       <button class="btn" data-copy="/c/izabella/">Скопировать ссылку</button>
@@ -120,6 +120,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

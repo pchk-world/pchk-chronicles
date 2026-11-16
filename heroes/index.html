@@ -302,7 +302,6 @@ function charCardHTML(id, inDialog){
   return `<div class="hd">${avatar(c,'portrait')}<div><h3>${lnk(c.url, c.name)}</h3><div class="tags" style="margin-top:6px">${tags}</div>
       ${c.actors.length ? `<div class="note" style="margin-top:6px">Играет: ${c.actors.map(a => lnk(actorUrl(a), a)).join(', ')}</div>` : ''}
       <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="${esc(c.url)}">Страница персонажа →</a>
-        ${c.wiki_url ? `<a class="btn" href="${esc(c.wiki_url)}" target="_blank" rel="noopener">Статья на вики ↗</a>` : ''}
         ${inDialog && NODE_IDS.has(id) ? `<button class="btn" data-graph="${esc(id)}">Показать на графе связей</button>` : ''}
       </div></div></div>
     ${c.summary ? `<p>${c.summary_html || esc(c.summary)}</p>` : ''}

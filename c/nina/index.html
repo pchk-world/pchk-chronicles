@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Болотное чудовище, в которое влюбился <a class="ref" href="/c/kukanyaka/">Кукан Яка</a> и осталась жить с ним в Мёртвых топях, родив двоих детей; в #26 приехала в столицу, участвовала в штурме «Четвёртой фабрики» и оживила <a class="ref" href="/c/dan-balan/">Дан Балана</a>. Жива.</p>
     <p class="char-where"><b>Где сейчас:</b> <a href="/place/kyonigpon/">Кёнигпон</a> — в лаборатории «Четвёртой фабрики» в столице; раздавила Гнилоша <span class="note">· по итогам <a href="/ep/26/" title="Четвёртая фабрика">#26</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%9D%D0%B8%D0%BD%D0%B0" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       
       <button class="btn" data-copy="/c/nina/">Скопировать ссылку</button>
@@ -150,6 +150,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

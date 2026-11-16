@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Слуга-надзиратель при закованном в маску бароне <a class="ref" href="/c/baron-edvard/">Эдварде Лёвенхарте</a> на пиратском корабле «Чёрный змей» в Гнилой Гавани. Погиб, из его тела вышел приставленный демон.</p>
     
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%9F%D0%B8%D1%81%D1%87%D0%B5%D0%BA" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       
       <button class="btn" data-copy="/c/pischek/">Скопировать ссылку</button>
@@ -120,6 +120,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 
 </body>

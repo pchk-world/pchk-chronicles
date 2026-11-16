@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Сбежал с каторги <a class="ref" href="/place/fogelnest/">Фогельнест</a> вместе со <a class="ref" href="/c/sfinkterion/">Сфинктерионом</a>, помогал спасать барона <a class="ref" href="/c/baron-edvard/">Эдварда</a> с «Чёрного змея» и командовал партизанами в оккупированном <a class="ref" href="/place/vyordzhinvald/">Вёрджинвальде</a>. Жив, остаётся рядом со Сфинктерионом.</p>
     <p class="char-where"><b>Где сейчас:</b> <a href="/place/gnilaya-gavan/">Гнилая Гавань</a> — выпрыгнули из взорвавшегося «Чёрного змея» на пирс и бегут в ночной город <span class="note">· по итогам <a href="/ep/09/" title="Человек в железной маске">#9</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%A3%D1%80%D1%81" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       <a class="btn" href="/graph/?c=urs">На графе связей</a>
       <button class="btn" data-copy="/c/urs/">Скопировать ссылку</button>
@@ -120,6 +120,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

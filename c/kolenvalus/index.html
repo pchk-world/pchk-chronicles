@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Тифлинг-механик присоединился к <a class="ref" href="/c/sfinkterion/">Сфинктериону</a> в гонке за желанием, подобрал гомункула Локи, проник с отрядом в небесный мир и погиб при подрыве <a class="ref" href="/a/nakopitel-lyubvi/">Накопителя Любви</a>, но воскрешён Локи.</p>
     <p class="char-where"><b>Где сейчас:</b> Котельники — умер в Накопителе Любви, тело перенесено в свою мастерскую в Котельниках и там воскрешено Локи <span class="note">· по итогам <a href="/ep/52/" title="Накопитель Любви">#52</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%9A%D0%BE%D0%BB%D0%B5%D0%BD%D0%B2%D0%B0%D0%BB%D1%83%D1%81" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       <a class="btn" href="/graph/?c=kolenvalus">На графе связей</a>
       <button class="btn" data-copy="/c/kolenvalus/">Скопировать ссылку</button>
@@ -150,6 +150,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

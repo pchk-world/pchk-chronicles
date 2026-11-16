@@ -363,7 +363,11 @@ footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--border); fo
 .ep-sec{margin-top:30px; scroll-margin-top:calc(var(--nav-h) + 18px)}
 .ep-sec > h2{font-size:22px; font-weight:600; padding-bottom:6px; border-bottom:1px solid var(--border); margin:0 0 14px; display:flex; justify-content:space-between; align-items:baseline; gap:12px}
 .ep-sec > h2 small{font:500 12px var(--mono); color:var(--faint)}
-.char-video video{display:block; width:100%; max-width:360px; aspect-ratio:9/16; border-radius:12px; background:#000}
+.btn-video small{font:500 11px var(--mono); opacity:.75; margin-left:4px}
+dialog.viddlg{background:#000; border:1px solid var(--border); border-radius:12px; padding:0; width:min(420px,calc(100vw - 16px), calc((100vh - 24px) * 9 / 16)); overflow:visible}
+dialog.viddlg::backdrop{background:rgba(0,0,0,.85)}
+dialog.viddlg video{display:block; width:100%; aspect-ratio:9/16; border-radius:12px; background:#000}
+dialog.viddlg .x{position:absolute; top:8px; right:8px; z-index:2; float:none; margin:0}
 .ep-toc{display:flex; flex-wrap:wrap; gap:6px; margin-top:16px}
 .ep-cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:24px}
 .party-line{margin:0 0 16px; font-size:14px}

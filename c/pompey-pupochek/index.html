@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Присоединился к отряду <a class="ref" href="/c/gnomka-talala/">Талалы</a> в поисках <a class="ref" href="/c/melissa/">Мелиссы</a>: в Лысой Пади усмирил корову и прошёл ловушки дома домовёнка Кузи. Жив, служит советником принца Конского.</p>
     <p class="char-where"><b>Где сейчас:</b> <a href="/place/vyordzhinvald/">Вёрджинвальд</a> — у логова знахарки в лесу близ Лысой Пади, грозил развеять прах <span class="note">· по итогам <a href="/ep/38/" title="Возлюбленная">#38</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%9F%D0%BE%D0%BC%D0%BF%D0%B5%D0%B9" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       
       <button class="btn" data-copy="/c/pompey-pupochek/">Скопировать ссылку</button>
@@ -150,6 +150,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Хранил <a class="ref" href="/a/shchit-tyomnogo-vlastelina/">Щит Тёмного Властелина</a>, который у него украли переодетые герои; отомстил, подставив <a class="ref" href="/c/sfinkterion/">Сфинктериона</a> перед эльфами, но джинн оазиса превратил его в нищего и изгнал.</p>
     
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%A2%D0%B5%D0%B9%D0%BC%D1%83%D1%80%D0%B0%D0%B7" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       <a class="btn" href="/graph/?c=halif-timuras">На графе связей</a>
       <button class="btn" data-copy="/c/halif-timuras/">Скопировать ссылку</button>
@@ -120,6 +120,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

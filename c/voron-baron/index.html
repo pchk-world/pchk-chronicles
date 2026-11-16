@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Был телохранителем <a class="ref" href="/c/sfinkterion/">Сфинктериона</a>, но отказался подчиняться Падшему рыцарю, предал короля ради <a class="ref" href="/c/lyuciy-palin/">Люция Палена</a> и стал изгоем в отряде <a class="ref" href="/c/krysa-larisa/">Ларисы</a>; в <a class="ref" href="/place/velikaya-falariya/">Фаларии</a> скрылся в хрустальном саркофаге, унесённом к морю. Судьба неизвестна.</p>
     <p class="char-where"><b>Где сейчас:</b> В пути — в хрустальном саркофаге из сгоревшей Митеры ветром к морю; судьба неизвестна <span class="note">· по итогам <a href="/ep/54/" title="Свиток Апокалипсиса">#54</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%92%D0%BE%D1%80%D0%BE%D0%BD_%D0%91%D0%B0%D1%80%D0%BE%D0%BD" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       <a class="btn" href="/graph/?c=voron-baron">На графе связей</a>
       <button class="btn" data-copy="/c/voron-baron/">Скопировать ссылку</button>
@@ -150,6 +150,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {

@@ -60,7 +60,7 @@
     <p class="char-short"><b>Кратко:</b> Друид, превращавшийся в козу: победил с отрядом демона в <a class="ref" href="/place/kaltenburg/">Кальтенбурге</a>, проводил <a class="ref" href="/c/gnomka-talala/">Талалу</a> и <a class="ref" href="/c/savl/">Савла</a> в путь, а в году 5 как военно-полевой лекарь спустился в ад взрывать демонический локомотив. Жив, вернулся.</p>
     <p class="char-where"><b>Где сейчас:</b> <a href="/place/gelenburg/">Геленбург</a> — вернулся из Ада в лагерь королевской армии у Чёрного Геленбурга <span class="note">· по итогам <a href="/ep/47/" title="Вокзал грешных душ">#47</a></span></p>
     <div class="ep-nav">
-      <a class="btn" href="https://pck.fandom.com/ru/wiki/%D0%9A%D0%B2%D0%B8%D1%80%D0%BA" target="_blank" rel="noopener">Статья на вики ↗</a>
+      
       
       
       <button class="btn" data-copy="/c/kvir/">Скопировать ссылку</button>
@@ -150,6 +150,15 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const done = () => { const t = b.textContent; b.textContent = 'Ссылка скопирована'; setTimeout(() => b.textContent = t, 1500); };
   (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(done, () => { prompt('Ссылка:', url); });
 }));
+const vd = document.getElementById('viddlg');   // видеоистория персонажа (viz/videos.py)
+if (vd) {
+  const v = vd.querySelector('video'), open = () => { vd.showModal(); v.play().catch(() => {}); };
+  document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', open));
+  vd.querySelector('.x').addEventListener('click', () => vd.close());
+  vd.addEventListener('click', e => { if (e.target === vd) vd.close(); });
+  vd.addEventListener('close', () => v.pause());
+  if (location.hash === '#video') open();
+}
 </script>
 <script>
 document.addEventListener('click', e => {
