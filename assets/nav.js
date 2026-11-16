@@ -159,3 +159,64 @@
   });
   document.addEventListener('pchk:leave', reset);
 })();
+
+/* Курица-талисман — пасхалки (рисунки: data/videos/brand/mascot → /img/chickens/<имя>.webp, viz/chickens.py).
+   1) Курицы на пустых местах (404, «Ничего не нашлось», пустой фильтр, низ «О проекте») — <img class="chick" data-chick>.
+   2) Изредка (≈1 из 9 открытых страниц, не чаще раза в 2 минуты) курица выглядывает из-за нижнего края: своя для раздела
+      или любая из «гуляющих»; через 6 с прячется. Нажатие на любую курицу — находка: «Курица найдена: N из 20» (localStorage).
+   Не выглядывает поверх галереи кадров, плеера и режима просмотра выпуска. */
+(() => {
+  const ALL = ['magnifier','lostmap','mapcompass','throw','nat20','nat1','knight','sleep','chronicler','chest','charcard',
+    'clapper','charsheet','lantern','microphone','coins','ale','rat','spyglass','potion'];
+  const SECTION = [[/^\/$/, ['chronicler']], [/^\/map\//, ['mapcompass']], [/^\/rolls\//, ['throw']], [/^\/heroes\//, ['knight']],
+    [/^\/a\//, ['chest']], [/^\/c\//, ['charcard']], [/^\/ep\//, ['clapper', 'coins']], [/^\/sheets\//, ['charsheet']],
+    [/^\/place\//, ['lantern']], [/^\/pod\//, ['microphone']], [/^\/search\//, ['magnifier']], [/^\/about\//, ['sleep']]];
+  const ROAM = ['nat20', 'ale', 'rat', 'spyglass', 'potion'];
+  const KEY = 'pchk.chickens', LAST = 'pchk.chickens.peek';
+  const store = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+                  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+  const src = n => `/img/chickens/${n}.webp`;
+  let toastEl = null, toastT = 0;
+  function toast(text) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'chick-toast'; toastEl.setAttribute('role', 'status'); document.body.append(toastEl); }
+    toastEl.textContent = text; toastEl.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 2600);
+  }
+  function found(name) {
+    const got = store.get(KEY, []);
+    const fresh = ALL.includes(name) && !got.includes(name);
+    if (fresh) { got.push(name); store.set(KEY, got); }
+    const n = got.filter(x => ALL.includes(x)).length;
+    toast(n >= ALL.length ? `Все курицы найдены: ${n} из ${ALL.length}!` : fresh ? `Курица найдена: ${n} из ${ALL.length}` : `Эта курица уже найдена: ${n} из ${ALL.length}`);
+  }
+  document.addEventListener('click', e => {
+    const c = e.target.closest && e.target.closest('.chick, .chick-peek');
+    if (!c) return;
+    e.preventDefault(); found(c.dataset.chick);
+    if (c.classList.contains('chick-peek')) hide(c);
+  });
+  function busy() {
+    if (document.body.classList.contains('watching')) return true;
+    return [...document.querySelectorAll('.lightbox, #ep-player, .ep-player, .ed-dlg')].some(el => getComputedStyle(el).display !== 'none' && el.offsetParent !== null);
+  }
+  function hide(el) { el.classList.remove('on'); setTimeout(() => el.remove(), 600); }
+  function maybePeek() {
+    if (document.querySelector('.chick-peek')) return;
+    const now = Date.now();
+    if (now - store.get(LAST, 0) < 120000 || Math.random() > 1 / 9 || busy()) return;
+    const sec = (SECTION.find(([re]) => re.test(location.pathname)) || [0, []])[1];
+    const pool = sec.length && Math.random() < 0.6 ? sec : ROAM;
+    const name = pool[Math.floor(Math.random() * pool.length)];
+    store.set(LAST, now);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chick-peek'; b.dataset.chick = name; b.setAttribute('aria-label', 'Курица');
+    b.style.left = `${4 + Math.random() * 50}vw`;
+    const img = new Image(); img.alt = ''; img.src = src(name);
+    img.onload = () => { document.body.append(b); requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('on'))); setTimeout(() => b.isConnected && hide(b), 6000); };
+    b.append(img);
+  }
+  const later = () => setTimeout(maybePeek, 2500 + Math.random() * 4000);
+  if (document.readyState === 'complete') later(); else addEventListener('load', later);
+  document.addEventListener('pchk:leave', () => { document.querySelectorAll('.chick-peek').forEach(el => el.remove()); later(); });
+  window.pchkChick = (name, cls = '') => `<img class="chick ${cls}" data-chick="${name}" src="${src(name)}" alt="" height="150" loading="lazy" title="Курица">`;
+})();

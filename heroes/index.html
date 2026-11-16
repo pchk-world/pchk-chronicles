@@ -370,6 +370,7 @@ function renderDB(){
     ${avatar(c,'portrait')}<div class="b"><b>${esc(c.name)}</b>
     <small>${esc(c.race || (c.roles[0]||''))}</small>
     <div class="tags">${c.kind==='pc'?'<span class="tag pc">игровой</span>':'<span class="tag">NPC</span>'}${c.dead?'<span class="tag d">погиб</span>':''}<span class="tag">${c.eps.length} вып.</span>${sub(c) ? `<span class="tag">${sub(c)}</span>` : ''}</div></div></a>`).join('');
+  if (!list.length && window.pchkChick) $('#dbgrid').innerHTML = `<div class="chick-empty" style="grid-column:1/-1">${window.pchkChick('nat1')}<p>Никого не нашлось — измените фильтры</p></div>`;   // пасхалка: курица с «1»
 }
 
 /* граф связей */

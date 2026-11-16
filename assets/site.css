@@ -909,3 +909,18 @@ main img{-webkit-touch-callout:none}
 .abil-art a{color:inherit; text-decoration:underline; text-underline-offset:3px}
 .abil-pool{color:#ffb86b}
 a.art-ref{color:var(--link)}
+
+/* курица-талисман — пасхалки (viz/nav.js, viz/chickens.py) */
+.chick{display:block; height:150px; width:auto; margin:14px auto 4px; cursor:pointer; filter:drop-shadow(0 4px 10px rgba(0,0,0,.45)); transition:transform .2s}
+.chick:hover{transform:rotate(-4deg) scale(1.04)}
+.chick-empty{text-align:center; padding:8px 0 4px}
+.chick-empty p{margin:0; color:var(--muted)}
+.chick-peek{position:fixed; bottom:0; z-index:28; width:auto; height:118px; padding:0; border:0; background:none; cursor:pointer;
+  transform:translateY(105%); transition:transform .55s cubic-bezier(.3,1.4,.5,1); filter:drop-shadow(0 -2px 8px rgba(0,0,0,.4))}
+.chick-peek img{height:150px; width:auto; display:block}
+.chick-peek.on{transform:translateY(22%)}
+.chick-peek:hover{transform:translateY(14%) rotate(-3deg)}
+.chick-toast{position:fixed; left:16px; bottom:16px; z-index:310; background:var(--nav-bg-2, #241626); color:var(--text); border:1px solid var(--link);
+  border-radius:10px; padding:9px 14px; font:600 14px var(--head); opacity:0; transform:translateY(10px); transition:opacity .25s, transform .25s; pointer-events:none}
+.chick-toast.on{opacity:1; transform:none}
+@media (prefers-reduced-motion: reduce){.chick-peek, .chick-peek.on, .chick, .chick-toast{transition:none}}

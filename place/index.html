@@ -79,6 +79,10 @@ document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click'
   const run = () => { const v = norm(q.value.trim()); let n = 0;
     cards.forEach(c => { const ok = !v || c._q.includes(v); c.hidden = !ok; if (ok) n++; });
     document.querySelectorAll('.ep-sec[data-grp]').forEach(s => s.hidden = !s.querySelector('[data-q]:not([hidden])'));
+    let ce = document.getElementById('chick-none');           // пусто — курица с «1» (пасхалка, viz/nav.js)
+    if (!n && !ce && window.pchkChick) { ce = document.createElement('div'); ce.id = 'chick-none'; ce.className = 'chick-empty';
+      ce.innerHTML = window.pchkChick('nat1') + '<p>Ничего не нашлось</p>'; (q.closest('header') || q.parentNode).after(ce); }
+    if (ce) ce.hidden = !!n;
     cnt.textContent = n + ' из ' + cards.length;
     try { const u = new URL(location.href); v ? u.searchParams.set('q', q.value.trim()) : u.searchParams.delete('q'); history.replaceState(history.state, '', u); } catch (e) {} };
   q.addEventListener('input', run); run();

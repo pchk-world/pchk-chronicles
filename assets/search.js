@@ -130,6 +130,7 @@ window.pchkSearch = window.pchkSearch || (() => {
           <span class="stype">${esc(d.types[it.t])}</span><b class="stitle">${mark(it.title, stems)}</b>${it.sub ? `<span class="ssub">${esc(it.sub)}</span>` : ''}
           ${it.text ? `<span class="ssnip">${snippet(it.text, stems)}</span>` : ''}</a></li>`).join('') +
           (shown.length > limit ? `<li><button class="chip smore" type="button">Показать ещё ${Math.min(50, shown.length - limit)}</button></li>` : '');
+        if (!res.length && q && window.pchkChick) box.innerHTML = `<li class="chick-empty">${window.pchkChick('magnifier')}</li>`;   // пасхалка: курица с лупой
       }, () => { status.textContent = 'Не удалось загрузить индекс поиска. Обновите страницу.'; });
     }
     input.addEventListener('input', () => { clearTimeout(timer); limit = 50; timer = setTimeout(render, 120); });
