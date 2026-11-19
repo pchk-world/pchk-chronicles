@@ -369,6 +369,7 @@ footer{margin-top:26px; padding-top:14px; border-top:1px solid var(--border); fo
 dialog.viddlg{background:#000; border:1px solid var(--border); border-radius:12px; padding:0; width:min(420px,calc(100vw - 16px), calc((100vh - 24px) * 9 / 16)); overflow:visible}
 dialog.viddlg::backdrop{background:rgba(0,0,0,.85)}
 dialog.viddlg video{display:block; width:100%; aspect-ratio:9/16; border-radius:12px; background:#000}
+dialog.viddlg .vidcredit{margin:0; padding:6px 10px 8px; font-size:12px; color:#bbb; text-align:center}
 dialog.viddlg .x{position:absolute; top:8px; right:8px; z-index:2; float:none; margin:0}
 .ep-toc{display:flex; flex-wrap:wrap; gap:6px; margin-top:16px}
 .ep-cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:24px}
