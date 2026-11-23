@@ -11,7 +11,7 @@ window.pchkSearch = window.pchkSearch || (() => {
 
   function load(){
     if (data) return Promise.resolve(data);
-    return loading = loading || fetch('/search.json').then(r => r.json()).then(j => {
+    return loading = loading || fetch('/search.json', {cache: 'no-cache'}).then(r => r.json()).then(j => {
       const sst = s => norm(s).split(' ').map(stem).join(' ');
       data = {types: j.types, items: j.items.map(([t, title, url, sub, alt, text, aka]) => ({t, title, url, sub, text, aka,
         nt: ' ' + norm(title + ' ' + (aka || '')) + ' ', st: sst(title), sa: aka ? sst(aka) : null, nn: ' ' + norm(title) + ' ', nk: aka ? ' ' + norm(aka) + ' ' : '',
