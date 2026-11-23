@@ -12,8 +12,10 @@ window.pchkSearch = window.pchkSearch || (() => {
   function load(){
     if (data) return Promise.resolve(data);
     return loading = loading || fetch('/search.json').then(r => r.json()).then(j => {
-      data = {types: j.types, items: j.items.map(([t, title, url, sub, alt, text]) => ({t, title, url, sub, text,
-        nt: ' ' + norm(title) + ' ', st: norm(title).split(' ').map(stem).join(' '), na: ' ' + norm(alt) + ' ', nx: ' ' + norm(sub + ' ' + text) + ' '}))};
+      const sst = s => norm(s).split(' ').map(stem).join(' ');
+      data = {types: j.types, items: j.items.map(([t, title, url, sub, alt, text, aka]) => ({t, title, url, sub, text, aka,
+        nt: ' ' + norm(title + ' ' + (aka || '')) + ' ', st: sst(title), sa: aka ? sst(aka) : null, nn: ' ' + norm(title) + ' ', nk: aka ? ' ' + norm(aka) + ' ' : '',
+        na: ' ' + norm(alt) + ' ', nx: ' ' + norm(sub + ' ' + text) + ' '}))};
       return data;
     }).catch(e => { loading = null; throw e; });
   }
@@ -33,10 +35,16 @@ window.pchkSearch = window.pchkSearch || (() => {
       }
       if (!ok) continue;
       const sq = stems.join(' ');
-      if (it.st === sq) score += 100; else if (it.st.startsWith(sq + ' ')) score += 50 * sq.length / it.st.length;
+      for (const s of [it.st, it.sa]) if (s) { if (s === sq) { score += 100; break; } if (s.startsWith(sq + ' ')) { score += 50 * sq.length / s.length; break; } }
       out.push({it, score: score + (WEIGHT[it.t] || 0) - Math.min(it.nt.length, 120) * 0.05});
     }
     return out.sort((a, b) => b.score - a.score).map(r => r.it);
+  }
+  /* заголовок персонажа с двумя именами: первым то, что набрано («Жанне» → «Жаннет / Сатир Дудочник», «Сатир» → «Сатир Дудочник / Жаннет») */
+  function label(it, stems){
+    if (!it.aka) return it.title;
+    const akaFirst = stems.some(s => it.nk.includes(' ' + s)) && !stems.some(s => it.nn.includes(' ' + s));
+    return akaFirst ? it.aka + ' / ' + it.title : it.title + ' / ' + it.aka;
   }
   /* результаты; если пусто, а запрос набран латиницей — пробует русскую раскладку */
   function search(q){
@@ -83,7 +91,7 @@ window.pchkSearch = window.pchkSearch || (() => {
         const {res, stems, fixed} = search(q);
         list.innerHTML = (fixed ? `<li class="sfix" role="presentation">Раскладка: «${esc(fixed)}»</li>` : '') +
           res.slice(0, 7).map((it, i) => `<li role="option" id="sugg-${i}" class="sopt" data-url="${esc(it.url)}" aria-selected="false">
-            <span class="stype">${esc(d.types[it.t])}</span><span class="stitle">${mark(it.title, stems)}</span>${it.sub ? `<span class="ssub">${esc(it.sub)}</span>` : ''}</li>`).join('') +
+            <span class="stype">${esc(d.types[it.t])}</span><span class="stitle">${mark(label(it, stems), stems)}</span>${it.sub ? `<span class="ssub">${esc(it.sub)}</span>` : ''}</li>`).join('') +
           (res.length ? `<li role="option" id="sugg-all" class="sopt sall" data-url="${esc(all(q))}" aria-selected="false">Все результаты: ${res.length} →</li>`
                       : `<li class="sempty" role="presentation">Ничего не нашлось</li>`);
         opts = [...list.querySelectorAll('[role="option"]')]; cur = -1;
@@ -127,7 +135,7 @@ window.pchkSearch = window.pchkSearch || (() => {
         status.textContent = res.length ? `${fixed ? `Показаны результаты для «${fixed}». ` : ''}Найдено: ${res.length}` + (type !== null ? `, из них ${d.types[type].toLowerCase()}: ${shown.length}` : '')
                                         : 'Ничего не нашлось. Попробуйте другое написание или начало слова.';
         box.innerHTML = shown.slice(0, limit).map(it => `<li><a class="sres" href="${esc(it.url)}">
-          <span class="stype">${esc(d.types[it.t])}</span><b class="stitle">${mark(it.title, stems)}</b>${it.sub ? `<span class="ssub">${esc(it.sub)}</span>` : ''}
+          <span class="stype">${esc(d.types[it.t])}</span><b class="stitle">${mark(label(it, stems), stems)}</b>${it.sub ? `<span class="ssub">${esc(it.sub)}</span>` : ''}
           ${it.text ? `<span class="ssnip">${snippet(it.text, stems)}</span>` : ''}</a></li>`).join('') +
           (shown.length > limit ? `<li><button class="chip smore" type="button">Показать ещё ${Math.min(50, shown.length - limit)}</button></li>` : '');
         if (!res.length && q && window.pchkChick) box.innerHTML = `<li class="chick-empty">${window.pchkChick('magnifier')}</li>`;   // пасхалка: курица с лупой
