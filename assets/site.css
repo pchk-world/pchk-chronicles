@@ -940,3 +940,22 @@ a.art-ref{color:var(--link)}
 .rolls-n .d20.c20{fill:rgba(255,214,90,.55); stroke:#ffd65a}
 .rolls-n .d20.c1{fill:rgba(230,80,70,.45); stroke:#e65046}
 .rolls-n b{font:600 11px var(--mono, monospace); color:#c9a55a; margin-left:1px}
+.coins-n{display:inline-flex; align-items:center; gap:2px; margin-left:6px; vertical-align:-2px; white-space:nowrap}
+.coins-n .coin{width:13px; height:13px; fill:#e8b64c; stroke:#8a6420; stroke-width:1.2}
+.coins-n .coin circle+circle{fill:none; stroke:#fff0b8; stroke-width:.8}
+.coins-n.out .coin{fill:rgba(232,182,76,.2); stroke:#b08a48}
+.coins-n.out .coin circle+circle{stroke:none}
+.coins-n.out .coin path{stroke:#e65046; stroke-width:1.8; stroke-linecap:round}
+.coins-n b{font:600 11px var(--mono, monospace); color:#e8b64c; margin-left:1px}
+/* бой на странице просмотра: красная рамка сцены и пунктов сюжета, здоровье героев на карточках */
+.watch-stage .sbox{transition:box-shadow .3s}
+.watch-stage .sbox.fight{box-shadow:0 0 0 3px #d23a2e, 0 0 18px rgba(210,58,46,.45)}
+.watch-plot li.fight button{border-color:rgba(210,58,46,.75)}
+.watch-plot li.fight.now button{border-color:#e65046; box-shadow:0 0 0 1px #e65046}
+.pcard .php{display:flex; align-items:center; gap:5px; margin-top:2px}
+.pcard .php[hidden]{display:none}
+.pcard .phb{display:block; width:58px; height:5px; border-radius:3px; background:rgba(255,255,255,.12); overflow:hidden}
+.pcard .phb span{display:block; height:100%; background:#4caf50; transition:width .4s}
+.pcard .phb span.mid{background:#e8b64c}
+.pcard .phb span.low{background:#e65046}
+.pcard .php em{font:600 11px var(--mono, monospace); font-style:normal; color:#f08a80}

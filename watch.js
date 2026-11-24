@@ -71,10 +71,22 @@ function dice(p) {
                        : D20(n20 ? " c20" : n1 ? " c1" : "") + `<b>×${n}</b>`;
   return `<span class="rolls-n" title="${tip}">${icons}</span>`;
 }
+// значки монет на пункте сюжета: получено — золотая монета, потрачено (переброс, отдана) — монета со знаком минус
+const COIN = cls => `<svg class="coin${cls}" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><circle cx="8" cy="8" r="4"/>${cls ? '<path d="M5.5 8h5"/>' : ""}</svg>`;
+function coinWord(n) { return n % 10 === 1 && n % 100 !== 11 ? "монета" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "монеты" : "монет"; }
+function coins(p) {
+  const out = [];
+  for (const [n, cls, verb] of [[p.coin_in || 0, "", "получено"], [p.coin_out || 0, " out", "потрачено"]]) {
+    if (!n) continue;
+    const icons = n <= 6 ? Array.from({ length: n }, () => COIN(cls)).join("") : COIN(cls) + `<b>×${n}</b>`;
+    out.push(`<span class="coins-n${cls}" title="${verb}: ${n} ${coinWord(n)}">${icons}</span>`);
+  }
+  return out.join("");
+}
 let plotItems = [];
 function buildPlot(items) {
   plotItems = items;
-  plotEl.innerHTML = items.map((p, i) => `<li data-i="${i}"><button type="button"><span class="tc">${fmt(p.t)}</span> ${esc(p.text)}${dice(p)}</button></li>`).join("");
+  plotEl.innerHTML = items.map((p, i) => `<li data-i="${i}"${p.fight ? ' class="fight"' : ""}><button type="button"><span class="tc">${fmt(p.t)}</span> ${esc(p.text)}${dice(p)}${coins(p)}</button></li>`).join("");
   plotEl.addEventListener("click", e => { const b = e.target.closest("li"); if (b) seek(items[+b.dataset.i].t); });
 }
 let lastPlot = -2;
@@ -307,6 +319,13 @@ function drawFx(S, t, info) {
 }
 
 // ---------- карта маршрута ----------
+// облик героя на карте — как в последней сцене с ним и по событиям «look» после неё (Гиммилут: овцедракон → Дракостя → дракон)
+function mapLook(id, t) {
+  let lk = null, lt = -1;
+  for (const s of scenes) { if (s.t > t) break; const c = s.cast && s.cast[id]; if (c) { lk = c.look || null; lt = s.t; } }
+  for (const e of events) { if (e.t > t) break; if (e.do === "look" && e.id === id && e.t >= lt) lk = e.as === "none" ? null : e.as; }
+  return lk && MAN.sprites[id + "_" + lk] ? id + "_" + lk : id;
+}
 function drawMap(S, t) {
   drawBg("map");
   const N = MAN.nodes, sc = S.sc, a = N[sc.from], b = N[sc.to] || a;
@@ -325,27 +344,47 @@ function drawMap(S, t) {
     const ci = img["s:cart"], ch = 100, cw = ci.naturalWidth * ch / ci.naturalHeight;
     ctx.save(); ctx.translate(cx, cy + 6 - Math.abs(Math.sin(t * 5)) * 2); if (b.x < a.x) ctx.scale(-1, 1); ctx.drawImage(ci, -cw / 2, -ch, cw, ch); ctx.restore();
   }
-  HEROES.forEach((h, i) => { const meta = MAN.sprites[h]; const s2 = 0.42; const im = img["s:" + h]; if (!im || !im.naturalWidth) return;
-    const lift = sc.cart ? 34 : 0, hh = meta.h * s2 * (sc.cart ? .8 : 1), ww = im.naturalWidth * hh / im.naturalHeight, bob = Math.abs(Math.sin(t * 6 + i)) * 4;
+  HEROES.forEach((h0, i) => { const h = mapLook(h0, t), meta = MAN.sprites[h]; const s2 = 0.42; const im = img["s:" + h]; if (!im || !im.naturalWidth) return;
+    const lift = sc.cart ? 34 : 0, hh = Math.min(meta.h, 300) * s2 * (sc.cart ? .8 : 1), ww = im.naturalWidth * hh / im.naturalHeight, bob = Math.abs(Math.sin(t * 6 + i)) * 4;
     ctx.save(); ctx.translate(cx + (i - 2) * (sc.cart ? 14 : 26), cy - bob - lift + (i % 2) * 8); ctx.fillStyle = "rgba(0,0,0,.3)"; ctx.beginPath(); ctx.ellipse(0, 0, ww * .45, 6, 0, 0, 7); ctx.fill();
     if (b.x < a.x) ctx.scale(-1, 1); ctx.drawImage(im, -ww / 2, -hh, ww, hh); ctx.restore(); });
 }
 
 
+// ---------- бой и здоровье ----------
+// бой — сцена, где по сценарию есть атаки или урон; здоровье героя = с карточки выпуска минус урон-числа из сценария
+// (атака по нему и «hurt»), смерть — 0, после воскрешения здоровье неизвестно — не показываем
+const isFight = sc => { const i = scenes.indexOf(sc), end = i + 1 < scenes.length ? scenes[i + 1].t : 1e9;
+  return sc.bg !== "map" && events.some(e => (e.do === "attack" || e.do === "hurt") && e.t >= sc.t && e.t < end); };
+function hpAt(id, t) {
+  const max = INFO[id] && INFO[id].hp; if (!max) return null;
+  let hp = max;
+  for (const e of events) {
+    if (e.t > t) break;
+    const d = parseInt(e.dmg, 10);
+    if ((e.do === "attack" && e.target === id || e.do === "hurt" && e.id === id) && d > 0) hp = hp == null ? null : Math.max(0, hp - d);
+    else if (e.do === "die" && e.id === id) hp = 0;
+    else if (e.do === "revive" && e.id === id) hp = null;
+  }
+  return hp == null ? null : { hp, max };
+}
+
 // ---------- карточки персонажей под сценой ----------
 const cardsEl = document.getElementById("cards");
+const stageBox = document.querySelector(".watch-stage .sbox");
 let cardSig = "", cardEls = {};
 function updateCards(S, t) {
   const ids = Object.values(S.A).filter(a => a.vis && !(a.mv && a.mv.gone && t >= a.mv.t0 + a.mv.dur) && INFO[a.id] && !INFO[a.id].hidden && S.sc.bg !== "map").map(a => a.id);
   if (S.sc.bg === "map") HEROES.forEach(h => ids.push(h));
   const order = id => (HEROES.indexOf(id) >= 0 ? HEROES.indexOf(id) : 10 + Object.keys(INFO).indexOf(id));
   ids.sort((a, b) => order(a) - order(b));
-  const sig = ids.join(",");
+  const lookOf = id => { const a = S.A[id], k = a && spriteKey(a); return k && k !== id ? k : null; };
+  const sig = ids.map(id => id + (lookOf(id) ? ":" + lookOf(id) : "")).join(",");
   if (sig !== cardSig) {
     cardSig = sig; cardEls = {}; hoverId = null;
     cardsEl.innerHTML = "";
     for (const id of ids) {
-      const inf = INFO[id], base = SPRITE_OF[id] && !MAN.sprites[id] ? SPRITE_OF[id] : id;
+      const inf = INFO[id], base = lookOf(id) || (SPRITE_OF[id] && !MAN.sprites[id] ? SPRITE_OF[id] : id);
       const d = document.createElement("div"); d.className = "pcard" + (HEROES.includes(id) ? " hero" : "");
       const im = document.createElement("img"); im.src = base_url(base); im.alt = ""; im.loading = "lazy";
       const tx = document.createElement("div"); tx.className = "pt";
@@ -353,15 +392,23 @@ function updateCards(S, t) {
       nm.appendChild(linkOrText(inf.name, inf.url)); tx.appendChild(nm);
       if (sub) { const sp = document.createElement("span"); sp.appendChild(linkOrText(sub, inf.actor && inf.actor_url)); tx.appendChild(sp); }
       const st = document.createElement("i"); st.className = "pst"; tx.appendChild(st);
+      const hp = document.createElement("span"); hp.className = "php"; hp.hidden = true;
+      hp.innerHTML = '<span class="phb"><span></span></span><em></em>'; tx.appendChild(hp);
       d.addEventListener("mouseenter", () => { hoverId = id; });
       d.addEventListener("mouseleave", () => { if (hoverId === id) hoverId = null; });
       if (inf.url) d.addEventListener("click", e => { if (!e.target.closest("a")) location.href = inf.url; });   // вся карточка ведёт на страницу персонажа
-      d.append(im, tx); cardsEl.appendChild(d); cardEls[id] = { d, st };
+      d.append(im, tx); cardsEl.appendChild(d); cardEls[id] = { d, st, hp };
     }
   }
-  const act = new Set(S.active);
+  const act = new Set(S.active), fight = isFight(S.sc);
+  stageBox.classList.toggle("fight", fight);
   for (const id of ids) {
     const c = cardEls[id], a = S.A[id]; if (!c) continue;
+    const h = fight && HEROES.includes(id) && !(a && a.look === "dragon") ? hpAt(id, t) : null;   // облик дракона — без данных о здоровье
+    c.hp.hidden = !h;
+    if (h) { const k = h.hp / h.max, txt = `${h.hp}/${h.max}`;
+      if (c.hp.lastChild.textContent !== txt) { c.hp.lastChild.textContent = txt; c.hp.title = `Здоровье: ${txt}`; }
+      const bar = c.hp.firstChild.firstChild; bar.style.width = (k * 100).toFixed(1) + "%"; bar.className = k <= .25 ? "low" : k <= .5 ? "mid" : ""; }
     c.d.classList.toggle("on", act.has(id));
     c.d.classList.toggle("down", !!a && !a.alive);
     const lab = a && !a.alive ? "повержен" : a && a.status && BADGE[a.status] ? BADGE[a.status] : a && a.status === "nakedsleep" ? "спит голый" : "";
