@@ -61,10 +61,20 @@ const s = document.createElement("script"); s.src = "https://www.youtube.com/ifr
 // ---------- сюжет под сценой ----------
 function fmt(t) { t = Math.floor(t); const h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(s).padStart(2, "0"); }
 const esc = x => String(x).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+// значки бросков на пункте сюжета: кубик на каждый бросок (больше шести — кубик и число), крит 20 — золотой, крит 1 — красный
+const D20 = cls => `<svg class="d20${cls}" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1 14.5 4.8v6.4L8 15 1.5 11.2V4.8z"/><path d="M8 1 4.6 10.4h6.8zM1.5 4.8l3.1 5.6M14.5 4.8l-3.1 5.6M4.6 10.4 8 15l3.4-4.6"/></svg>`;
+function dice(p) {
+  const n = p.rolls || 0; if (!n) return "";
+  const n20 = p.n20 || 0, n1 = p.n1 || 0, word = n % 10 === 1 && n % 100 !== 11 ? "бросок" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "броска" : "бросков";
+  const tip = `${n} ${word} на экране` + (n20 ? ` · крит 20: ${n20}` : "") + (n1 ? ` · крит 1: ${n1}` : "");
+  const icons = n <= 6 ? Array.from({ length: n }, (_, i) => D20(i < n20 ? " c20" : i < n20 + n1 ? " c1" : "")).join("")
+                       : D20(n20 ? " c20" : n1 ? " c1" : "") + `<b>×${n}</b>`;
+  return `<span class="rolls-n" title="${tip}">${icons}</span>`;
+}
 let plotItems = [];
 function buildPlot(items) {
   plotItems = items;
-  plotEl.innerHTML = items.map((p, i) => `<li data-i="${i}"><button type="button"><span class="tc">${fmt(p.t)}</span> ${esc(p.text)}</button></li>`).join("");
+  plotEl.innerHTML = items.map((p, i) => `<li data-i="${i}"><button type="button"><span class="tc">${fmt(p.t)}</span> ${esc(p.text)}${dice(p)}</button></li>`).join("");
   plotEl.addEventListener("click", e => { const b = e.target.closest("li"); if (b) seek(items[+b.dataset.i].t); });
 }
 let lastPlot = -2;
@@ -204,6 +214,21 @@ function drawActive(S, t, info) {
     ctx.beginPath(); ctx.ellipse(p.x, p.y - 2, Math.max(p.h * .3, 50), 14, 0, 0, 7); ctx.stroke(); ctx.restore();
   }
 }
+// наведение на карточку под сценой: фигурка этого персонажа подсвечивается на сцене (столб света, кольцо, стрелка над головой)
+let hoverId = null;
+function drawHover(t, info) {
+  const p = hoverId && info[hoverId]; if (!p) return;
+  const k = .8 + .2 * Math.sin(t * 5), top = p.top, w = Math.max(p.h * .32, 54);
+  ctx.save();
+  const g = ctx.createLinearGradient(0, top - 30, 0, p.y); g.addColorStop(0, "rgba(255,240,190,0)"); g.addColorStop(1, `rgba(255,240,190,${.28 * k})`);
+  ctx.fillStyle = g; ctx.fillRect(p.x - w, top - 30, w * 2, p.y - top + 30);
+  ctx.strokeStyle = `rgba(255,248,220,${k})`; ctx.lineWidth = 5; ctx.shadowColor = "#fff2c0"; ctx.shadowBlur = 18;
+  ctx.beginPath(); ctx.ellipse(p.x, p.y - 2, w, 15, 0, 0, 7); ctx.stroke();
+  const ay = Math.max(30, top - 22 - Math.abs(Math.sin(t * 4)) * 8);
+  ctx.fillStyle = "#fff2c0"; ctx.strokeStyle = "#2a1d12"; ctx.lineWidth = 2.5; ctx.shadowBlur = 10;
+  ctx.beginPath(); ctx.moveTo(p.x - 16, ay - 20); ctx.lineTo(p.x + 16, ay - 20); ctx.lineTo(p.x, ay); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
 function drawBubbles(S, t, info) {
   for (const b of S.bubbles) {
     if (t < b.t0 || t > b.t0 + b.dur) continue;
@@ -317,7 +342,7 @@ function updateCards(S, t) {
   ids.sort((a, b) => order(a) - order(b));
   const sig = ids.join(",");
   if (sig !== cardSig) {
-    cardSig = sig; cardEls = {};
+    cardSig = sig; cardEls = {}; hoverId = null;
     cardsEl.innerHTML = "";
     for (const id of ids) {
       const inf = INFO[id], base = SPRITE_OF[id] && !MAN.sprites[id] ? SPRITE_OF[id] : id;
@@ -328,6 +353,9 @@ function updateCards(S, t) {
       nm.appendChild(linkOrText(inf.name, inf.url)); tx.appendChild(nm);
       if (sub) { const sp = document.createElement("span"); sp.appendChild(linkOrText(sub, inf.actor && inf.actor_url)); tx.appendChild(sp); }
       const st = document.createElement("i"); st.className = "pst"; tx.appendChild(st);
+      d.addEventListener("mouseenter", () => { hoverId = id; });
+      d.addEventListener("mouseleave", () => { if (hoverId === id) hoverId = null; });
+      if (inf.url) d.addEventListener("click", e => { if (!e.target.closest("a")) location.href = inf.url; });   // вся карточка ведёт на страницу персонажа
       d.append(im, tx); cardsEl.appendChild(d); cardEls[id] = { d, st };
     }
   }
@@ -359,7 +387,7 @@ function frame() {
     // лёгкое затемнение по краям для читаемости
     const v = ctx.createLinearGradient(0, H * .55, 0, H); v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,.35)"); ctx.fillStyle = v; ctx.fillRect(0, H * .55, W, H * .45);
     const info = drawActors(S, t);
-    drawActive(S, t, info); drawFx(S, t, info); drawFloats(S, t, info); drawBubbles(S, t, info);
+    drawActive(S, t, info); drawHover(t, info); drawFx(S, t, info); drawFloats(S, t, info); drawBubbles(S, t, info);
     S.info = info;
   }
   const fd = (performance.now() - fadeAt) / 450; if (fd < 1) { ctx.fillStyle = `rgba(8,6,12,${1 - fd})`; ctx.fillRect(0, 0, W, H); }
