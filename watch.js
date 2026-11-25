@@ -23,13 +23,14 @@ function load(name, src) {
   return img[name];
 }
 
-let TL, MAN, INFO = {}, scenes = [], events = [];
+let TL, MAN, INFO = {}, scenes = [], events = [], HPD = null;   // HPD — здоровье по ходу выпуска (data/hp/epNN.json)
 Promise.all([fetch(base + "timeline.json").then(r => r.json()), fetch(base + "manifest.json").then(r => r.json())]).then(([tl, man]) => {
   TL = tl; MAN = man; HEROES = man.heroes || HEROES; PROPS = man.props || PROPS; SPRITE_OF = { ...SPRITE_OF, ...(man.alias || {}) }; scenes = tl.scenes.slice().sort((a, b) => a.t - b.t);
   events = tl.events.slice().sort((a, b) => a.t - b.t);
   Object.keys(man.sprites).forEach(k => load("s:" + k, base + "sprites/" + k + ".webp"));
   Object.keys(man.bgs).forEach(k => load("b:" + k, base + "bg/" + k + ".webp"));
   INFO = tl.info || {};
+  HPD = tl.hp || null; if (HPD) HPD.events.sort((a, b) => a.t - b.t);
   buildPlot(tl.plot || []);
   requestAnimationFrame(frame);
 });
@@ -357,6 +358,12 @@ function drawMap(S, t) {
 const isFight = sc => { const i = scenes.indexOf(sc), end = i + 1 < scenes.length ? scenes[i + 1].t : 1e9;
   return sc.bg !== "map" && events.some(e => (e.do === "attack" || e.do === "hurt") && e.t >= sc.t && e.t < end); };
 function hpAt(id, t) {
+  if (HPD) {                                          // собранные по выпуску значения: последнее известное к моменту t
+    const ch = HPD.chars[id]; if (!ch || !ch.max) return null;
+    let hp = ch.max;
+    for (const e of HPD.events) { if (e.t > t) break; if (e.id === id) hp = e.hp; }
+    return hp == null ? null : { hp, max: Math.max(ch.max, hp) };
+  }
   const max = INFO[id] && INFO[id].hp; if (!max) return null;
   let hp = max;
   for (const e of events) {
@@ -404,7 +411,7 @@ function updateCards(S, t) {
   stageBox.classList.toggle("fight", fight);
   for (const id of ids) {
     const c = cardEls[id], a = S.A[id]; if (!c) continue;
-    const h = fight && HEROES.includes(id) && !(a && a.look === "dragon") ? hpAt(id, t) : null;   // облик дракона — без данных о здоровье
+    const h = fight && (HPD || HEROES.includes(id) && !(a && a.look === "dragon")) ? hpAt(id, t) : null;   // без данных по выпуску — только герои, у дракона здоровья с карточки нет
     c.hp.hidden = !h;
     if (h) { const k = h.hp / h.max, txt = `${h.hp}/${h.max}`;
       if (c.hp.lastChild.textContent !== txt) { c.hp.lastChild.textContent = txt; c.hp.title = `Здоровье: ${txt}`; }
