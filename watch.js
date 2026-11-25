@@ -83,7 +83,7 @@ function coins(p) {
     out.push(`<span class="coins-n${cls}" title="${verb}: ${n} ${coinWord(n)}">${icons}</span>`);
   }
   if (out.length && p.coin_bal != null)
-    out.push(`<span class="coins-bal" title="монет на столе после этого: ${p.coin_bal}">осталось ${p.coin_bal}</span>`);
+    out.push(`<span class="coins-bal" title="монет на столе после этого: ${p.coin_bal}">= ${p.coin_bal}</span>`);
   return out.join("");
 }
 let plotItems = [];
