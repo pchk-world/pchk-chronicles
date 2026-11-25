@@ -82,6 +82,8 @@ function coins(p) {
     const icons = n <= 6 ? Array.from({ length: n }, () => COIN(cls)).join("") : COIN(cls) + `<b>×${n}</b>`;
     out.push(`<span class="coins-n${cls}" title="${verb}: ${n} ${coinWord(n)}">${icons}</span>`);
   }
+  if (out.length && p.coin_bal != null)
+    out.push(`<span class="coins-bal" title="монет на столе после этого: ${p.coin_bal}">осталось ${p.coin_bal}</span>`);
   return out.join("");
 }
 let plotItems = [];

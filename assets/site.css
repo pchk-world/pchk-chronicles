@@ -946,6 +946,7 @@ a.art-ref{color:var(--link)}
 .coins-n.out .coin{fill:rgba(232,182,76,.2); stroke:#b08a48}
 .coins-n.out .coin circle+circle{stroke:none}
 .coins-n.out .coin path{stroke:#e65046; stroke-width:1.8; stroke-linecap:round}
+.coins-bal{margin-left:6px; font:600 11px var(--mono, monospace); color:#e8b64c; white-space:nowrap; vertical-align:1px}
 .coins-n b{font:600 11px var(--mono, monospace); color:#e8b64c; margin-left:1px}
 /* бой на странице просмотра: красная рамка сцены и пунктов сюжета, здоровье героев на карточках */
 .watch-stage .sbox{transition:box-shadow .3s}
