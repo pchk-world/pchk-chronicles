@@ -959,3 +959,8 @@ a.art-ref{color:var(--link)}
 .pcard .phb span.mid{background:#e8b64c}
 .pcard .phb span.low{background:#e65046}
 .pcard .php em{font:600 11px var(--mono, monospace); font-style:normal; color:#f08a80}
+/* фото участника с Викисклада и подпись автора и лицензии */
+.pphoto{margin:0}
+.pphoto .pic{display:block; aspect-ratio:4/5; object-fit:cover}
+.pphoto figcaption{font-size:11px; color:var(--faint); margin-top:5px; line-height:1.35}
+.pphoto figcaption a{color:inherit}
