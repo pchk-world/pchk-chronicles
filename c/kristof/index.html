@@ -23,7 +23,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=5ca4d0becb">
+<link rel="stylesheet" href="/assets/site.css?v=57255ec9c3">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -73,34 +73,57 @@
 
 <section class="ep-sec" id="history"><h2>История персонажа <small>в порядке времени Понии</small></h2><div class="chron"><div class="cev" style="--c:#B03A7A"><div class="when">год 3</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr"><p><a class="ref" href="/c/moyra-kris/">Кристоф</a> вместе с женой <a class="ref" href="/c/agniya/">Агнией</a> жил в лагере мигрантов, где Агния подделывала паспорта, а под скатертью в их палатке хранились гномьи колпаки и набор для подделки документов. Клан <a class="ref" href="/c/dan-balan/">Дан Балана</a> узнал о плане высшего вампирского совета «Чёрное небо» — взорвать вулкан <a class="ref" href="/place/nergal/">Нергал</a> и закрыть пеплом солнце над <a class="ref" href="/c/korol-poni-v/">Понией</a>; Кристоф присоединился к заговору вместе с изобретателем <a class="ref" href="/c/villi/">Вилли</a>. Он рассказал героям, что гном-вампир <a class="ref" href="/c/gryaznis-domogaytis/">Домогайтис</a> этой ночью увёз в город его сестру, обвинив Домогайтиса в домогательствах. Заговор был раскрыт наёмным убийцей Пиф-Пафом, который отменил операцию, и началась погоня.<button type="button" class="fn t-addition" aria-expanded="false" title="Дополнение: Настоящий план Пиф-Пафа: бойня в банях и снайпер на крыше">1</button><span class="fnb t-addition" hidden><span class="ptype">Дополнение</span> <b>Настоящий план Пиф-Пафа: бойня в банях и снайпер на крыше</b> <a class="ref" href="/c/pif-paf/">Пиф-Паф</a> распустил среди мигрантов слухи, демонизирующие <a class="ref" href="/c/gryaznis-domogaytis/">Домогайтиса</a>, и завербовал отряд (<a class="ref" href="/c/moyra-kris/">Кристоф</a>, изобретатель <a class="ref" href="/c/villi/">Вилли</a> и др.), чтобы отправить его в бани. Сам он собирался лечь на крышу с гномьей снайперской винтовкой. Он хотел взорвать котельную, чтобы перекрыть чёрный ход. Затем ожил бы боевой автоматон и, как Терминатор, зачистил бы бани, а выбегающих Пиф-Паф добил бы с крыши. Так всё выглядело бы как бунт мигрантов, и свидетелей бы не осталось. Клан <a class="ref" href="/c/dan-balan/">Балан</a> он предал бы при любых договорённостях. <span class="note">Подкаст по #28 · <a href="https://youtu.be/drZSni0fegc?t=5473" target="_blank" rel="noopener">1:31:13 ↗</a> · <a href="#qa28-19">к записи</a></span></span></p><div class="epl"><a href="/ep/28a/" title="Часть 1 Чёрное небо вампиров">#28a Часть 1 Чёрное небо вампиров</a></div></div></div><div class="cev" style="--c:var(--faint)"><div class="when">итог</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr;background:none"><p><b>Сейчас:</b> Выжил, остался в лагере мигрантов.</p></div></div></div></section>
 <section class="ep-sec" id="gallery"><h2>Облики <small>2 изображения · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="https://img.pchk.world/img/chars/kristof.webp"><img src="https://img.pchk.world/img/chars/kristof.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure><figure data-full="https://img.pchk.world/img/gallery/f28a-kristof.webp"><img src="https://img.pchk.world/img/gallery/f28a-kristof.webp" alt="" loading="lazy"><figcaption>карточка с плашки · <a href="/ep/28a/#t=2656">#28a</a></figcaption></figure></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
-  if (window.__galBound) return; window.__galBound = true;
-  let box, items = [], i = 0;
-  function show() {
-    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
-    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-  }
-  function open(fig) {
-    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
-    if (!box) {
-      box = document.createElement('div'); box.className = 'lightbox';
-      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
-      document.body.appendChild(box);
-      box.addEventListener('click', e => {
-        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
-        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
-        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
-      });
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+          // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
+          // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
+  if (!window.__galBound) {
+    window.__galBound = true;
+    let box, items = [], i = 0;
+    const all = () => [...document.querySelectorAll('.gal figure')];
+    const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
+    function show() {
+      const it = items[i], im = box.querySelector('img');
+      im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
+      box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+      box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
     }
-    show(); box.classList.add('on');
+    function close() {
+      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      box.classList.remove('on');
+    }
+    function open(fig) {
+      items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+      if (!box) {
+        box = document.createElement('div'); box.className = 'lightbox';
+        box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+        document.body.appendChild(box);
+        box.addEventListener('click', e => {
+          const im = e.target.closest('img.zoomable');
+          if (im) { const r = im.getBoundingClientRect(); window.pchkZoom && pchkZoom(im.src, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }
+          else if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+          else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+          else if (e.target.closest('.lb-x') || e.target === box) close();
+        });
+        addEventListener('resize', () => box.classList.contains('on') && fit());
+      }
+      show(); box.classList.add('on');
+    }
+    window.__galHash = () => {
+      const m = location.hash.match(/^#img-(\d+)$/), f = m && all()[+m[1] - 1];
+      if (f) open(f);
+    };
+    document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+    document.addEventListener('keydown', e => {
+      if (!box || !box.classList.contains('on')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+      if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+    });
+    addEventListener('hashchange', () => window.__galHash());
+    document.addEventListener('pchk:leave', () => box && box.classList.remove('on'));
   }
-  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
-  document.addEventListener('keydown', e => {
-    if (!box || !box.classList.contains('on')) return;
-    if (e.key === 'Escape') box.classList.remove('on');
-    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
-    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
-  });
+  setTimeout(() => window.__galHash(), 0);
 })();
 </script></section>
 <section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/agniya/"><img class="av" src="https://img.pchk.world/img/chars/agniya.webp" alt="" loading="lazy"><span>Агния</span><small>1 общ.</small></a><a class="mate" href="/c/adrian-vurdalasku/"><img class="av" src="https://img.pchk.world/img/chars/adrian-i-ohranniki-28.webp" alt="" loading="lazy"><span>Адриан Вурдаласку</span><small>1 общ.</small></a><a class="mate" href="/c/anton/"><img class="av card" src="https://img.pchk.world/img/gallery/f28b-anton-x.webp" alt="" loading="lazy"><span>Антон</span><small>1 общ.</small></a><a class="mate" href="/c/bonk-bonk/"><img class="av" src="https://img.pchk.world/img/gallery/f28a-a-bonk-bonk-1493-fig.webp" alt="" loading="lazy"><span>Боньк-Боньк</span><small>1 общ.</small></a><a class="mate" href="/c/byanka-sosunesku/"><img class="av card" src="https://img.pchk.world/img/gallery/f26-byanka-sosunesku-x.webp" alt="" loading="lazy"><span>Бьянка Сосунеску</span><small>1 общ.</small></a><a class="mate" href="/c/vampirap/"><img class="av card" src="https://img.pchk.world/img/gallery/f28b-vampidap-x.webp" alt="" loading="lazy"><span>Вампидап</span><small>1 общ.</small></a><a class="mate" href="/c/vampir-bek/"><img class="av card intro" src="https://img.pchk.world/img/gallery/f48-i-vampirbek.webp" alt="" loading="lazy"><span>Вампирбек</span><small>1 общ.</small></a><a class="mate" href="/c/villi/"><img class="av" src="https://img.pchk.world/img/chars/villi.webp" alt="" loading="lazy"><span>Вилли</span><small>1 общ.</small></a><a class="mate" href="/c/gryaznis-domogaytis/"><img class="av" src="https://img.pchk.world/img/chars/gryaznis-domogajtis.webp" alt="" loading="lazy"><span>Грязнис Домогайтис</span><small>1 общ.</small></a><a class="mate" href="/c/dan-balan/"><img class="av card intro" src="https://img.pchk.world/img/gallery/f48-i-dan-balan.webp" alt="" loading="lazy"><span>Дан Балан</span><small>1 общ.</small></a><a class="mate" href="/c/dzvenk-dzvenk/"><span class="av" aria-hidden="true">Д</span><span>Дзвеньк-Дзвеньк</span><small>1 общ.</small></a><a class="mate" href="/c/luka-superbigdikgan/"><img class="av card intro" src="https://img.pchk.world/img/gallery/f28a-i-superbigdikgan.webp" alt="" loading="lazy"><span>Лука «СуперБигДикГан»</span><small>1 общ.</small></a><a class="mate" href="/c/pif-paf/"><img class="av" src="https://img.pchk.world/img/chars/pif-paf.webp" alt="" loading="lazy"><span>Пиф-Паф</span><small>1 общ.</small></a></div></section>

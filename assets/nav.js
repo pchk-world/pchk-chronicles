@@ -220,3 +220,42 @@
   document.addEventListener('pchk:leave', () => { document.querySelectorAll('.chick-peek').forEach(el => el.remove()); later(); });
   window.pchkChick = (name, cls = '') => `<img class="chick ${cls}" data-chick="${name}" src="${src(name)}" alt="" height="150" loading="lazy" title="Курица">`;
 })();
+
+/* увеличение в просмотре галерей: картинка в полном разрешении (кадры с выпуска — 4K), прокрутка/перетаскивание, клик или Esc —
+   обратно. Вызов: pchkZoom(src, fx, fy) — fx, fy (0..1) — куда кликнули на уменьшенной картинке, туда и прокрутится. */
+(() => {
+  let z = null;
+  const close = () => { if (z) { z.classList.remove('on'); z.querySelector('img').removeAttribute('src'); } };
+  window.pchkZoomOpen = () => !!(z && z.classList.contains('on'));
+  window.pchkZoomClose = close;
+  window.pchkZoom = (src, fx = 0.5, fy = 0.5) => {
+    if (!z) {
+      z = document.createElement('div'); z.className = 'lb-zoom'; z.setAttribute('role', 'dialog'); z.setAttribute('aria-label', 'Увеличенная картинка');
+      z.innerHTML = '<img alt=""><span class="lb-zoom-wait">загрузка…</span>';
+      document.body.appendChild(z);
+      let drag = null, moved = false;
+      z.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; drag = [e.clientX, e.clientY, z.scrollLeft, z.scrollTop]; moved = false; });
+      z.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const dx = e.clientX - drag[0], dy = e.clientY - drag[1];
+        if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
+        z.scrollLeft = drag[2] - dx; z.scrollTop = drag[3] - dy;
+      });
+      addEventListener('pointerup', () => { drag = null; });
+      z.addEventListener('click', e => { if (!moved) close(); moved = false; });
+      document.addEventListener('keydown', e => {          // пока увеличено, стрелки не листают галерею под ним
+        if (!window.pchkZoomOpen() || !/^(Escape|ArrowLeft|ArrowRight)$/.test(e.key)) return;
+        e.stopImmediatePropagation(); if (e.key === 'Escape') close();
+      }, true);
+    }
+    const im = z.querySelector('img');
+    z.classList.add('on', 'wait');
+    im.onload = () => {
+      z.classList.remove('wait');
+      z.scrollLeft = Math.max(0, im.offsetWidth * fx - z.clientWidth / 2);
+      z.scrollTop = Math.max(0, im.offsetHeight * fy - z.clientHeight / 2);
+    };
+    im.src = src;
+  };
+  document.addEventListener('pchk:leave', close);
+})();

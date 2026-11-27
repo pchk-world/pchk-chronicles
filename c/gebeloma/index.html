@@ -23,7 +23,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=5ca4d0becb">
+<link rel="stylesheet" href="/assets/site.css?v=57255ec9c3">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -73,34 +73,57 @@
 <section class="ep-sec" id="sheets"><h2>Листы героя</h2><div class="tbl-wrap"><table class="sheet-tbl"><thead><tr><th>Выпуск</th><th>Раса и класс</th><th>КБ</th><th>Здор.</th><th>Сил</th><th>Лов</th><th>Вын</th><th>Муд</th><th>Инт</th><th>Хар</th><th>Снаряжение</th></tr></thead><tbody><tr><td><a href="/ep/13/#t=878">#13</a></td><td>Грибнит</td><td class="n">12</td><td class="n">22</td><td class="n">+2</td><td class="n">+0</td><td class="n">+3</td><td class="n">+2</td><td class="n">+0</td><td class="n">-2</td><td class="gear">раскладной грибной нож, магический кирпич с рунами, складная швабра</td></tr></tbody></table></div></section>
 <section class="ep-sec" id="history"><h2>История персонажа <small>в порядке времени Понии</small></h2><div class="chron"><div class="cev" style="--c:#2F84C8"><div class="when">год 1</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr"><p>Через год после разгрома таверны «Кайф» войсками <a class="ref" href="/c/lord-vlaston/">Властона</a> Гибилоныч вместе с семьёй каннибалов и <a class="ref" href="/c/erik-penisov/">Эриком Пэнисовым</a> везёт беременную <a class="ref" href="/c/sofiya/">Софию</a> к повитухе <a class="ref" href="/c/helena/">Хелене</a>, спасая её от родового проклятия. На пути к Зелёному Мосту он выпускает галлюциногенные споры, чтобы вывести из строя охрану на мосту, угощает стражу зельем со слабительным эффектом собственной плоти и подрезает ноги солдатам в бою. Через «мировую грибную сеть» он подтверждает подлинность зелья снятия проклятия и помогает поддельной подписью <a class="ref" href="/c/keyt-palin/">Кейт Пален</a> добиться освобождения Хелены — благодаря этому проклятие с новорождённого сына Эрика и Софии снимают.<button type="button" class="fn t-addition" aria-expanded="false" title="Дополнение: Сыроега не родня Гибилонычу">1</button><span class="fnb t-addition" hidden><span class="ptype">Дополнение</span> <b>Сыроега не родня Гибилонычу</b> На вопрос, не мать ли <a class="ref" href="/c/syroega/">Сыроега</a> Гибилонычу, авторы ответили, что это существа разного вида: Гибилоныч — маленький гриболюд, а Сыроега — адский грибной демон. <span class="note">Подкаст по #43 и #44 · <a href="https://youtu.be/trPN7O0uNR0?t=1844" target="_blank" rel="noopener">0:30:44 ↗</a> · <a href="#qa43-44-10">к записи</a></span></span></p><div class="epl"><a href="/ep/13/" title="Проклятые роды">#13 Проклятые роды</a></div></div></div><div class="cev" style="--c:var(--faint)"><div class="when">итог</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr;background:none"><p><b>Сейчас:</b> Жив, остаётся другом семьи каннибалов.</p></div></div></div></section>
 <section class="ep-sec" id="gallery"><h2>Облики <small>1 изображение · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="https://img.pchk.world/img/chars/gibilonych.webp"><img src="https://img.pchk.world/img/chars/gibilonych.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
-  if (window.__galBound) return; window.__galBound = true;
-  let box, items = [], i = 0;
-  function show() {
-    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
-    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-  }
-  function open(fig) {
-    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
-    if (!box) {
-      box = document.createElement('div'); box.className = 'lightbox';
-      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
-      document.body.appendChild(box);
-      box.addEventListener('click', e => {
-        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
-        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
-        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
-      });
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+          // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
+          // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
+  if (!window.__galBound) {
+    window.__galBound = true;
+    let box, items = [], i = 0;
+    const all = () => [...document.querySelectorAll('.gal figure')];
+    const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
+    function show() {
+      const it = items[i], im = box.querySelector('img');
+      im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
+      box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+      box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
     }
-    show(); box.classList.add('on');
+    function close() {
+      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      box.classList.remove('on');
+    }
+    function open(fig) {
+      items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+      if (!box) {
+        box = document.createElement('div'); box.className = 'lightbox';
+        box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+        document.body.appendChild(box);
+        box.addEventListener('click', e => {
+          const im = e.target.closest('img.zoomable');
+          if (im) { const r = im.getBoundingClientRect(); window.pchkZoom && pchkZoom(im.src, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }
+          else if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+          else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+          else if (e.target.closest('.lb-x') || e.target === box) close();
+        });
+        addEventListener('resize', () => box.classList.contains('on') && fit());
+      }
+      show(); box.classList.add('on');
+    }
+    window.__galHash = () => {
+      const m = location.hash.match(/^#img-(\d+)$/), f = m && all()[+m[1] - 1];
+      if (f) open(f);
+    };
+    document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+    document.addEventListener('keydown', e => {
+      if (!box || !box.classList.contains('on')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+      if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+    });
+    addEventListener('hashchange', () => window.__galHash());
+    document.addEventListener('pchk:leave', () => box && box.classList.remove('on'));
   }
-  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
-  document.addEventListener('keydown', e => {
-    if (!box || !box.classList.contains('on')) return;
-    if (e.key === 'Escape') box.classList.remove('on');
-    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
-    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
-  });
+  setTimeout(() => window.__galHash(), 0);
 })();
 </script></section>
 <section class="ep-sec"><h2>Чаще всего рядом</h2><div class="mates"><a class="mate" href="/c/aleks-palen/"><img class="av" src="https://img.pchk.world/img/chars/aleks-palen.webp" alt="" loading="lazy"><span>Алекс Пален</span><small>1 общ.</small></a><a class="mate" href="/c/zhanuariya/"><img class="av card intro" src="https://img.pchk.world/img/gallery/f42-i-zhenuariya.webp" alt="" loading="lazy"><span>Женуария</span><small>1 общ.</small></a><a class="mate" href="/c/keyt-palin/"><img class="av" src="https://img.pchk.world/img/chars/kejt-palen.webp" alt="" loading="lazy"><span>Кейт Пален</span><small>1 общ.</small></a><a class="mate" href="/c/lyuciy-palin/"><img class="av" src="https://img.pchk.world/img/chars/lyucij-palen.webp" alt="" loading="lazy"><span>Люций Пален</span><small>1 общ.</small></a><a class="mate" href="/c/lyosha/"><img class="av card" src="https://img.pchk.world/img/gallery/f45-lyosha-x.webp" alt="" loading="lazy"><span>Лёша</span><small>1 общ.</small></a><a class="mate" href="/c/otec-semeystva-kannibalov/"><img class="av" src="https://img.pchk.world/img/gallery/f13-a-otec-semeystva-kannibalov-282-fig.webp" alt="" loading="lazy"><span>Отец семейства каннибалов</span><small>1 общ.</small></a><a class="mate" href="/c/pisar/"><img class="av" src="https://img.pchk.world/img/gallery/f13-a-pisar-5220-fig.webp" alt="" loading="lazy"><span>Писарь</span><small>1 общ.</small></a><a class="mate" href="/c/serzh/"><img class="av" src="https://img.pchk.world/img/chars/serzh.webp" alt="" loading="lazy"><span>Серж</span><small>1 общ.</small></a><a class="mate" href="/c/sofiya/"><img class="av card intro" src="https://img.pchk.world/img/gallery/f53-i-sofiya.webp" alt="" loading="lazy"><span>София</span><small>1 общ.</small></a><a class="mate" href="/c/helena/"><img class="av" src="https://img.pchk.world/img/chars/helena-ved-mova.webp" alt="" loading="lazy"><span>Хелена</span><small>1 общ.</small></a><a class="mate" href="/c/erik-penisov/"><img class="av" src="https://img.pchk.world/img/portraits/d9600a7f722f7a11.webp" alt="" loading="lazy"><span>Эрик Пэнисов</span><small>1 общ.</small></a><a class="mate" href="/c/yulian/"><img class="av card intro" src="https://img.pchk.world/img/gallery/f53-i-yulian-lektor.webp" alt="" loading="lazy"><span>Юлиан</span><small>1 общ.</small></a></div></section>

@@ -156,15 +156,21 @@
   if (D.frames && D.frames.length) {
     let lb = null, cur = 0;
     const show = () => {
-      const f = D.frames[cur], cap = frCaption(f.sec);
-      lb.querySelector('img').src = f.img;
-      lb.querySelector('img').alt = 'Кадр выпуска, ' + fmt(f.sec);
+      const f = D.frames[cur], cap = frCaption(f.sec), im = lb.querySelector('img');
+      im.src = f.hd || f.img;                          // 1920 px, если есть кадр 4K; иначе превью 640
+      im.alt = 'Кадр выпуска, ' + fmt(f.sec);
+      im.classList.toggle('zoomable', !!f.full);
+      im.title = f.full ? 'Увеличить (4K)' : '';
+      history.replaceState(history.state, '', '#frame-' + f.sec);   // у каждого кадра свой адрес
       lb.querySelector('figcaption').innerHTML = `<b class="lb-t">${fmt(f.sec)}</b>${cap ? ' ' + cap : ''}`;
       lb.querySelector('.lb-n').textContent = `${cur + 1} / ${D.frames.length}`;
-      const nx = D.frames[(cur + 1) % D.frames.length]; if (nx) new Image().src = nx.img;   // следующий — заранее
+      const nx = D.frames[(cur + 1) % D.frames.length]; if (nx) new Image().src = nx.hd || nx.img;   // следующий — заранее
     };
     const step = d => { cur = (cur + d + D.frames.length) % D.frames.length; show(); };
-    const close = () => { lb && lb.classList.remove('on'); document.body.style.overflow = ''; };
+    const close = () => {
+      if (lb && lb.classList.contains('on') && /^#frame-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      lb && lb.classList.remove('on'); document.body.style.overflow = '';
+    };
     const open = i => {
       if (!lb) {
         lb = document.createElement('div'); lb.className = 'lightbox ep-lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-label', 'Кадры с выпуска');
@@ -172,6 +178,8 @@
         document.body.appendChild(lb);
         ac.signal.addEventListener('abort', () => { close(); lb.remove(); });   // мягкий переход на другую страницу
         lb.addEventListener('click', e => {
+          const im = e.target.closest('img.zoomable');
+          if (im) { const r = im.getBoundingClientRect(); window.pchkZoom && pchkZoom(D.frames[cur].full, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); return; }
           if (e.target.closest('.lb-p')) step(-1);
           else if (e.target.closest('.lb-nx')) step(1);
           else if (e.target.closest('.lb-x') || e.target === lb) close();
@@ -188,6 +196,7 @@
       lb.querySelector('.lb-x').focus();
     };
     $('#frames').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) open(+b.dataset.i); });
+    window.__epFrameOpen = sec => { const i = D.frames.findIndex(f => f.sec === sec); if (i >= 0) { open(i); return true; } return false; };
   }
 
   /* сноски из подкастов: номер раскрывает скрытый текст записи */
@@ -342,6 +351,8 @@
 
   /* переход к моменту: /ep/NN/#t=0:12:30 или #t=750 */
   function jump() {
+    const fr = location.hash.match(/^#frame-(\d+)$/);   // кадр с выпуска: открыть его в просмотре
+    if (fr && window.__epFrameOpen && __epFrameOpen(+fr[1])) return;
     const m = decodeURIComponent(location.hash).match(/^#t=(?:(\d+):)?(\d+)(?::(\d+))?$/);
     if (!m) { const el = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el) el.scrollIntoView({ block: 'start' }); return; }   // #people и др.: страница рисуется скриптом, браузер сам не докрутит
     const sec = m[3] != null ? (+m[1] || 0) * 3600 + +m[2] * 60 + +m[3] : m[1] != null ? +m[1] * 60 + +m[2] : +m[2];

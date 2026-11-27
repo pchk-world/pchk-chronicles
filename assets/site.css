@@ -965,3 +965,12 @@ a.art-ref{color:var(--link)}
 .pphoto .pic{display:block; aspect-ratio:4/5; object-fit:cover}
 .pphoto figcaption{font-size:11px; color:var(--faint); margin-top:5px; line-height:1.35}
 .pphoto figcaption a{color:inherit}
+/* увеличение в просмотре галерей (viz/nav.js pchkZoom): полное разрешение, прокрутка и перетаскивание */
+.lightbox img.zoomable{cursor:zoom-in}
+.lb-zoom{position:fixed; inset:0; z-index:210; display:none; overflow:auto; background:#08060c; cursor:zoom-out; overscroll-behavior:contain}
+.lb-zoom.on{display:block}
+.lb-zoom img{display:block; max-width:none; max-height:none; margin:auto; user-select:none; -webkit-user-drag:none}
+.lb-zoom.wait img{visibility:hidden}
+.lb-zoom-wait{display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font:13px var(--mono); color:#aaa}
+.lb-zoom.wait .lb-zoom-wait{display:block}
+@media (max-width:600px){ .lb-zoom img{width:250vw; height:auto} }

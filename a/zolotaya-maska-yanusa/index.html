@@ -23,7 +23,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
-<link rel="stylesheet" href="/assets/site.css?v=5ca4d0becb">
+<link rel="stylesheet" href="/assets/site.css?v=57255ec9c3">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -67,65 +67,111 @@
   </div>
 </header>
 <section class="ep-sec" id="gallery"><h2>Галерея <small>4 изображения</small></h2><div class="gal"><figure data-full="https://img.pchk.world/img/gallery/pzh-pchk_32-1-0256.webp"><img src="https://img.pchk.world/img/gallery/pzh-pchk_32-1-0256.webp" alt="" loading="lazy"><figcaption>кадр выпуска</figcaption></figure><figure data-full="https://img.pchk.world/img/gallery/c32-zolotaya-maska-yanusa-4794.webp"><img src="https://img.pchk.world/img/gallery/c32-zolotaya-maska-yanusa-4794.webp" alt="" loading="lazy"><figcaption>игровая карта · <a href="/ep/32/#t=4794">#32</a></figcaption></figure><figure data-full="https://img.pchk.world/img/gallery/c39-zolotaya-maska-yanusa-7145.webp"><img src="https://img.pchk.world/img/gallery/c39-zolotaya-maska-yanusa-7145.webp" alt="" loading="lazy"><figcaption>игровая карта · <a href="/ep/39/#t=7145">#39</a></figcaption></figure><figure data-full="https://img.pchk.world/img/gallery/f55-art-3125.webp"><img src="https://img.pchk.world/img/gallery/f55-art-3125.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/55/#t=3125">#55</a></figcaption></figure></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
-  if (window.__galBound) return; window.__galBound = true;
-  let box, items = [], i = 0;
-  function show() {
-    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
-    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-  }
-  function open(fig) {
-    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
-    if (!box) {
-      box = document.createElement('div'); box.className = 'lightbox';
-      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
-      document.body.appendChild(box);
-      box.addEventListener('click', e => {
-        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
-        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
-        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
-      });
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+          // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
+          // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
+  if (!window.__galBound) {
+    window.__galBound = true;
+    let box, items = [], i = 0;
+    const all = () => [...document.querySelectorAll('.gal figure')];
+    const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
+    function show() {
+      const it = items[i], im = box.querySelector('img');
+      im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
+      box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+      box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
     }
-    show(); box.classList.add('on');
+    function close() {
+      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      box.classList.remove('on');
+    }
+    function open(fig) {
+      items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+      if (!box) {
+        box = document.createElement('div'); box.className = 'lightbox';
+        box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+        document.body.appendChild(box);
+        box.addEventListener('click', e => {
+          const im = e.target.closest('img.zoomable');
+          if (im) { const r = im.getBoundingClientRect(); window.pchkZoom && pchkZoom(im.src, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }
+          else if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+          else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+          else if (e.target.closest('.lb-x') || e.target === box) close();
+        });
+        addEventListener('resize', () => box.classList.contains('on') && fit());
+      }
+      show(); box.classList.add('on');
+    }
+    window.__galHash = () => {
+      const m = location.hash.match(/^#img-(\d+)$/), f = m && all()[+m[1] - 1];
+      if (f) open(f);
+    };
+    document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+    document.addEventListener('keydown', e => {
+      if (!box || !box.classList.contains('on')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+      if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+    });
+    addEventListener('hashchange', () => window.__galHash());
+    document.addEventListener('pchk:leave', () => box && box.classList.remove('on'));
   }
-  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
-  document.addEventListener('keydown', e => {
-    if (!box || !box.classList.contains('on')) return;
-    if (e.key === 'Escape') box.classList.remove('on');
-    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
-    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
-  });
+  setTimeout(() => window.__galHash(), 0);
 })();
 </script></section>
 <section class="ep-sec" id="sheet"><h2>С листа героя <small>2</small></h2><p class="note">Свойства предмета так, как они напечатаны на листе героя в выпуске; снимок листа — кадр выпуска.</p><div class="abil-ep"><h3 class="sub-h">#32 · <a href="/ep/32/">Путешествие к Нергалу</a> · <a href="/c/yanus/">Янус (Дододис)</a></h3><p><b>Золотая маска Януса</b>: Легендарный артефакт.</p><ul class="abil"><li><b>Заменяет характеристики Мудрости (+5), Интеллекта (+8) и Харизмы (+5).</b></li><li><b>Обман +8.</b></li><li><b>У Маски Януса 8 зарядов на день.</b>: Можно дать маске дополнительный заряд, “скормив” ей 1 золотую монету.</li><li><b>Ты не можешь её потерять, если находишься в сознании/дееспособен.</b>: Если маска в 30 метрах от тебя, ты можешь её притянуть бонусным действием.</li><li><b>Нанесение ран (1 заряд)</b>: Рукопашная атака (касание) +10, урон 3d10 (+1d10 за каждый дополнительный заряд).</li><li><b>Призыв нежити (1 заряд)</b>: Ты призываешь 1d4 Гуля. Они сражаются на твоей стороне.</li><li><b>Призыв призрака (2 заряда)</b>: Ты призываешь призрака. Он сражается на твоей стороне. Также ты можешь создать проклятый предмет, через который призрак может вселиться в гуманоида. Если гуманоид дотрагивается до предмета, он совершает спасбросок Харизмы 18. При провале, призрак завладевает телом.</li><li><b>Некротический шар (3 заряда)</b>: Ты создаешь шар, который взрывается некротической энергией. Все живые существа в радиусе 6 метров проводят Спасбросок Ловкости 18. При провале получают урон 8d6. Или половину при успехе.</li><li><b>Перст смерти (4 заряда)</b>: Из твоего пальца исходит негативная энергия, доставляющая жертве невыносимую боль. Она совершает спасбросок Выносливости 18. При провале получает урон 7d8+30 (успех — половину). Убитый гуманоид становится зомби, которым ты управляешь.</li><li><b>Клетка душ (2 заряда)</b>: Когда рядом с тобой умирает гуманоид, ты можешь реакцией забрать его душу и поместить в клетку.</li><li><b>Душу ты можешь использовать (3 раза) следующим образом</b>: 1) Впитать её жизненную энергию и восстановить 2d8 ПЗ (3 раза). 2) Задать вопрос, на который душа правдиво ответит 1-2 предложениями. 3) Заимствовать её опыт, чтобы совершить следующую проверку с преимуществом. 4) Назвать место, которое гуманоид видел при жизни. Отправить душу туда и понаблюдать, что происходит там в данный момент.</li></ul><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep32/p000.webp"><img src="https://img.pchk.world/img/sheets/ep32/p000.webp" alt="" loading="lazy"><figcaption>лист героя, #32</figcaption></figure><figure data-full="https://img.pchk.world/img/sheets/ep32/p004.webp"><img src="https://img.pchk.world/img/sheets/ep32/p004.webp" alt="" loading="lazy"><figcaption>лист героя, #32</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#49 · <a href="/ep/49/">Раненый дракон</a> · <a href="/c/drakon-gimelut/">Дракон Гиммилут</a></h3><p><b>Душу ты можешь использовать (3 раза) следующим образом</b></p><ul class="abil"><li>: Заменяет характеристики Мудрости (+5), Интеллекта (+8) и Харизмы (+5).</li><li>: Обман +8.</li><li>: У Маски Януса 8 зарядов на день. Можно дать маске дополнительный заряд, &quot;скормив&quot; ей 1 золотую монету. Ты не можешь её потерять, если находишься в сознании/дееспособен. Если маска в 30 метрах от тебя, ты можешь её притянуть бонусным действием.</li><li><b>Нанесение ран (1 заряд)</b>: Рукопашная атака (касание) +10, урон 3d10 (+1d10 за каждый дополнительный заряд).</li><li><b>Призыв нежити (1 заряд)</b>: Ты призываешь 1d4 Гуля. Они сражаются на твоей стороне.</li><li><b>Призыв призрака (2 заряда)</b>: Ты призываешь призрака. Он сражается на твоей стороне. Также ты можешь создать проклятый предмет, через который призрак может вселиться в гуманоида. Если гуманоид дотрагивается до предмета, он совершает спасбросок Харизмы 18. При провале, призрак завладевает телом.</li><li><b>Некротический шар (3 заряда)</b>: Ты создаешь шар, который взрывается некротической энергией. Все живые существа в радиусе 6 метров проводят спасбросок Ловкости 18. При провале получают урон 8d6. Или половину при успехе.</li><li><b>Перст смерти (4 заряда)</b>: Из твоего пальца исходит негативная энергия, доставляющая жертве невыносимую боль. Она совершает спасбросок Выносливости 18. При провале получает урон 7d8+30 (успех — половину). Убитый гуманоид становится зомби, которым ты управляешь.</li><li><b>Клетка душ (2 заряда)</b>: Когда рядом с тобой умирает гуманоид, ты можешь реакцией забрать его душу и поместить в клетку.</li><li><b>1)</b>: Впитать её жизненную энергию и восстановить 2d8 ПЗ (3 раза).</li><li><b>2)</b>: Задать вопрос, на который душа правдиво ответит 1-2 предложениями.</li><li><b>3)</b>: Заимствовать её опыт, чтобы совершить следующую проверку с преимуществом.</li><li><b>4)</b>: Назвать место, которое гуманоид видел при жизни, отправить душу туда и понаблюдать, что происходит там в данный момент.</li></ul><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep49/p005.webp"><img src="https://img.pchk.world/img/sheets/ep49/p005.webp" alt="" loading="lazy"><figcaption>лист героя, #49</figcaption></figure><figure data-full="https://img.pchk.world/img/sheets/ep49/p009.webp"><img src="https://img.pchk.world/img/sheets/ep49/p009.webp" alt="" loading="lazy"><figcaption>лист героя, #49</figcaption></figure></div></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; один обработчик на сайт (страницы подгружаются без перезагрузки)
-  if (window.__galBound) return; window.__galBound = true;
-  let box, items = [], i = 0;
-  function show() {
-    const it = items[i]; box.querySelector('img').src = it.dataset.full; box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
-    box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-  }
-  function open(fig) {
-    items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
-    if (!box) {
-      box = document.createElement('div'); box.className = 'lightbox';
-      box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
-      document.body.appendChild(box);
-      box.addEventListener('click', e => {
-        if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
-        else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
-        else if (e.target.closest('.lb-x') || e.target === box) box.classList.remove('on');
-      });
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+          // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
+          // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
+  if (!window.__galBound) {
+    window.__galBound = true;
+    let box, items = [], i = 0;
+    const all = () => [...document.querySelectorAll('.gal figure')];
+    const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
+    function show() {
+      const it = items[i], im = box.querySelector('img');
+      im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
+      box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
+      box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
+      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
     }
-    show(); box.classList.add('on');
+    function close() {
+      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      box.classList.remove('on');
+    }
+    function open(fig) {
+      items = [...fig.closest('.gal').querySelectorAll('figure')]; i = items.indexOf(fig);
+      if (!box) {
+        box = document.createElement('div'); box.className = 'lightbox';
+        box.innerHTML = '<button class="lb-x" aria-label="Закрыть">×</button><button class="lb-p" aria-label="Назад">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nx" aria-label="Вперёд">›</button><span class="lb-n"></span>';
+        document.body.appendChild(box);
+        box.addEventListener('click', e => {
+          const im = e.target.closest('img.zoomable');
+          if (im) { const r = im.getBoundingClientRect(); window.pchkZoom && pchkZoom(im.src, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height); }
+          else if (e.target.closest('.lb-p')) { i = (i + items.length - 1) % items.length; show(); }
+          else if (e.target.closest('.lb-nx')) { i = (i + 1) % items.length; show(); }
+          else if (e.target.closest('.lb-x') || e.target === box) close();
+        });
+        addEventListener('resize', () => box.classList.contains('on') && fit());
+      }
+      show(); box.classList.add('on');
+    }
+    window.__galHash = () => {
+      const m = location.hash.match(/^#img-(\d+)$/), f = m && all()[+m[1] - 1];
+      if (f) open(f);
+    };
+    document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
+    document.addEventListener('keydown', e => {
+      if (!box || !box.classList.contains('on')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
+      if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
+    });
+    addEventListener('hashchange', () => window.__galHash());
+    document.addEventListener('pchk:leave', () => box && box.classList.remove('on'));
   }
-  document.addEventListener('click', e => { const f = e.target.closest('.gal figure'); if (f && !e.target.closest('a')) { e.preventDefault(); open(f); } });
-  document.addEventListener('keydown', e => {
-    if (!box || !box.classList.contains('on')) return;
-    if (e.key === 'Escape') box.classList.remove('on');
-    if (e.key === 'ArrowRight') { i = (i + 1) % items.length; show(); }
-    if (e.key === 'ArrowLeft') { i = (i + items.length - 1) % items.length; show(); }
-  });
+  setTimeout(() => window.__galHash(), 0);
 })();
 </script></section>
 <section class="ep-sec"><h2>История</h2><ul class="hist"><li><b><a href="/ep/22/" title="Отряд Солнца">#22</a></b> эльф <a class="ref" href="/c/yanus/">Дододис</a> превращается в <a class="ref" href="/c/yanus/">Януса</a>, надев маску; <a class="ref" href="/c/lyosha/">Лёша</a> примеряет её, голос из маски предлагает убить хозяина.</li><li><b><a href="/ep/29/" title="Отель &quot;Глубокий канал&quot;">#29</a></b> маска говорит, что хотела бы, чтобы <a class="ref" href="/c/lyosha/">Лёша</a> её носил.</li><li><b><a href="/ep/32/" title="Путешествие к Нергалу">#32</a></b> <a class="ref" href="/c/yanus/">Дододис</a> отдаёт маску дракону <a class="ref" href="/c/drakon-gimelut/">Гиммилуту</a>, погибает в жерле вулкана <a class="ref" href="/place/nergal/">Нергал</a>; маска достаётся дракону.</li><li><b><a href="/ep/39/" title="Кунисская пленница">#39</a></b> маска у дракона <a class="ref" href="/c/drakon-gimelut/">Гиммилута</a>.</li><li><b><a href="/ep/49/" title="Раненый дракон">#49</a></b> маска пробудила в <a class="ref" href="/c/drakon-gimelut/">Гиммилуте</a> жажду власти над миром; цыганка пытается её украсть, безуспешно.</li></ul></section>
