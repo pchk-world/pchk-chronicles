@@ -71,23 +71,24 @@
 </header>
 
 <section class="ep-sec" id="sheet"><h2>С листа героя <small>1</small></h2><p class="note">Свойства предмета так, как они напечатаны на листе героя в выпуске; снимок листа — кадр выпуска.</p><div class="abil-ep"><h3 class="sub-h">#29 · <a href="/ep/29/">Отель &quot;Глубокий канал&quot;</a> · <a href="/c/cherezdevic/">Чрездевиц</a></h3><p><b>Для использования магии у тебя 5 зарядов флейты. Ты можешь восстановить 1d4 зарядов, если 10 минут почистишь свою флейту</b>: Твой заклинательный инструмент</p><ul class="abil"><li><b>Малая иллюзия (1 заряд)</b>: Ты создаешь звук или образ небольшого предмета. Существо может раскусить твой обман, если пройдет бросок Мудрости 13.</li><li><b>Приказ (1 заряд)</b>: Сделай проверку Харизмы против Мудрости жертвы. Если ты преуспел, то жертва выполнит одну простую команду (1 слово), которая не приведёт её к смерти.</li><li><b>Песня паралича (2 заряда)</b>: Песней ты можешь отправить жертву в паралич. Не может говорить и двигаться, но может смотреть, дышать и чувствовать. Атака = твоя харизма против Мудрости жертвы.</li><li><b>Огонь фей (1 заряд)</b>: Ты подсвечиваешь сиянием до трёх существ рядом друг с другом. Они совершают Спасбросок Ловкости 13. При провале твои союзники атакуют жертв с преимуществом из-за тусклого ореола.</li></ul><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep29/p018.webp"><img src="https://img.pchk.world/img/sheets/ep29/p018.webp" alt="" loading="lazy"><figcaption>лист героя, #29</figcaption></figure><figure data-full="https://img.pchk.world/img/sheets/ep29/p020.webp"><img src="https://img.pchk.world/img/sheets/ep29/p020.webp" alt="" loading="lazy"><figcaption>лист героя, #29</figcaption></figure></div></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес <страница>/i/N/ (N — по порядку на странице; старый #img-N тоже открывает);
           // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
           // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
   if (!window.__galBound) {
     window.__galBound = true;
     let box, items = [], i = 0;
     const all = () => [...document.querySelectorAll('.gal figure')];
+    const base = () => location.pathname.replace(/i\/\d+\/$/, '');
     const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
     function show() {
       const it = items[i], im = box.querySelector('img');
       im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
       box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
       box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
+      history.replaceState(history.state, '', base() + 'i/' + (all().indexOf(it) + 1) + '/');   // с превью картинки в соцсетях (viz/share_pages.py)
     }
     function close() {
-      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      if (box.classList.contains('on') && (/^#img-/.test(location.hash) || /\/i\/\d+\/$/.test(location.pathname))) history.replaceState(history.state, '', base() + location.search);
       box.classList.remove('on');
     }
     function open(fig) {

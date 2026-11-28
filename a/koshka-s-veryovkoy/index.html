@@ -71,23 +71,24 @@
 </header>
 
 <section class="ep-sec" id="sheet"><h2>С листа героя <small>7</small></h2><p class="note">Свойства предмета так, как они напечатаны на листе героя в выпуске; снимок листа — кадр выпуска.</p><div class="abil-ep"><h3 class="sub-h">#21a · <a href="/ep/21a/">Часть 1 Судьба Властона</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка с верёвкой</b></p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep21a/p001.webp"><img src="https://img.pchk.world/img/sheets/ep21a/p001.webp" alt="" loading="lazy"><figcaption>лист героя, #21a</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#24 · <a href="/ep/24/">Чёрный Геленбург</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка с верёвкой</b></p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep24/p000.webp"><img src="https://img.pchk.world/img/sheets/ep24/p000.webp" alt="" loading="lazy"><figcaption>лист героя, #24</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#30 · <a href="/ep/30/">Ультиматум Сфинктериона</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка с верёвкой</b></p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep30/p032.webp"><img src="https://img.pchk.world/img/sheets/ep30/p032.webp" alt="" loading="lazy"><figcaption>лист героя, #30</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#35 · <a href="/ep/35/">Второй Шанс</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка с верёвкой</b></p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep35/p001.webp"><img src="https://img.pchk.world/img/sheets/ep35/p001.webp" alt="" loading="lazy"><figcaption>лист героя, #35</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#41 · <a href="/ep/41/">Гонка за желанием</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка (реальная) с верёвкой</b>: – облезлая, но сильная. Верёвка не рвётся, если используется по назначению. Сила Кошки +3.</p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep41/p000.webp"><img src="https://img.pchk.world/img/sheets/ep41/p000.webp" alt="" loading="lazy"><figcaption>лист героя, #41</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#46 · <a href="/ep/46/">Операция &quot;Гром в аду&quot;</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка (реальная) с верёвкой</b>: Облезлая, но сильная. Верёвка не рвётся, если используется по назначению. Сила кошки +3.</p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep46/p000.webp"><img src="https://img.pchk.world/img/sheets/ep46/p000.webp" alt="" loading="lazy"><figcaption>лист героя, #46</figcaption></figure></div></div><div class="abil-ep"><h3 class="sub-h">#52 · <a href="/ep/52/">Накопитель Любви</a> · <a href="/c/sfinkterion/">Сфинктерион</a></h3><p><b>Кошка (реальная) с верёвкой</b>: Облезлая, но сильная. Верёвка не рвётся, если используется по назначению. Сила Кошки +3.</p><div class="gal sheet-gal"><figure data-full="https://img.pchk.world/img/sheets/ep52/p003.webp"><img src="https://img.pchk.world/img/sheets/ep52/p003.webp" alt="" loading="lazy"><figcaption>лист героя, #52</figcaption></figure></div></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес <страница>/i/N/ (N — по порядку на странице; старый #img-N тоже открывает);
           // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
           // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
   if (!window.__galBound) {
     window.__galBound = true;
     let box, items = [], i = 0;
     const all = () => [...document.querySelectorAll('.gal figure')];
+    const base = () => location.pathname.replace(/i\/\d+\/$/, '');
     const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
     function show() {
       const it = items[i], im = box.querySelector('img');
       im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
       box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
       box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
+      history.replaceState(history.state, '', base() + 'i/' + (all().indexOf(it) + 1) + '/');   // с превью картинки в соцсетях (viz/share_pages.py)
     }
     function close() {
-      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      if (box.classList.contains('on') && (/^#img-/.test(location.hash) || /\/i\/\d+\/$/.test(location.pathname))) history.replaceState(history.state, '', base() + location.search);
       box.classList.remove('on');
     }
     function open(fig) {

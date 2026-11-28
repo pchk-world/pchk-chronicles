@@ -73,23 +73,24 @@
 <section class="ep-sec" id="sheets"><h2>Листы героя</h2><div class="tbl-wrap"><table class="sheet-tbl"><thead><tr><th>Выпуск</th><th>Раса и класс</th><th>КБ</th><th>Здор.</th><th>Сил</th><th>Лов</th><th>Вын</th><th>Муд</th><th>Инт</th><th>Хар</th><th>Снаряжение</th></tr></thead><tbody><tr><td><a href="/ep/03/#t=406">#3</a></td><td>Горный дварф воин</td><td class="n">14</td><td class="n">12</td><td class="n">+3</td><td class="n">+1</td><td class="n">+2</td><td class="n">+1</td><td class="n">+0</td><td class="n">-1</td><td class="gear"></td></tr></tbody></table></div></section>
 <section class="ep-sec" id="history"><h2>История персонажа <small>в порядке времени Понии</small></h2><div class="chron"><div class="cev" style="--c:#7D8A84"><div class="when">до года 0</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr"><p>Оставшись без армии после того, как король распустил три четверти войска, Дейн присоединяется к отряду охотника за головами <a class="ref" href="/c/ragozin/">Рогозия</a>, чтобы заработать на дом. В пещере кобольдов он опускает раскалённый мост, топорами перерубает тросы клетки, убивает нескольких кобольдов и, зная драконий язык, убеждает пленённых троллем кобольдов помочь отряду. Вместе они скармливают троллю бомбу и добивают его, освобождая кобольдов от его гнёта. По словам авторов (подкаст по #29), позже Дейн, хотевший взять в жёны Эа, сестру <a class="ref" href="/c/dimash/">Демаша</a>, уехал вместе с ней на юг, в <a class="ref" href="/place/gelenburg/">Геленбург</a>.<button type="button" class="fn t-addition" aria-expanded="false" title="Дополнение: Судьба героев «Пещеры кобольдов»: Дейн и сестра Демаша ушли на юг">1</button><span class="fnb t-addition" hidden><span class="ptype">Дополнение</span> <b>Судьба героев «Пещеры кобольдов»: Дейн и сестра Демаша ушли на юг</b> Пришедшая в студию <a class="ref" href="/p/yuliya-ahmedova/">Юлия Ахмедова</a> и ведущие вспомнили героев выпуска <a href="/ep/03/" title="Пещера кобольдов">3</a>: Дейн хотел взять в жёны сестру <a class="ref" href="/c/dimash/">Демаша</a> (<a class="ref" href="/c/ea/">Эа</a>), и они уехали на юг, в <a class="ref" href="/place/gelenburg/">Геленбург</a>; там «должно быть южное приключение». Демаш, по полушутливым словам за столом, умер. <span class="note">Подкаст по #29 · <a href="https://youtu.be/ISgEZBjxvG4?t=3379" target="_blank" rel="noopener">0:56:19 ↗</a> · <a href="#qa29-11">к записи</a></span></span></p><div class="epl"><a href="/ep/03/" title="Пещера кобольдов">#3 Пещера кобольдов</a></div></div></div><div class="cev" style="--c:var(--faint)"><div class="when">итог</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr;background:none"><p><b>Сейчас:</b> Жив; уехал с Эа на юг, в <a class="ref" href="/place/gelenburg/">Геленбург</a> (рассказано в подкасте по #29).</p></div></div></div></section>
 <section class="ep-sec" id="gallery"><h2>Облики <small>1 изображение · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="https://img.pchk.world/img/chars/dejn.webp"><img src="https://img.pchk.world/img/chars/dejn.webp" alt="" loading="lazy"><figcaption>вики</figcaption></figure></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес <страница>/i/N/ (N — по порядку на странице; старый #img-N тоже открывает);
           // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
           // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
   if (!window.__galBound) {
     window.__galBound = true;
     let box, items = [], i = 0;
     const all = () => [...document.querySelectorAll('.gal figure')];
+    const base = () => location.pathname.replace(/i\/\d+\/$/, '');
     const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
     function show() {
       const it = items[i], im = box.querySelector('img');
       im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
       box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
       box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
+      history.replaceState(history.state, '', base() + 'i/' + (all().indexOf(it) + 1) + '/');   // с превью картинки в соцсетях (viz/share_pages.py)
     }
     function close() {
-      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      if (box.classList.contains('on') && (/^#img-/.test(location.hash) || /\/i\/\d+\/$/.test(location.pathname))) history.replaceState(history.state, '', base() + location.search);
       box.classList.remove('on');
     }
     function open(fig) {

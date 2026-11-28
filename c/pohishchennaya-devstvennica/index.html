@@ -73,23 +73,24 @@
 
 <section class="ep-sec" id="history"><h2>История персонажа <small>в порядке времени Понии</small></h2><div class="chron"><div class="cev" style="--c:#C8423B"><div class="when">год 0</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr"><p><a class="ref" href="/c/koldun-filipp/">Колдун Филипп</a> похитил девушку из мирной деревни, чтобы на закате перелить себе её кровь. Герои нашли её на столе в его покоях, а после гибели колдуна она торопливо собрала вещи и убежала.</p><div class="epl"><a href="/ep/01/" title="Башня колдуна">#1 Башня колдуна</a></div></div></div><div class="cev" style="--c:var(--faint)"><div class="when">итог</div><div class="rail"></div><div class="card" style="grid-template-columns:1fr;background:none"><p><b>Сейчас:</b> Жива, спасена и убежала.</p></div></div></div></section>
 <section class="ep-sec" id="gallery"><h2>Облики <small>2 изображения · на остальных страницах — последнее подтверждённое</small></h2><div class="gal"><figure data-full="https://img.pchk.world/img/gallery/f01-p-2397.webp"><img src="https://img.pchk.world/img/gallery/f01-p-2397.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/01/#t=2397">#1</a></figcaption></figure><figure data-full="https://img.pchk.world/img/gallery/f05-p-17.webp"><img src="https://img.pchk.world/img/gallery/f05-p-17.webp" alt="" loading="lazy"><figcaption>кадр вставки · <a href="/ep/05/#t=17">#5</a></figcaption></figure></div><script>
-(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес #img-N (N — по порядку на странице);
+(() => {  // просмотр галереи: крупно, стрелки и клавиши ← →, Esc; у каждой картинки свой адрес <страница>/i/N/ (N — по порядку на странице; старый #img-N тоже открывает);
           // картинка больше показанной — клик увеличивает до полного размера (viz/nav.js pchkZoom). Обработчики — один раз на сайт
           // (страницы подгружаются без перезагрузки), открытие по адресу — при каждом запуске скрипта
   if (!window.__galBound) {
     window.__galBound = true;
     let box, items = [], i = 0;
     const all = () => [...document.querySelectorAll('.gal figure')];
+    const base = () => location.pathname.replace(/i\/\d+\/$/, '');
     const fit = () => { const im = box.querySelector('img'); im.classList.toggle('zoomable', im.naturalWidth > im.clientWidth * 1.2 || im.naturalHeight > im.clientHeight * 1.2); };
     function show() {
       const it = items[i], im = box.querySelector('img');
       im.classList.remove('zoomable'); im.onload = fit; im.src = it.dataset.full;
       box.querySelector('figcaption').innerHTML = it.querySelector('figcaption').innerHTML;
       box.querySelector('.lb-n').textContent = (i + 1) + ' / ' + items.length;
-      history.replaceState(history.state, '', '#img-' + (all().indexOf(it) + 1));
+      history.replaceState(history.state, '', base() + 'i/' + (all().indexOf(it) + 1) + '/');   // с превью картинки в соцсетях (viz/share_pages.py)
     }
     function close() {
-      if (box.classList.contains('on') && /^#img-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      if (box.classList.contains('on') && (/^#img-/.test(location.hash) || /\/i\/\d+\/$/.test(location.pathname))) history.replaceState(history.state, '', base() + location.search);
       box.classList.remove('on');
     }
     function open(fig) {

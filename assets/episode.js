@@ -161,14 +161,14 @@
       im.alt = 'Кадр выпуска, ' + fmt(f.sec);
       im.classList.toggle('zoomable', !!f.full);
       im.title = f.full ? 'Увеличить (4K)' : '';
-      history.replaceState(history.state, '', '#frame-' + f.sec);   // у каждого кадра свой адрес
+      history.replaceState(history.state, '', epUrl(D.key) + 'f/' + f.sec + '/');   // у каждого кадра свой адрес — с превью кадра в соцсетях (viz/share_pages.py)
       lb.querySelector('figcaption').innerHTML = `<b class="lb-t">${fmt(f.sec)}</b>${cap ? ' ' + cap : ''}`;
       lb.querySelector('.lb-n').textContent = `${cur + 1} / ${D.frames.length}`;
       const nx = D.frames[(cur + 1) % D.frames.length]; if (nx) new Image().src = nx.hd || nx.img;   // следующий — заранее
     };
     const step = d => { cur = (cur + d + D.frames.length) % D.frames.length; show(); };
     const close = () => {
-      if (lb && lb.classList.contains('on') && /^#frame-/.test(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+      if (lb && lb.classList.contains('on') && (/^#frame-/.test(location.hash) || /\/f\/\d+\/$/.test(location.pathname))) history.replaceState(history.state, '', epUrl(D.key) + location.search);
       lb && lb.classList.remove('on'); document.body.style.overflow = '';
     };
     const open = i => {
